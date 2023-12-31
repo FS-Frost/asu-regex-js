@@ -1,0 +1,15 @@
+{
+  "name": "asu-regex-js",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "hono": "^3.10.4",
+    "magic-regexp": "^0.7.0"
+  }
+}

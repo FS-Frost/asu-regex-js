@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "typescript.format.semicolons": "insert",
+}
