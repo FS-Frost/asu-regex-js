@@ -354,9 +354,9 @@ const reFs = re.exactly("\\").and("fs").and(re.oneOrMore(re.digit));
 
 const rePos = re.exactly("\\").and("pos").and(re.exactly("(")).and(reFloat.groupedAs("x")).and(re.exactly(",")).and(reFloat.groupedAs("y")).and(re.exactly(")"));
 
-const jaja = re.exactly(",").and(reFloat.groupedAs("move_t1")).and(re.exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
+const reMoveTimeArgs = re.exactly(",").and(reFloat.groupedAs("move_t1")).and(re.exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
 
-const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(jaja).and(re.exactly(")"));
+const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(reMoveTimeArgs).and(re.exactly(")"));
 
 const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).or(reFry).or(reFrz);
 
