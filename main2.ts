@@ -343,12 +343,13 @@ export function findPos(items: ContentItem[]): TagPos | null {
         return null;
     }
 
-    const pos = fx.tags.find(tag => tag.name == TagName.pos);
-    if (pos?.name != TagName.pos) {
+    const tagName = TagName.pos;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
         return null;
     }
 
-    return pos;
+    return tag;
 }
 
 export function findMove(items: ContentItem[]): TagMove | null {
@@ -357,12 +358,13 @@ export function findMove(items: ContentItem[]): TagMove | null {
         return null;
     }
 
-    const move = fx.tags.find(tag => tag.name == TagName.move);
-    if (move?.name != TagName.move) {
+    const tagName = TagName.move;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
         return null;
     }
 
-    return move;
+    return tag;
 }
 
 export function findT(items: ContentItem[]): TagT | null {
@@ -371,12 +373,13 @@ export function findT(items: ContentItem[]): TagT | null {
         return null;
     }
 
-    const t = fx.tags.find(tag => tag.name == TagName.t);
-    if (t?.name != TagName.t) {
+    const tagName = TagName.t;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
         return null;
     }
 
-    return t;
+    return tag;
 }
 
 main();
