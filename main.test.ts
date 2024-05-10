@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import * as asu from "./main2";
+import * as asu from "./main";
 
 test("expected api: find be", () => {
     const text = "{\\be2}Kirino-san";
