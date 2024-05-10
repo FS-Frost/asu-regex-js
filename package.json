@@ -2,13 +2,12 @@
   "name": "asu-regex-js",
   "module": "index.ts",
   "type": "module",
-  "devDependencies": {
-    "bun-types": "latest"
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/bun": "^1.1.1",
     "hono": "^3.10.4",
     "magic-regexp": "^0.7.0"
   }

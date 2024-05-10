@@ -1,6 +1,27 @@
 import { expect, test } from "bun:test";
 import * as asu from "./main2";
 
+test("expected api: find pos", () => {
+    const text = "{\\pos(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const pos = asu.findPos(result);
+    expect(pos).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find t", () => {
+    const text = "{\\t(10,20,30,\\fs32)}Kirino-san";
+    const result = asu.parseContent(text);
+    const t = asu.findT(result);
+    expect(t).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("parse result equals toString()", () => {
+    const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
+    const result = asu.parseContent(text);
+    expect(asu.contentsToString(result)).toEqual(text);
+});
 
 test("parse tag be", () => {
     const text = "\\be2";
@@ -15,7 +36,7 @@ test("parse tag be", () => {
 });
 
 test("parse multiple groups", () => {
-    const text = "{\\be5}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
+    const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const result = asu.parseContent(text);
     const expected: asu.ContentItem[] = [
         {
@@ -25,6 +46,11 @@ test("parse multiple groups", () => {
                     name: asu.TagName.be,
                     value: 5,
                 } satisfies asu.TagBe,
+                {
+                    name: asu.TagName.pos,
+                    x: 0.5,
+                    y: -28,
+                } satisfies asu.TagPos,
             ],
         } satisfies asu.ContentEffect,
         {
