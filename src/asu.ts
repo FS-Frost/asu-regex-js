@@ -1,4 +1,5 @@
-import * as re from "magic-regexp";
+import { createRegExp } from "magic-regexp";
+import { reMove, rePos, reT, regexContent, regexTags } from "./regex";
 
 export enum TagName {
     fs = "fs",
@@ -171,7 +172,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.pos)) {
         const value = result[0].substring(1 + TagName.pos.length);
         console.log(value);
-        const r = re.createRegExp(rePos);
+        const r = createRegExp(rePos);
         const a = result[0].match(r)?.groups;
         const x = Number(a?.x ?? "0");
         const y = Number(a?.y ?? "0");
@@ -187,7 +188,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.move)) {
         const value = result[0].substring(1 + TagName.move.length);
         console.log(value);
-        const r = re.createRegExp(reMove);
+        const r = createRegExp(reMove);
         const a = result[0].match(r)?.groups;
         const x1 = Number(a?.x1 ?? "0");
         const y1 = Number(a?.y1 ?? "0");
@@ -211,7 +212,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.t)) {
         const value = result[0].substring(1 + TagName.t.length);
         console.log(value);
-        const r = re.createRegExp(reT);
+        const r = createRegExp(reT);
         const a = result[0].match(r)?.groups;
         const rawTags = a?.tags ?? "";
         const subtags: Tags[] = [];
@@ -337,105 +338,6 @@ export function contentsToString(items: ContentItem[]): string {
     }
 
     return s;
-}
-
-const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
-
-const reInt = re.exactly("-").optionally().and(re.oneOrMore(re.digit));
-
-const reFloat = reInt.and(re.exactly(".").and(re.oneOrMore(re.digit)).optionally());
-
-const reBe = re.exactly("\\").and("be").and(re.oneOrMore(re.digit));
-
-const reFr = re.exactly("\\").and("fr").and(reFloat);
-
-const reFrx = re.exactly("\\").and("frx").and(reFloat);
-
-const reFry = re.exactly("\\").and("fry").and(reFloat);
-
-const reFrz = re.exactly("\\").and("frz").and(reFloat);
-
-const reI = re.exactly("\\").and("i").and(re.exactly("1").or("0"));
-
-const reFs = re.exactly("\\").and("fs").and(re.oneOrMore(re.digit));
-
-const rePos = re.exactly("\\").and("pos").and(re.exactly("(")).and(reFloat.groupedAs("x")).and(re.exactly(",")).and(reFloat.groupedAs("y")).and(re.exactly(")"));
-
-const reMoveTimeArgs = re.exactly(",").and(reFloat.groupedAs("move_t1")).and(re.exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
-
-const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(reMoveTimeArgs).and(re.exactly(")"));
-
-const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).or(reFry).or(reFrz);
-
-const reTFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
-
-const reTAccelFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
-
-const reTTimeAccelFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
-
-const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
-
-const regexTags = re.createRegExp(unitTags.or(reT));
-console.log(regexTags);
-
-function main() {
-    testContentParser();
-    // testTagParser();
-}
-
-function testContentParser() {
-    const text = "{\\be5}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
-    const items = parseContent(text);
-    console.log("=================");
-    console.log(contentsToString(items));
-    console.log("=================");
-
-    console.log("Items:", items.length);
-    for (const item of items) {
-        switch (item.name) {
-            case "effect":
-                console.log("FX :", item.tags);
-                break;
-
-            default:
-                console.log("TXT:", item.value);
-                break;
-        }
-    }
-
-    // TODO: set/update tag
-    const targetIndex = items.findIndex(item => {
-        if (item.name != "effect") {
-            return;
-        }
-
-        if (item.tags.some(t => t.name == TagName.i)) {
-            return item;
-        }
-    });
-
-    if (targetIndex < 0) {
-        console.error("tag \\i not found");
-        return;
-    }
-
-    const item = items[targetIndex];
-    if (item.name != "effect") {
-        return;
-    }
-
-    console.log(item.tags);
-}
-
-function testTagParser() {
-    let text = `\\be5\\fs32\\t(2,10,6,\\fs63\\be1)`;
-    const tags: Tags[] = [];
-    parseTags(text, tags);
-
-    console.log("\nTags:", tags.length);
-    for (const tag of tags) {
-        console.log(tag);
-    }
 }
 
 export function findBe(items: ContentItem[]): TagBe | null {
@@ -588,6 +490,32 @@ export function findT(items: ContentItem[]): TagT | null {
     return tag;
 }
 
+export function setBe(items: ContentItem[], newValue: number): TagBe {
+    const defaultTag: TagBe = {
+        name: TagName.be,
+        value: newValue,
+    };
+
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        items.unshift({
+            name: "effect",
+            tags: [defaultTag],
+        });
+        return defaultTag;
+    }
+
+    const tagName = TagName.be;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        fx.tags.push(defaultTag);
+        return defaultTag;
+    }
+
+    tag.value = newValue;
+    return tag;
+}
+
 export function setFs(items: ContentItem[], newValue: number): TagFs {
     const defaultTag: TagFs = {
         name: TagName.fs,
@@ -596,7 +524,7 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
 
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
-        items.push({
+        items.unshift({
             name: "effect",
             tags: [defaultTag],
         });
@@ -613,5 +541,3 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
     tag.value = newValue;
     return tag;
 }
-
-main();

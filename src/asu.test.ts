@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import * as asu from "./main";
+import * as asu from "./asu";
 
 test("expected api: find be", () => {
     const text = "{\\be2}Kirino-san";
@@ -7,6 +7,42 @@ test("expected api: find be", () => {
     const tag = asu.findBe(result);
     expect(tag).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("expected api: update be", () => {
+    const text = "{\\fs16\\be1}Kirino-san";
+    const expectedText = "{\\fs16\\be2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBe(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.be,
+        value: 2,
+    } satisfies asu.TagBe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: add be", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\be2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBe(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.be,
+        value: 2,
+    } satisfies asu.TagBe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and be", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\be2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBe(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.be,
+        value: 2,
+    } satisfies asu.TagBe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
 test("expected api: find fr", () => {
@@ -69,9 +105,21 @@ test("expected api: update fs", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fs", () => {
+test("expected api: add fs", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\fs16}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFs(result, 16);
+    expect(tag).toEqual({
+        name: asu.TagName.fs,
+        value: 16,
+    } satisfies asu.TagFs);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and fs", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fs16}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.setFs(result, 16);
     expect(tag).toEqual({

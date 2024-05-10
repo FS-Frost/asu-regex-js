@@ -2,61 +2,58 @@
 
 https://aegisub.org/docs/latest/ass_tags/
 
-- fn
-- an
-- b
-- u
-- s
-- bord
-- xbord
-- ybord
-- shad
-- xshad
-- yshad
-- blur
-- fscx
-- fscy
-- fsp
-- fax
-- fay
-- fe
-- c
-- 1c
-- 2c
-- 3c
-- 4c
-- alpha
-- 1a
-- 2a
-- 3a
-- 4a
-- a
-- k
-- K
-- kf
-- ko
-- q
-- r
-- org
-- fad
-- fade
-- clip
-- iclip
-- p
-- pbo
-
-# DONE
-
-- be
-- i
-- fs
-- pos
-- move(x1,y1,x2,y2)
-- move(x1,y1,x2,y2,t1,t2)
-- t(fx)
-- t(accel,fx)
-- t(t1,t2,accel,fx)
-- fr
-- frx
-- fry
-- frz
+- [ ] a
+- [ ] an
+- [ ] b
+- [x] be
+- [ ] blur
+- [ ] bord
+- [ ] xbord
+- [ ] ybord
+- [ ] c
+- [ ] 1c
+- [ ] 2c
+- [ ] 3c
+- [ ] 4c
+- [ ] alpha
+- [ ] 1a
+- [ ] 2a
+- [ ] 3a
+- [ ] 4a
+- [ ] clip
+- [ ] iclip
+- [ ] fad
+- [ ] fade
+- [ ] fax
+- [ ] fay
+- [ ] fe
+- [ ] fn
+- [ ] fr
+- [ ] frx
+- [ ] fry
+- [ ] frz
+- [x] fs
+- [ ] fscx
+- [ ] fscy
+- [ ] fsp
+- [ ] i
+- [ ] k
+- [ ] K
+- [ ] kf
+- [ ] ko
+- [ ] move(x1,y1,x2,y2)
+- [ ] move(x1,y1,x2,y2,t1,t2)
+- [ ] org
+- [ ] p
+- [ ] pbo
+- [ ] pos
+- [ ] q
+- [ ] r
+- [ ] s
+- [ ] shad
+- [ ] xshad
+- [ ] yshad
+- [ ] t(fx)
+- [ ] t(accel,fx)
+- [ ] t(t1,t2,accel,fx)
+- [ ] u
