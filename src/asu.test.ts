@@ -325,6 +325,45 @@ test("expected api: find pos", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update pos", () => {
+    const text = "{\\be2\\pos(-10,20.12)}Kirino-san";
+    const expectedText = "{\\be2\\pos(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPos(result, 10, 20);
+    expect(tag).toEqual({
+        name: asu.TagName.pos,
+        x: 10,
+        y: 20,
+    } satisfies asu.TagPos);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: add pos", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\pos(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPos(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.pos,
+        x: -130.51,
+        y: 40.12,
+    } satisfies asu.TagPos);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and pos", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\pos(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPos(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.pos,
+        x: -130.51,
+        y: 40.12,
+    } satisfies asu.TagPos);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // move
 test("expected api: find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";

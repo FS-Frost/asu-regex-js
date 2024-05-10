@@ -588,6 +588,22 @@ export function setI(items: ContentItem[], newValue: number): TagI {
     return tag;
 }
 
+export function setPos(items: ContentItem[], x: number, y: number): TagPos {
+    const defaultTag: TagPos = {
+        name: TagName.pos,
+        x: x,
+        y: y,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.x = x;
+        tag.y = y;
+    }
+
+    return tag;
+}
+
 function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [boolean, T] {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
