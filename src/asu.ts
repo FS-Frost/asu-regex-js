@@ -497,7 +497,7 @@ export function setBe(items: ContentItem[], newValue: number): TagBe {
         value: newValue,
     };
 
-    const [updated, tag] = setTag<TagBe>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -512,7 +512,7 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
         value: newValue,
     };
 
-    const [updated, tag] = setTag<TagFs>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -527,7 +527,52 @@ export function setFr(items: ContentItem[], newValue: number): TagFr {
         value: newValue,
     };
 
-    const [updated, tag] = setTag<TagFr>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setFrx(items: ContentItem[], newValue: number): TagFrx {
+    const tagName = TagName.frx;
+    const defaultTag: TagFrx = {
+        name: tagName,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setFry(items: ContentItem[], newValue: number): TagFry {
+    const tagName = TagName.fry;
+    const defaultTag: TagFry = {
+        name: tagName,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setFrz(items: ContentItem[], newValue: number): TagFrz {
+    const tagName = TagName.frz;
+    const defaultTag: TagFrz = {
+        name: tagName,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
