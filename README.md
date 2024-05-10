@@ -1,15 +1,24 @@
 # asu-regex-js
 
-To install dependencies:
+Library to work with Alpha Station Subtitles (ASS).
 
-```bash
+## Dev requeriments
+
+- [Bun (JavaScript runtime)](https://bun.sh/)
+
+To install JS dependencies:
+```sh
 bun install
 ```
 
-To run:
+## Run tests
 
-```bash
-bun run index.ts
+```sh
+bun test
 ```
 
-This project was created using `bun init` in bun v1.0.15. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Bundle
+
+```sh
+bun bundle
+```
