@@ -235,6 +235,42 @@ test("expected api: find i", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update i", () => {
+    const text = "{\\i0\\frz270}Kirino-san";
+    const expectedText = "{\\i1\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setI(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.i,
+        value: 1,
+    } satisfies asu.TagI);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// test("expected api: add frz", () => {
+//     const text = "{\\fs16}Kirino-san";
+//     const expectedText = "{\\fs16\\frz90}Kirino-san";
+//     const result = asu.parseContent(text);
+//     const tag = asu.setFrz(result, 90);
+//     expect(tag).toEqual({
+//         name: asu.TagName.frz,
+//         value: 90,
+//     } satisfies asu.TagFrz);
+//     expect(asu.contentsToString(result)).toEqual(expectedText);
+// });
+
+// test("expected api: create fx and frz", () => {
+//     const text = "Kirino-san";
+//     const expectedText = "{\\frz90}Kirino-san";
+//     const result = asu.parseContent(text);
+//     const tag = asu.setFrz(result, 90);
+//     expect(tag).toEqual({
+//         name: asu.TagName.frz,
+//         value: 90,
+//     } satisfies asu.TagFrz);
+//     expect(asu.contentsToString(result)).toEqual(expectedText);
+// });
+
 // fs
 test("expected api: find fs", () => {
     const text = "{\\fs32}Kirino-san";

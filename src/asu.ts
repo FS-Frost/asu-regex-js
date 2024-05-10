@@ -491,13 +491,12 @@ export function findT(items: ContentItem[]): TagT | null {
 }
 
 export function setBe(items: ContentItem[], newValue: number): TagBe {
-    const tagName = TagName.be;
     const defaultTag: TagBe = {
-        name: tagName,
+        name: TagName.be,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -506,13 +505,12 @@ export function setBe(items: ContentItem[], newValue: number): TagBe {
 }
 
 export function setFs(items: ContentItem[], newValue: number): TagFs {
-    const tagName = TagName.fs;
     const defaultTag: TagFs = {
-        name: tagName,
+        name: TagName.fs,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -521,13 +519,12 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
 }
 
 export function setFr(items: ContentItem[], newValue: number): TagFr {
-    const tagName = TagName.fr;
     const defaultTag: TagFr = {
-        name: tagName,
+        name: TagName.fr,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -536,13 +533,12 @@ export function setFr(items: ContentItem[], newValue: number): TagFr {
 }
 
 export function setFrx(items: ContentItem[], newValue: number): TagFrx {
-    const tagName = TagName.frx;
     const defaultTag: TagFrx = {
-        name: tagName,
+        name: TagName.frx,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -551,13 +547,12 @@ export function setFrx(items: ContentItem[], newValue: number): TagFrx {
 }
 
 export function setFry(items: ContentItem[], newValue: number): TagFry {
-    const tagName = TagName.fry;
     const defaultTag: TagFry = {
-        name: tagName,
+        name: TagName.fry,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
@@ -566,13 +561,26 @@ export function setFry(items: ContentItem[], newValue: number): TagFry {
 }
 
 export function setFrz(items: ContentItem[], newValue: number): TagFrz {
-    const tagName = TagName.frz;
     const defaultTag: TagFrz = {
-        name: tagName,
+        name: TagName.frz,
         value: newValue,
     };
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, tagName, defaultTag);
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setI(items: ContentItem[], newValue: number): TagI {
+    const defaultTag: TagI = {
+        name: TagName.i,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
     }
