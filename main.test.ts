@@ -105,6 +105,18 @@ test("expected api: find t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update fs", () => {
+    const text = "{\\be2\\fs32}Kirino-san";
+    const expectedText = "{\\be2\\fs16}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFs(result, 16);
+    expect(tag).toEqual({
+        name: asu.TagName.fs,
+        value: 16,
+    } satisfies asu.TagFs);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const result = asu.parseContent(text);

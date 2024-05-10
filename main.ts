@@ -588,4 +588,25 @@ export function findT(items: ContentItem[]): TagT | null {
     return tag;
 }
 
+export function setFs(items: ContentItem[], newValue: number): TagFs {
+    const defaultTag: TagFs = {
+        name: TagName.fs,
+        value: newValue,
+    };
+
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return defaultTag;
+    }
+
+    const tagName = TagName.fs;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return defaultTag;
+    }
+
+    tag.value = newValue;
+    return tag;
+}
+
 main();
