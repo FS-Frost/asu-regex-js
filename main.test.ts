@@ -57,6 +57,30 @@ test("expected api: find fs", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update fs", () => {
+    const text = "{\\be2\\fs32}Kirino-san";
+    const expectedText = "{\\be2\\fs16}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFs(result, 16);
+    expect(tag).toEqual({
+        name: asu.TagName.fs,
+        value: 16,
+    } satisfies asu.TagFs);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fs", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\fs16}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFs(result, 16);
+    expect(tag).toEqual({
+        name: asu.TagName.fs,
+        value: 16,
+    } satisfies asu.TagFs);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 test("expected api: find pos", () => {
     const text = "{\\pos(10,20)}Kirino-san";
     const result = asu.parseContent(text);
@@ -103,18 +127,6 @@ test("expected api: find t(t1,t2,accel,fx)", () => {
     const t = asu.findT(result);
     expect(t).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
-});
-
-test("expected api: update fs", () => {
-    const text = "{\\be2\\fs32}Kirino-san";
-    const expectedText = "{\\be2\\fs16}Kirino-san";
-    const result = asu.parseContent(text);
-    const tag = asu.setFs(result, 16);
-    expect(tag).toEqual({
-        name: asu.TagName.fs,
-        value: 16,
-    } satisfies asu.TagFs);
-    expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
 test("parse result equals toString()", () => {

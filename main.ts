@@ -596,12 +596,17 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
 
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
+        items.push({
+            name: "effect",
+            tags: [defaultTag],
+        });
         return defaultTag;
     }
 
     const tagName = TagName.fs;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
+        fx.tags.push(defaultTag);
         return defaultTag;
     }
 
