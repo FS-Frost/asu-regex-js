@@ -295,6 +295,9 @@ export function contentEffectToString(item: ContentEffect): string {
                 const subcontent = contentEffectToString(subeffect);
                 if (tag.t1 != null && tag.t2 != null && tag.accel != null) {
                     s += `\\t(${tag.t1},${tag.t2},${tag.accel},${subcontent})`;
+                }
+                else if (tag.accel != null) {
+                    s += `\\t(${tag.accel},${subcontent})`;
                 } else {
                     s += `\\t(${subcontent})`;
                 }
@@ -366,9 +369,11 @@ const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).o
 
 const reTFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
 
+const reTAccelFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
+
 const reTTimeAccelFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
 
-const reT = reTFx.or(reTTimeAccelFx);
+const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
 
 const regexTags = re.createRegExp(unitTags.or(reT));
 console.log(regexTags);

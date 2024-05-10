@@ -81,16 +81,24 @@ test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: find t(t1,t2,accel,fx)", () => {
-    const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
+test("expected api: find t(fx)", () => {
+    const text = "{\\t(\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
     expect(t).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: find t(fx)", () => {
-    const text = "{\\t(\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
+test("expected api: find t(accel,fx)", () => {
+    const text = "{\\t(10,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const t = asu.findT(result);
+    expect(t).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("expected api: find t(t1,t2,accel,fx)", () => {
+    const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
     expect(t).not.toBeNull();

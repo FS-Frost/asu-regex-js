@@ -37,7 +37,6 @@ https://aegisub.org/docs/latest/ass_tags/
 - ko
 - q
 - r
-- t(accel,fx)
 - org
 - fad
 - fade
@@ -55,6 +54,7 @@ https://aegisub.org/docs/latest/ass_tags/
 - move(x1,y1,x2,y2)
 - move(x1,y1,x2,y2,t1,t2)
 - t(fx)
+- t(accel,fx)
 - t(t1,t2,accel,fx)
 - fr
 - frx
