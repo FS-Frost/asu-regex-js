@@ -81,20 +81,20 @@ export type TagT = {
 export type Tags = TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
-    console.log("");
-    console.log(text);
+    // console.log("");
+    // console.log(text);
 
     let result = text.match(regexTags);
     if (!result || !result[0]) {
         return tags;
     }
 
-    console.log("MATCH:", result[0]);
+    // console.log("MATCH:", result[0]);
     const tagNameSource = text.substring(1);
 
     if (tagNameSource.startsWith(TagName.be)) {
         const value = result[0].substring(1 + TagName.be.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagBe = {
             name: TagName.be,
@@ -105,7 +105,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.frx)) {
         const value = result[0].substring(1 + TagName.frx.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagFrx = {
             name: TagName.frx,
@@ -116,7 +116,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.fry)) {
         const value = result[0].substring(1 + TagName.fry.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagFry = {
             name: TagName.fry,
@@ -127,7 +127,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.frz)) {
         const value = result[0].substring(1 + TagName.frz.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagFrz = {
             name: TagName.frz,
@@ -138,7 +138,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.fr)) {
         const value = result[0].substring(1 + TagName.fr.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagFr = {
             name: TagName.fr,
@@ -149,7 +149,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.i)) {
         const value = result[0].substring(1 + TagName.i.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagI = {
             name: TagName.i,
@@ -160,7 +160,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.fs)) {
         const value = result[0].substring(1 + TagName.fs.length);
-        console.log(value);
+        // console.log(value);
 
         const tag: TagFs = {
             name: TagName.fs,
@@ -171,7 +171,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.pos)) {
         const value = result[0].substring(1 + TagName.pos.length);
-        console.log(value);
+        // console.log(value);
         const r = createRegExp(rePos);
         const a = result[0].match(r)?.groups;
         const x = Number(a?.x ?? "0");
@@ -187,7 +187,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.move)) {
         const value = result[0].substring(1 + TagName.move.length);
-        console.log(value);
+        // console.log(value);
         const r = createRegExp(reMove);
         const a = result[0].match(r)?.groups;
         const x1 = Number(a?.x1 ?? "0");
@@ -211,7 +211,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.t)) {
         const value = result[0].substring(1 + TagName.t.length);
-        console.log(value);
+        // console.log(value);
         const r = createRegExp(reT);
         const a = result[0].match(r)?.groups;
         const rawTags = a?.tags ?? "";
@@ -254,13 +254,13 @@ export function parseContent(text: string): ContentItem[] {
 
     for (const match of result) {
         if (match.groups?.fx) {
-            console.log("FX :", match.groups.fx);
+            // console.log("FX :", match.groups.fx);
 
             // remove curly braces {}
             const rawTags = match.groups.fx.substring(1, match.groups.fx.length - 1);
             const tags: Tags[] = [];
             parseTags(rawTags, tags);
-            console.log("tags:", tags.length);
+            // console.log("tags:", tags.length);
 
             items.push({
                 name: "effect",
@@ -270,7 +270,7 @@ export function parseContent(text: string): ContentItem[] {
         }
 
         if (match.groups?.txt) {
-            console.log("TXT:", match.groups.txt);
+            // console.log("TXT:", match.groups.txt);
 
             items.push({
                 name: "text",
@@ -497,22 +497,11 @@ export function setBe(items: ContentItem[], newValue: number): TagBe {
         value: newValue,
     };
 
-    const fx = items.find(item => item.name == "effect");
-    if (fx?.name != "effect") {
-        items.unshift({
-            name: "effect",
-            tags: [defaultTag],
-        });
-        return defaultTag;
+    const [updated, tag] = setTag<TagBe>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
     }
 
-    const tag = fx.tags.find(tag => tag.name == tagName);
-    if (tag?.name != tagName) {
-        fx.tags.push(defaultTag);
-        return defaultTag;
-    }
-
-    tag.value = newValue;
     return tag;
 }
 
@@ -523,22 +512,11 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
         value: newValue,
     };
 
-    const fx = items.find(item => item.name == "effect");
-    if (fx?.name != "effect") {
-        items.unshift({
-            name: "effect",
-            tags: [defaultTag],
-        });
-        return defaultTag;
+    const [updated, tag] = setTag<TagFs>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
     }
 
-    const tag = fx.tags.find(tag => tag.name == tagName);
-    if (tag?.name != tagName) {
-        fx.tags.push(defaultTag);
-        return defaultTag;
-    }
-
-    tag.value = newValue;
     return tag;
 }
 
@@ -549,21 +527,29 @@ export function setFr(items: ContentItem[], newValue: number): TagFr {
         value: newValue,
     };
 
+    const [updated, tag] = setTag<TagFr>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [boolean, T] {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
         items.unshift({
             name: "effect",
             tags: [defaultTag],
         });
-        return defaultTag;
+        return [true, defaultTag];
     }
 
-    const tag = fx.tags.find(tag => tag.name == tagName);
+    const tag = fx.tags.find(tag => tag.name == tagName) as T | null;
     if (tag?.name != tagName) {
         fx.tags.push(defaultTag);
-        return defaultTag;
+        return [true, defaultTag];
     }
 
-    tag.value = newValue;
-    return tag;
+    return [false, tag];
 }

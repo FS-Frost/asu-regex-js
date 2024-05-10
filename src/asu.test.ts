@@ -79,7 +79,7 @@ test("expected api: add fr", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test.only("expected api: create fx and fr", () => {
+test("expected api: create fx and fr", () => {
     const text = "Kirino-san";
     const expectedText = "{\\fr90}Kirino-san";
     const result = asu.parseContent(text);
