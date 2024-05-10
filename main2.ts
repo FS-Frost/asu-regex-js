@@ -71,9 +71,9 @@ export type TagMove = {
 
 export type TagT = {
     name: TagName.t;
-    t1: number;
-    t2: number;
-    accel: number;
+    t1: number | null;
+    t2: number | null;
+    accel: number | null;
     tags: Tags[];
 };
 
@@ -219,9 +219,9 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
         const tag: TagT = {
             name: TagName.t,
-            accel: Number(a?.accel),
-            t1: Number(a?.t1),
-            t2: Number(a?.t2),
+            accel: a?.accel ? Number(a.accel) : null,
+            t1: a?.t1 ? Number(a.t1) : null,
+            t2: a?.t2 ? Number(a.t2) : null,
             tags: subtags,
         };
         tags.push(tag);
@@ -293,7 +293,11 @@ export function contentEffectToString(item: ContentEffect): string {
                 };
 
                 const subcontent = contentEffectToString(subeffect);
-                s += `\\t(${tag.t1},${tag.t2},${tag.accel},${subcontent})`;
+                if (tag.t1 != null && tag.t2 != null && tag.accel != null) {
+                    s += `\\t(${tag.t1},${tag.t2},${tag.accel},${subcontent})`;
+                } else {
+                    s += `\\t(${subcontent})`;
+                }
                 break;
 
             case TagName.pos:
@@ -360,7 +364,11 @@ const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.gro
 
 const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).or(reFry).or(reFrz);
 
-const reT = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
+const reTFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
+
+const reTTimeAccelFx = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
+
+const reT = reTFx.or(reTTimeAccelFx);
 
 const regexTags = re.createRegExp(unitTags.or(reT));
 console.log(regexTags);
