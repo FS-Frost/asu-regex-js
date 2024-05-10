@@ -3,6 +3,10 @@ import * as re from "magic-regexp";
 export enum TagName {
     fs = "fs",
     be = "be",
+    fr = "fr",
+    frx = "frx",
+    fry = "fry",
+    frz = "frz",
     i = "i",
     pos = "pos",
     move = "move",
@@ -16,6 +20,26 @@ export type Tag = {
 
 export type TagBe = {
     name: TagName.be;
+    value: number;
+};
+
+export type TagFr = {
+    name: TagName.fr;
+    value: number;
+};
+
+export type TagFrx = {
+    name: TagName.frx;
+    value: number;
+};
+
+export type TagFry = {
+    name: TagName.fry;
+    value: number;
+};
+
+export type TagFrz = {
+    name: TagName.frz;
     value: number;
 };
 
@@ -51,7 +75,7 @@ export type TagT = {
     tags: Tags[];
 };
 
-export type Tags = TagBe | TagI | TagFs | TagT | TagPos | TagMove;
+export type Tags = TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     console.log("");
@@ -76,7 +100,51 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    if (tagNameSource.startsWith(TagName.i)) {
+    else if (tagNameSource.startsWith(TagName.frx)) {
+        const value = result[0].substring(1 + TagName.frx.length);
+        console.log(value);
+
+        const tag: TagFrx = {
+            name: TagName.frx,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fry)) {
+        const value = result[0].substring(1 + TagName.fry.length);
+        console.log(value);
+
+        const tag: TagFry = {
+            name: TagName.fry,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.frz)) {
+        const value = result[0].substring(1 + TagName.frz.length);
+        console.log(value);
+
+        const tag: TagFrz = {
+            name: TagName.frz,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fr)) {
+        const value = result[0].substring(1 + TagName.fr.length);
+        console.log(value);
+
+        const tag: TagFr = {
+            name: TagName.fr,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.i)) {
         const value = result[0].substring(1 + TagName.i.length);
         console.log(value);
 
@@ -87,7 +155,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    if (tagNameSource.startsWith(TagName.fs)) {
+    else if (tagNameSource.startsWith(TagName.fs)) {
         const value = result[0].substring(1 + TagName.fs.length);
         console.log(value);
 
@@ -98,7 +166,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    if (tagNameSource.startsWith(TagName.pos)) {
+    else if (tagNameSource.startsWith(TagName.pos)) {
         const value = result[0].substring(1 + TagName.pos.length);
         console.log(value);
         const r = re.createRegExp(rePos);
@@ -114,7 +182,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    if (tagNameSource.startsWith(TagName.move)) {
+    else if (tagNameSource.startsWith(TagName.move)) {
         const value = result[0].substring(1 + TagName.move.length);
         console.log(value);
         const r = re.createRegExp(reMove);
@@ -134,7 +202,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    if (tagNameSource.startsWith(TagName.t)) {
+    else if (tagNameSource.startsWith(TagName.t)) {
         const value = result[0].substring(1 + TagName.t.length);
         console.log(value);
         const r = re.createRegExp(reT);
@@ -256,21 +324,29 @@ export function contentsToString(items: ContentItem[]): string {
 
 const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
+const reInt = re.exactly("-").optionally().and(re.oneOrMore(re.digit));
+
+const reFloat = reInt.and(re.exactly(".").and(re.oneOrMore(re.digit)).optionally());
+
 const reBe = re.exactly("\\").and("be").and(re.oneOrMore(re.digit));
+
+const reFr = re.exactly("\\").and("fr").and(reFloat);
+
+const reFrx = re.exactly("\\").and("frx").and(reFloat);
+
+const reFry = re.exactly("\\").and("fry").and(reFloat);
+
+const reFrz = re.exactly("\\").and("frz").and(reFloat);
 
 const reI = re.exactly("\\").and("i").and(re.exactly("1").or("0"));
 
 const reFs = re.exactly("\\").and("fs").and(re.oneOrMore(re.digit));
 
-const reInt = re.exactly("-").optionally().and(re.oneOrMore(re.digit));
-
-const reFloat = reInt.and(re.exactly(".").and(re.oneOrMore(re.digit)).optionally());
-
 const rePos = re.exactly("\\").and("pos").and(re.exactly("(")).and(reFloat.groupedAs("x")).and(re.exactly(",")).and(reFloat.groupedAs("y")).and(re.exactly(")"));
 
 const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(re.exactly(")"));
 
-const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove);
+const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).or(reFry).or(reFrz);
 
 const reT = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
 
@@ -344,6 +420,66 @@ export function findBe(items: ContentItem[]): TagBe | null {
     }
 
     const tagName = TagName.be;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFr(items: ContentItem[]): TagFr | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fr;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFrx(items: ContentItem[]): TagFrx | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.frx;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFry(items: ContentItem[]): TagFry | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fry;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFrz(items: ContentItem[]): TagFrz | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.frz;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

@@ -9,6 +9,38 @@ test("expected api: find be", () => {
     expect(text).toEqual(asu.contentsToString(result));
 });
 
+test("expected api: find fr", () => {
+    const text = "{\\fr45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFr(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find frx", () => {
+    const text = "{\\frx45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFrx(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find fry", () => {
+    const text = "{\\fry45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFry(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find frz", () => {
+    const text = "{\\frz45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFrz(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
 test("expected api: find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";
     const result = asu.parseContent(text);
