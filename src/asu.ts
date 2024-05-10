@@ -491,8 +491,9 @@ export function findT(items: ContentItem[]): TagT | null {
 }
 
 export function setBe(items: ContentItem[], newValue: number): TagBe {
+    const tagName = TagName.be;
     const defaultTag: TagBe = {
-        name: TagName.be,
+        name: tagName,
         value: newValue,
     };
 
@@ -505,7 +506,6 @@ export function setBe(items: ContentItem[], newValue: number): TagBe {
         return defaultTag;
     }
 
-    const tagName = TagName.be;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         fx.tags.push(defaultTag);
@@ -517,8 +517,9 @@ export function setBe(items: ContentItem[], newValue: number): TagBe {
 }
 
 export function setFs(items: ContentItem[], newValue: number): TagFs {
+    const tagName = TagName.fs;
     const defaultTag: TagFs = {
-        name: TagName.fs,
+        name: tagName,
         value: newValue,
     };
 
@@ -531,7 +532,32 @@ export function setFs(items: ContentItem[], newValue: number): TagFs {
         return defaultTag;
     }
 
-    const tagName = TagName.fs;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        fx.tags.push(defaultTag);
+        return defaultTag;
+    }
+
+    tag.value = newValue;
+    return tag;
+}
+
+export function setFr(items: ContentItem[], newValue: number): TagFr {
+    const tagName = TagName.fr;
+    const defaultTag: TagFr = {
+        name: tagName,
+        value: newValue,
+    };
+
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        items.unshift({
+            name: "effect",
+            tags: [defaultTag],
+        });
+        return defaultTag;
+    }
+
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         fx.tags.push(defaultTag);

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import * as asu from "./asu";
 
+// be
 test("expected api: find be", () => {
     const text = "{\\be2}Kirino-san";
     const result = asu.parseContent(text);
@@ -45,6 +46,7 @@ test("expected api: create fx and be", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// fr
 test("expected api: find fr", () => {
     const text = "{\\fr45}Kirino-san";
     const result = asu.parseContent(text);
@@ -53,6 +55,43 @@ test("expected api: find fr", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update fr", () => {
+    const text = "{\\fs16\\fr90}Kirino-san";
+    const expectedText = "{\\fs16\\fr270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFr(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fr,
+        value: 270,
+    } satisfies asu.TagFr);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: add fr", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fr90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFr(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fr,
+        value: 90,
+    } satisfies asu.TagFr);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test.only("expected api: create fx and fr", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fr90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFr(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fr,
+        value: 90,
+    } satisfies asu.TagFr);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// frx
 test("expected api: find frx", () => {
     const text = "{\\frx45}Kirino-san";
     const result = asu.parseContent(text);
@@ -61,6 +100,7 @@ test("expected api: find frx", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// fry
 test("expected api: find fry", () => {
     const text = "{\\fry45}Kirino-san";
     const result = asu.parseContent(text);
@@ -69,6 +109,7 @@ test("expected api: find fry", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// frz
 test("expected api: find frz", () => {
     const text = "{\\frz45}Kirino-san";
     const result = asu.parseContent(text);
@@ -77,6 +118,7 @@ test("expected api: find frz", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// i
 test("expected api: find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";
     const result = asu.parseContent(text);
@@ -85,6 +127,7 @@ test("expected api: find i", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// fs
 test("expected api: find fs", () => {
     const text = "{\\fs32}Kirino-san";
     const result = asu.parseContent(text);
@@ -129,6 +172,7 @@ test("expected api: create fx and fs", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// pos
 test("expected api: find pos", () => {
     const text = "{\\pos(10,20)}Kirino-san";
     const result = asu.parseContent(text);
@@ -137,6 +181,7 @@ test("expected api: find pos", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// move
 test("expected api: find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
@@ -153,6 +198,7 @@ test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// t
 test("expected api: find t(fx)", () => {
     const text = "{\\t(\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -177,6 +223,7 @@ test("expected api: find t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+// others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const result = asu.parseContent(text);
