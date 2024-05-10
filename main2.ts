@@ -65,6 +65,8 @@ export type TagMove = {
     y1: number;
     x2: number;
     y2: number;
+    t1: number | null;
+    t2: number | null;
 };
 
 export type TagT = {
@@ -191,6 +193,8 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         const y1 = Number(a?.y1 ?? "0");
         const x2 = Number(a?.x2 ?? "0");
         const y2 = Number(a?.y2 ?? "0");
+        const t1 = a?.move_t1 ? Number(a.move_t1) : null;
+        const t2 = a?.move_t1 ? Number(a.move_t2) : null;
 
         const tag: TagMove = {
             name: TagName.move,
@@ -198,6 +202,8 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             y1: y1,
             x2: x2,
             y2: y2,
+            t1: t1,
+            t2: t2,
         };
         tags.push(tag);
     }
@@ -295,7 +301,11 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.move:
-                s += `\\move(${tag.x1},${tag.y1},${tag.x2},${tag.y2})`;
+                s += `\\move(${tag.x1},${tag.y1},${tag.x2},${tag.y2}`;
+                if (tag.t1 != null && tag.t2 != null) {
+                    s += `,${tag.t1},${tag.t2}`;
+                }
+                s += ")";
                 break;
 
             default:
@@ -344,7 +354,9 @@ const reFs = re.exactly("\\").and("fs").and(re.oneOrMore(re.digit));
 
 const rePos = re.exactly("\\").and("pos").and(re.exactly("(")).and(reFloat.groupedAs("x")).and(re.exactly(",")).and(reFloat.groupedAs("y")).and(re.exactly(")"));
 
-const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(re.exactly(")"));
+const jaja = re.exactly(",").and(reFloat.groupedAs("move_t1")).and(re.exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
+
+const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(jaja).and(re.exactly(")"));
 
 const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove).or(reFr).or(reFrx).or(reFry).or(reFrz);
 

@@ -2,10 +2,6 @@
 
 https://aegisub.org/docs/latest/ass_tags/
 
-- fr
-- frx
-- fry
-- frz
 - fn
 - an
 - b
@@ -41,9 +37,8 @@ https://aegisub.org/docs/latest/ass_tags/
 - ko
 - q
 - r
-- move (t1, t2)
-- t (fx only)
-- t (fx, accel)
+- t(fx)
+- t(accel,fx)
 - org
 - fad
 - fade
@@ -58,5 +53,10 @@ https://aegisub.org/docs/latest/ass_tags/
 - i
 - fs
 - pos
-- move
-- t
+- move(x1,y1,x2,y2)
+- move(x1,y1,x2,y2,t1,t2)
+- t(t1,t2,accel,fx)
+- fr
+- frx
+- fry
+- frz

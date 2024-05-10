@@ -6,7 +6,7 @@ test("expected api: find be", () => {
     const result = asu.parseContent(text);
     const tag = asu.findBe(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find fr", () => {
@@ -14,7 +14,7 @@ test("expected api: find fr", () => {
     const result = asu.parseContent(text);
     const tag = asu.findFr(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find frx", () => {
@@ -22,7 +22,7 @@ test("expected api: find frx", () => {
     const result = asu.parseContent(text);
     const tag = asu.findFrx(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find fry", () => {
@@ -30,7 +30,7 @@ test("expected api: find fry", () => {
     const result = asu.parseContent(text);
     const tag = asu.findFry(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find frz", () => {
@@ -38,7 +38,7 @@ test("expected api: find frz", () => {
     const result = asu.parseContent(text);
     const tag = asu.findFrz(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find i", () => {
@@ -46,7 +46,7 @@ test("expected api: find i", () => {
     const result = asu.parseContent(text);
     const tag = asu.findI(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find fs", () => {
@@ -54,7 +54,7 @@ test("expected api: find fs", () => {
     const result = asu.parseContent(text);
     const tag = asu.findFs(result);
     expect(tag).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find pos", () => {
@@ -62,15 +62,23 @@ test("expected api: find pos", () => {
     const result = asu.parseContent(text);
     const pos = asu.findPos(result);
     expect(pos).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: find move", () => {
+test("expected api: find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
     const move = asu.findMove(result);
     expect(move).not.toBeNull();
-    expect(text).toEqual(asu.contentsToString(result));
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
+    const text = "{\\move(10,20,30,40,50,60)}Kirino-san";
+    const result = asu.parseContent(text);
+    const move = asu.findMove(result);
+    expect(move).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
 });
 
 test("expected api: find t", () => {
