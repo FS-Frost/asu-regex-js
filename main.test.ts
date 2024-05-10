@@ -9,8 +9,16 @@ test("expected api: find pos", () => {
     expect(text).toEqual(asu.contentsToString(result));
 });
 
+test.only("expected api: find move", () => {
+    const text = "{\\move(10,20,30,40)}Kirino-san";
+    const result = asu.parseContent(text);
+    const move = asu.findMove(result);
+    expect(move).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
 test("expected api: find t", () => {
-    const text = "{\\t(10,20,30,\\fs32)}Kirino-san";
+    const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
     expect(t).not.toBeNull();

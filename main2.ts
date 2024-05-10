@@ -5,6 +5,7 @@ export enum TagName {
     be = "be",
     i = "i",
     pos = "pos",
+    move = "move",
     t = "t",
 }
 
@@ -34,6 +35,14 @@ export type TagPos = {
     y: number;
 };
 
+export type TagMove = {
+    name: TagName.move;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+};
+
 export type TagT = {
     name: TagName.t;
     t1: number;
@@ -42,7 +51,7 @@ export type TagT = {
     tags: Tags[];
 };
 
-export type Tags = TagBe | TagI | TagFs | TagT | TagPos;
+export type Tags = TagBe | TagI | TagFs | TagT | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     console.log("");
@@ -90,7 +99,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     if (tagNameSource.startsWith(TagName.pos)) {
-        const value = result[0].substring(1 + TagName.t.length);
+        const value = result[0].substring(1 + TagName.pos.length);
         console.log(value);
         const r = re.createRegExp(rePos);
         const a = result[0].match(r)?.groups;
@@ -101,6 +110,26 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.pos,
             x: x,
             y: y,
+        };
+        tags.push(tag);
+    }
+
+    if (tagNameSource.startsWith(TagName.move)) {
+        const value = result[0].substring(1 + TagName.move.length);
+        console.log(value);
+        const r = re.createRegExp(reMove);
+        const a = result[0].match(r)?.groups;
+        const x1 = Number(a?.x1 ?? "0");
+        const y1 = Number(a?.y1 ?? "0");
+        const x2 = Number(a?.x2 ?? "0");
+        const y2 = Number(a?.y2 ?? "0");
+
+        const tag: TagMove = {
+            name: TagName.move,
+            x1: x1,
+            y1: y1,
+            x2: x2,
+            y2: y2,
         };
         tags.push(tag);
     }
@@ -197,6 +226,10 @@ export function contentEffectToString(item: ContentEffect): string {
                 s += `\\pos(${tag.x},${tag.y})`;
                 break;
 
+            case TagName.move:
+                s += `\\move(${tag.x1},${tag.y1},${tag.x2},${tag.y2})`;
+                break;
+
             default:
                 s += `\\${tag.name}${tag.value}`;
                 break;
@@ -235,7 +268,9 @@ const reFloat = reInt.and(re.exactly(".").and(re.oneOrMore(re.digit)).optionally
 
 const rePos = re.exactly("\\").and("pos").and(re.exactly("(")).and(reFloat.groupedAs("x")).and(re.exactly(",")).and(reFloat.groupedAs("y")).and(re.exactly(")"));
 
-const unitTags = reBe.or(reFs).or(reI).or(rePos);
+const reMove = re.exactly("\\").and("move").and(re.exactly("(")).and(reFloat.groupedAs("x1")).and(re.exactly(",")).and(reFloat.groupedAs("y1")).and(re.exactly(",")).and(reFloat.groupedAs("x2")).and(re.exactly(",")).and(reFloat.groupedAs("y2")).and(re.exactly(")"));
+
+const unitTags = reBe.or(reFs).or(reI).or(rePos).or(reMove);
 
 const reT = re.exactly("\\").and("t").and(re.exactly("(")).and(re.oneOrMore(re.digit).groupedAs("t1")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("t2")).and(re.exactly(",")).and(re.oneOrMore(re.digit).groupedAs("accel")).and(re.exactly(",")).and(re.oneOrMore(unitTags).groupedAs("tags")).and(re.exactly(")"));
 
@@ -314,6 +349,20 @@ export function findPos(items: ContentItem[]): TagPos | null {
     }
 
     return pos;
+}
+
+export function findMove(items: ContentItem[]): TagMove | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const move = fx.tags.find(tag => tag.name == TagName.move);
+    if (move?.name != TagName.move) {
+        return null;
+    }
+
+    return move;
 }
 
 export function findT(items: ContentItem[]): TagT | null {
