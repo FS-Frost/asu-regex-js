@@ -337,6 +337,51 @@ function testTagParser() {
     }
 }
 
+export function findBe(items: ContentItem[]): TagBe | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.be;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findI(items: ContentItem[]): TagI | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.i;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFs(items: ContentItem[]): TagFs | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fs;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
 export function findPos(items: ContentItem[]): TagPos | null {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {

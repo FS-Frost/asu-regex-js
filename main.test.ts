@@ -1,6 +1,30 @@
 import { expect, test } from "bun:test";
 import * as asu from "./main2";
 
+test("expected api: find be", () => {
+    const text = "{\\be2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findBe(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find i", () => {
+    const text = "{\\i1}Kirino-san{\\i0}";
+    const result = asu.parseContent(text);
+    const tag = asu.findI(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
+test("expected api: find fs", () => {
+    const text = "{\\fs32}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFs(result);
+    expect(tag).not.toBeNull();
+    expect(text).toEqual(asu.contentsToString(result));
+});
+
 test("expected api: find pos", () => {
     const text = "{\\pos(10,20)}Kirino-san";
     const result = asu.parseContent(text);
@@ -9,7 +33,7 @@ test("expected api: find pos", () => {
     expect(text).toEqual(asu.contentsToString(result));
 });
 
-test.only("expected api: find move", () => {
+test("expected api: find move", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
     const move = asu.findMove(result);
