@@ -24,8 +24,8 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] iclip
 - [ ] fad
 - [ ] fade
-- [-] fax
-- [-] fay
+- [x] fax
+- [x] fay
 - [ ] fe
 - [ ] fn
 - [x] fr
@@ -50,9 +50,9 @@ https://aegisub.org/docs/latest/ass_tags/
 - [-] q
 - [ ] r
 - [-] s
-- [-] shad
-- [-] xshad
-- [-] yshad
+- [x] shad
+- [x] xshad
+- [x] yshad
 - [x] t(fx)
 - [x] t(accel,fx)
 - [x] t(t1,t2,accel,fx)

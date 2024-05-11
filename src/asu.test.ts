@@ -676,6 +676,96 @@ test("create fx and frz", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// fax
+test("find fax", () => {
+    const text = "{\\fax45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFax(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fax", () => {
+    const text = "{\\fs16\\fax90}Kirino-san";
+    const expectedText = "{\\fs16\\fax270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFax(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fax,
+        value: 270,
+    } satisfies asu.TagFax);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fax", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fax90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFax(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fax,
+        value: 90,
+    } satisfies asu.TagFax);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fax", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fax90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFax(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fax,
+        value: 90,
+    } satisfies asu.TagFax);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fay
+test("find fay", () => {
+    const text = "{\\fay45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFay(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fay", () => {
+    const text = "{\\fs16\\fay90}Kirino-san";
+    const expectedText = "{\\fs16\\fay270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFay(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fay,
+        value: 270,
+    } satisfies asu.TagFay);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fay", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fay90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFay(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fay,
+        value: 90,
+    } satisfies asu.TagFay);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fay", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fay90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFay(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fay,
+        value: 90,
+    } satisfies asu.TagFay);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // i
 test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";

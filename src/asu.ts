@@ -502,6 +502,28 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.fax)) {
+        const value = result[0].substring(1 + TagName.fax.length);
+        // console.log(value);
+
+        const tag: TagFax = {
+            name: TagName.fax,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fay)) {
+        const value = result[0].substring(1 + TagName.fay.length);
+        // console.log(value);
+
+        const tag: TagFay = {
+            name: TagName.fay,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.an)) {
         const value = result[0].substring(1 + TagName.be.length);
         // console.log(value);
@@ -953,6 +975,36 @@ export function findFrz(items: ContentItem[]): TagFrz | null {
     }
 
     const tagName = TagName.frz;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFax(items: ContentItem[]): TagFax | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fax;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFay(items: ContentItem[]): TagFay | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fay;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;
