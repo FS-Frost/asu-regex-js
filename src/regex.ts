@@ -86,11 +86,16 @@ export const reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and
 
 export const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("x1")).and(exactly(",")).and(reFloat.groupedAs("y1")).and(exactly(",")).and(reFloat.groupedAs("x2")).and(exactly(",")).and(reFloat.groupedAs("y2")).and(reMoveTimeArgs).and(exactly(")"));
 
+export const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("args")).and(exactly(")"));
+
+export const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("args")).and(exactly(")"));
+
 export const unitTags = reBe
     .or(reXbord)
     .or(reYbord)
     .or(reXshad)
     .or(reYshad)
+    .or(reIclip)
     .or(reMove)
     .or(reBlur)
     .or(reBord)
@@ -98,6 +103,7 @@ export const unitTags = reBe
     .or(reFscx)
     .or(reFscy)
     .or(reFade)
+    .or(reClip)
     .or(reFsp)
     .or(rePos)
     .or(reOrg)

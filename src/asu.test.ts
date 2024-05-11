@@ -1738,6 +1738,96 @@ test("create fx and fade", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// clip
+test("find clip", () => {
+    const text = "{\\clip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const fade = asu.findClip(result);
+    expect(fade).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update clip", () => {
+    const text = "{\\be2\\clip(0,0,320,240)}Kirino-san";
+    const expectedText = "{\\be2\\clip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.clip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagClip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add clip", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\clip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.clip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagClip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and clip", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\clip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.clip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagClip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// iclip
+test("find iclip", () => {
+    const text = "{\\iclip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const fade = asu.findIclip(result);
+    expect(fade).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update iclip", () => {
+    const text = "{\\be2\\iclip(0,0,320,240)}Kirino-san";
+    const expectedText = "{\\be2\\iclip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.iclip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagIclip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add iclip", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\iclip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.iclip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagIclip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and iclip", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\iclip(1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
+    expect(tag).toEqual({
+        name: asu.TagName.iclip,
+        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+    } satisfies asu.TagIclip);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // move(x1,y1,x2,y2)
 test("find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";

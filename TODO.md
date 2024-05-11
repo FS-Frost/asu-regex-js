@@ -20,8 +20,8 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] 2a
 - [ ] 3a
 - [ ] 4a
-- [ ] clip
-- [ ] iclip
+- [x] clip
+- [x] iclip
 - [x] fad
 - [x] fade
 - [x] fax

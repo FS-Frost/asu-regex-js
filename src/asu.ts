@@ -1,5 +1,5 @@
 import { createRegExp } from "magic-regexp";
-import { reFad, reFade, reMove, reOrg, rePos, reT, regexContent, regexTags } from "./regex";
+import { reClip, reFad, reFade, reIclip, reMove, reOrg, rePos, reT, regexContent, regexTags } from "./regex";
 
 export enum TagName {
     a = "a",
@@ -420,6 +420,20 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.iclip)) {
+        const value = result[0].substring(1 + TagName.iclip.length);
+        // console.log(value);
+        const r = createRegExp(reIclip);
+        const a = result[0].match(r)?.groups;
+        const args = a?.args ?? "";
+
+        const tag: TagIclip = {
+            name: TagName.iclip,
+            drawCommands: args,
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.blur)) {
         const value = result[0].substring(1 + TagName.blur.length);
         // console.log(value);
@@ -497,6 +511,20 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t2: t2,
             t3: t3,
             t4: t4,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.clip)) {
+        const value = result[0].substring(1 + TagName.clip.length);
+        // console.log(value);
+        const r = createRegExp(reClip);
+        const a = result[0].match(r)?.groups;
+        const args = a?.args ?? "";
+
+        const tag: TagClip = {
+            name: TagName.clip,
+            drawCommands: args,
         };
         tags.push(tag);
     }
@@ -1557,6 +1585,36 @@ export function findFade(items: ContentItem[]): TagFade | null {
     return tag;
 }
 
+export function findClip(items: ContentItem[]): TagClip | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.clip;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findIclip(items: ContentItem[]): TagIclip | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.iclip;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
 export function findMove(items: ContentItem[]): TagMove | null {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
@@ -2141,6 +2199,34 @@ export function setFade(
         tag.t2 = t2;
         tag.t3 = t3;
         tag.t4 = t4;
+    }
+
+    return tag;
+}
+
+export function setClip(items: ContentItem[], drawCommands: string): TagClip {
+    const defaultTag: TagClip = {
+        name: TagName.clip,
+        drawCommands: drawCommands,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.drawCommands = drawCommands;
+    }
+
+    return tag;
+}
+
+export function setIclip(items: ContentItem[], drawCommands: string): TagIclip {
+    const defaultTag: TagIclip = {
+        name: TagName.iclip,
+        drawCommands: drawCommands,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.drawCommands = drawCommands;
     }
 
     return tag;
