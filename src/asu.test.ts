@@ -1,6 +1,51 @@
 import { expect, test } from "bun:test";
 import * as asu from "./asu";
 
+// a
+test("find a", () => {
+    const text = "{\\a7}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findA(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update a", () => {
+    const text = "{\\fs16\\a1}Kirino-san";
+    const expectedText = "{\\fs16\\a9}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setA(result, 9);
+    expect(tag).toEqual({
+        name: asu.TagName.a,
+        value: 9,
+    } satisfies asu.TagA);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add a", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\a9}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setA(result, 9);
+    expect(tag).toEqual({
+        name: asu.TagName.a,
+        value: 9,
+    } satisfies asu.TagA);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and a", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\a9}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setA(result, 9);
+    expect(tag).toEqual({
+        name: asu.TagName.a,
+        value: 9,
+    } satisfies asu.TagA);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // be
 test("find be", () => {
     const text = "{\\be2}Kirino-san";

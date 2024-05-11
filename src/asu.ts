@@ -2,21 +2,27 @@ import { createRegExp } from "magic-regexp";
 import { reMove, rePos, reT, regexContent, regexTags } from "./regex";
 
 export enum TagName {
-    fs = "fs",
+    a = "a",
     be = "be",
     fr = "fr",
     frx = "frx",
     fry = "fry",
     frz = "frz",
+    fs = "fs",
     i = "i",
-    pos = "pos",
     move = "move",
+    pos = "pos",
     t = "t",
 }
 
 export type Tag = {
     name: TagName;
     value: string;
+};
+
+export type TagA = {
+    name: TagName.a;
+    value: number;
 };
 
 export type TagBe = {
@@ -78,7 +84,7 @@ export type TagT = {
     tags: Tags[];
 };
 
-export type Tags = TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
+export type Tags = TagA | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     // console.log("");
@@ -228,6 +234,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.a)) {
+        const value = result[0].substring(1 + TagName.a.length);
+        // console.log(value);
+
+        const tag: TagA = {
+            name: TagName.a,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     text = text.substring(result[0].length);
     if (text.length > 0) {
         parseTags(text, tags);
@@ -338,6 +355,21 @@ export function contentsToString(items: ContentItem[]): string {
     }
 
     return s;
+}
+
+export function findA(items: ContentItem[]): TagA | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.a;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
 }
 
 export function findBe(items: ContentItem[]): TagBe | null {
@@ -485,6 +517,20 @@ export function findT(items: ContentItem[]): TagT | null {
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;
+    }
+
+    return tag;
+}
+
+export function setA(items: ContentItem[], newValue: number): TagA {
+    const defaultTag: TagA = {
+        name: TagName.a,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
     }
 
     return tag;

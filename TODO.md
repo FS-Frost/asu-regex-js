@@ -2,7 +2,7 @@
 
 https://aegisub.org/docs/latest/ass_tags/
 
-- [ ] a
+- [x] a
 - [ ] an
 - [ ] b
 - [x] be
