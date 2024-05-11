@@ -10,16 +10,16 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] bord
 - [x] xbord
 - [x] ybord
-- [ ] c
-- [ ] 1c
-- [ ] 2c
-- [ ] 3c
-- [ ] 4c
-- [ ] alpha
-- [ ] 1a
-- [ ] 2a
-- [ ] 3a
-- [ ] 4a
+- [x] c
+- [x] 1c
+- [x] 2c
+- [x] 3c
+- [x] 4c
+- [x] alpha
+- [x] 1a
+- [x] 2a
+- [x] 3a
+- [x] 4a
 - [x] clip
 - [x] iclip
 - [x] fad

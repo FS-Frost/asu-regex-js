@@ -1828,6 +1828,456 @@ test("create fx and iclip", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// color
+test("find color", () => {
+    const text = "{\\c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findColor(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update color", () => {
+    const text = "{\\be2\\c&H28AB72&}Kirino-san";
+    const expectedText = "{\\be2\\c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor(result, "&HC14200&");
+    expect(tag).toEqual({
+        name: asu.TagName.color,
+        value: "&HC14200&",
+    } satisfies asu.TagC);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add color", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color,
+        value: "&H28AB72&",
+    } satisfies asu.TagC);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and color", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color,
+        value: "&H28AB72&",
+    } satisfies asu.TagC);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// color1
+test("find color1", () => {
+    const text = "{\\1c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findColor1(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update color1", () => {
+    const text = "{\\be2\\1c&H28AB72&}Kirino-san";
+    const expectedText = "{\\be2\\1c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor1(result, "&HC14200&");
+    expect(tag).toEqual({
+        name: asu.TagName.color1,
+        value: "&HC14200&",
+    } satisfies asu.Tag1c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add color1", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\1c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor1(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color1,
+        value: "&H28AB72&",
+    } satisfies asu.Tag1c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and color1", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\1c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor1(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color1,
+        value: "&H28AB72&",
+    } satisfies asu.Tag1c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// color2
+test("find color2", () => {
+    const text = "{\\2c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findColor2(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update color2", () => {
+    const text = "{\\be2\\2c&H28AB72&}Kirino-san";
+    const expectedText = "{\\be2\\2c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor2(result, "&HC14200&");
+    expect(tag).toEqual({
+        name: asu.TagName.color2,
+        value: "&HC14200&",
+    } satisfies asu.Tag2c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add color2", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\2c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor2(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color2,
+        value: "&H28AB72&",
+    } satisfies asu.Tag2c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and color2", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\2c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor2(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color2,
+        value: "&H28AB72&",
+    } satisfies asu.Tag2c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// color3
+test("find color3", () => {
+    const text = "{\\3c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findColor3(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update color3", () => {
+    const text = "{\\be2\\3c&H28AB72&}Kirino-san";
+    const expectedText = "{\\be2\\3c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor3(result, "&HC14200&");
+    expect(tag).toEqual({
+        name: asu.TagName.color3,
+        value: "&HC14200&",
+    } satisfies asu.Tag3c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add color3", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\3c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor3(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color3,
+        value: "&H28AB72&",
+    } satisfies asu.Tag3c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and color3", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\3c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor3(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color3,
+        value: "&H28AB72&",
+    } satisfies asu.Tag3c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// color4
+test("find color4", () => {
+    const text = "{\\4c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findColor4(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update color4", () => {
+    const text = "{\\be2\\4c&H28AB72&}Kirino-san";
+    const expectedText = "{\\be2\\4c&HC14200&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor4(result, "&HC14200&");
+    expect(tag).toEqual({
+        name: asu.TagName.color4,
+        value: "&HC14200&",
+    } satisfies asu.Tag4c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add color4", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\4c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor4(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color4,
+        value: "&H28AB72&",
+    } satisfies asu.Tag4c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and color4", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\4c&H28AB72&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setColor4(result, "&H28AB72&");
+    expect(tag).toEqual({
+        name: asu.TagName.color4,
+        value: "&H28AB72&",
+    } satisfies asu.Tag4c);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// alpha
+test("find alpha", () => {
+    const text = "{\\alpha&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findAlpha(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update alpha", () => {
+    const text = "{\\be2\\alpha&H20&}Kirino-san";
+    const expectedText = "{\\be2\\alpha&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha,
+        value: "&H80&",
+    } satisfies asu.TagAlpha);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add alpha", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\alpha&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha,
+        value: "&H80&",
+    } satisfies asu.TagAlpha);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and alpha", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\alpha&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha,
+        value: "&H80&",
+    } satisfies asu.TagAlpha);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// alpha1
+test("find alpha1", () => {
+    const text = "{\\1a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findAlpha1(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update alpha1", () => {
+    const text = "{\\be2\\1a&H20&}Kirino-san";
+    const expectedText = "{\\be2\\1a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha1(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha1,
+        value: "&H80&",
+    } satisfies asu.Tag1a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add alpha1", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\1a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha1(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha1,
+        value: "&H80&",
+    } satisfies asu.Tag1a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and alpha1", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\1a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha1(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha1,
+        value: "&H80&",
+    } satisfies asu.Tag1a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// alpha2
+test("find alpha2", () => {
+    const text = "{\\2a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findAlpha2(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update alpha2", () => {
+    const text = "{\\be2\\2a&H20&}Kirino-san";
+    const expectedText = "{\\be2\\2a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha2(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha2,
+        value: "&H80&",
+    } satisfies asu.Tag2a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add alpha2", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\2a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha2(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha2,
+        value: "&H80&",
+    } satisfies asu.Tag2a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and alpha2", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\2a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha2(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha2,
+        value: "&H80&",
+    } satisfies asu.Tag2a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// alpha3
+test("find alpha3", () => {
+    const text = "{\\3a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findAlpha3(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update alpha3", () => {
+    const text = "{\\be2\\3a&H20&}Kirino-san";
+    const expectedText = "{\\be2\\3a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha3(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha3,
+        value: "&H80&",
+    } satisfies asu.Tag3a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add alpha3", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\3a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha3(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha3,
+        value: "&H80&",
+    } satisfies asu.Tag3a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and alpha3", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\3a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha3(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha3,
+        value: "&H80&",
+    } satisfies asu.Tag3a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// alpha4
+test("find alpha4", () => {
+    const text = "{\\4a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findAlpha4(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update alpha4", () => {
+    const text = "{\\be2\\4a&H20&}Kirino-san";
+    const expectedText = "{\\be2\\4a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha4(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha4,
+        value: "&H80&",
+    } satisfies asu.Tag4a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add alpha4", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\4a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha4(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha4,
+        value: "&H80&",
+    } satisfies asu.Tag4a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and alpha4", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\4a&H80&}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setAlpha4(result, "&H80&");
+    expect(tag).toEqual({
+        name: asu.TagName.alpha4,
+        value: "&H80&",
+    } satisfies asu.Tag4a);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // move(x1,y1,x2,y2)
 test("find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";

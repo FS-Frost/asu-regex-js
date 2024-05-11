@@ -123,7 +123,7 @@ export type Tag4c = {
 
 export type TagAlpha = {
     name: TagName.alpha;
-    value: number;
+    value: string;
 };
 
 export type Tag1a = {
@@ -372,6 +372,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             y2: y2,
             t1: t1,
             t2: t2,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.alpha)) {
+        const value = result[0].substring(1 + TagName.alpha.length);
+        // console.log(value);
+
+        const tag: TagAlpha = {
+            name: TagName.alpha,
+            value: value,
         };
         tags.push(tag);
     }
@@ -742,6 +753,94 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.color1)) {
+        const value = result[0].substring(1 + TagName.color1.length);
+        // console.log(value);
+
+        const tag: Tag1c = {
+            name: TagName.color1,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.color2)) {
+        const value = result[0].substring(1 + TagName.color2.length);
+        // console.log(value);
+
+        const tag: Tag2c = {
+            name: TagName.color2,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.color3)) {
+        const value = result[0].substring(1 + TagName.color3.length);
+        // console.log(value);
+
+        const tag: Tag3c = {
+            name: TagName.color3,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.color4)) {
+        const value = result[0].substring(1 + TagName.color4.length);
+        // console.log(value);
+
+        const tag: Tag4c = {
+            name: TagName.color4,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.alpha1)) {
+        const value = result[0].substring(1 + TagName.alpha1.length);
+        // console.log(value);
+
+        const tag: Tag1a = {
+            name: TagName.alpha1,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.alpha2)) {
+        const value = result[0].substring(1 + TagName.alpha2.length);
+        // console.log(value);
+
+        const tag: Tag2a = {
+            name: TagName.alpha2,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.alpha3)) {
+        const value = result[0].substring(1 + TagName.alpha3.length);
+        // console.log(value);
+
+        const tag: Tag3a = {
+            name: TagName.alpha3,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.alpha4)) {
+        const value = result[0].substring(1 + TagName.alpha4.length);
+        // console.log(value);
+
+        const tag: Tag4a = {
+            name: TagName.alpha4,
+            value: value,
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.kLowerCase)) {
         const value = result[0].substring(1 + TagName.kLowerCase.length);
         // console.log(value);
@@ -845,6 +944,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t1: a?.t1 ? Number(a.t1) : null,
             t2: a?.t2 ? Number(a.t2) : null,
             tags: subtags,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.color)) {
+        const value = result[0].substring(1 + TagName.color.length);
+        // console.log(value);
+
+        const tag: TagC = {
+            name: TagName.color,
+            value: value,
         };
         tags.push(tag);
     }
@@ -1037,6 +1147,156 @@ export function findB(items: ContentItem[]): TagB | null {
     }
 
     const tagName = TagName.b;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findColor(items: ContentItem[]): TagC | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.color;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findColor1(items: ContentItem[]): Tag1c | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.color1;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findColor2(items: ContentItem[]): Tag2c | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.color2;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findColor3(items: ContentItem[]): Tag3c | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.color3;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findColor4(items: ContentItem[]): Tag4c | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.color4;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAlpha(items: ContentItem[]): TagAlpha | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.alpha;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAlpha1(items: ContentItem[]): Tag1a | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.alpha1;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAlpha2(items: ContentItem[]): Tag2a | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.alpha2;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAlpha3(items: ContentItem[]): Tag3a | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.alpha3;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAlpha4(items: ContentItem[]): Tag4a | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.alpha4;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;
@@ -1676,6 +1936,146 @@ export function setAn(items: ContentItem[], newValue: number): TagAn {
 export function setB(items: ContentItem[], newValue: number): TagB {
     const defaultTag: TagB = {
         name: TagName.b,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setColor(items: ContentItem[], newValue: string): TagC {
+    const defaultTag: TagC = {
+        name: TagName.color,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setColor1(items: ContentItem[], newValue: string): Tag1c {
+    const defaultTag: Tag1c = {
+        name: TagName.color1,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setColor2(items: ContentItem[], newValue: string): Tag2c {
+    const defaultTag: Tag2c = {
+        name: TagName.color2,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setColor3(items: ContentItem[], newValue: string): Tag3c {
+    const defaultTag: Tag3c = {
+        name: TagName.color3,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setColor4(items: ContentItem[], newValue: string): Tag4c {
+    const defaultTag: Tag4c = {
+        name: TagName.color4,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setAlpha(items: ContentItem[], newValue: string): TagAlpha {
+    const defaultTag: TagAlpha = {
+        name: TagName.alpha,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setAlpha1(items: ContentItem[], newValue: string): Tag1a {
+    const defaultTag: Tag1a = {
+        name: TagName.alpha1,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setAlpha2(items: ContentItem[], newValue: string): Tag2a {
+    const defaultTag: Tag2a = {
+        name: TagName.alpha2,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setAlpha3(items: ContentItem[], newValue: string): Tag3a {
+    const defaultTag: Tag3a = {
+        name: TagName.alpha3,
+        value: newValue,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setAlpha4(items: ContentItem[], newValue: string): Tag4a {
+    const defaultTag: Tag4a = {
+        name: TagName.alpha4,
         value: newValue,
     };
 

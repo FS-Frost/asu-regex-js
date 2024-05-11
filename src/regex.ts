@@ -8,6 +8,26 @@ export const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally()
 
 export const reA = exactly("\\").and("a").and(oneOrMore(digit));
 
+export const reColor = exactly("\\").and("c").and(oneOrMore(charNotIn("\\")));
+
+export const reColor1 = exactly("\\").and("1c").and(oneOrMore(charNotIn("\\")));
+
+export const reColor2 = exactly("\\").and("2c").and(oneOrMore(charNotIn("\\")));
+
+export const reColor3 = exactly("\\").and("3c").and(oneOrMore(charNotIn("\\")));
+
+export const reColor4 = exactly("\\").and("4c").and(oneOrMore(charNotIn("\\")));
+
+export const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
+
+export const reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
+
+export const reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
+
+export const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
+
+export const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
+
 export const reKLowerCase = exactly("\\").and("k").and(oneOrMore(digit));
 
 export const reKUpperCase = exactly("\\").and("K").and(oneOrMore(digit));
@@ -91,6 +111,7 @@ export const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(
 export const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("args")).and(exactly(")"));
 
 export const unitTags = reBe
+    .or(reAlpha)
     .or(reXbord)
     .or(reYbord)
     .or(reXshad)
@@ -121,6 +142,15 @@ export const unitTags = reBe
     .or(reFe)
     .or(reFn)
     .or(reAn)
+    .or(reColor1)
+    .or(reColor2)
+    .or(reColor3)
+    .or(reColor4)
+    .or(reAlpha1)
+    .or(reAlpha2)
+    .or(reAlpha3)
+    .or(reAlpha4)
+    .or(reColor)
     .or(reQ)
     .or(reU)
     .or(reS)
