@@ -185,12 +185,12 @@ export type TagFay = {
 
 export type TagFe = {
     name: TagName.fe;
-    encoding: string;
+    encodingId: number;
 };
 
 export type TagFn = {
     name: TagName.fn;
-    font: number;
+    font: string;
 };
 
 export type TagFscx = {
@@ -568,6 +568,28 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.fe)) {
+        const value = result[0].substring(1 + TagName.fe.length);
+        // console.log(value);
+
+        const tag: TagFe = {
+            name: TagName.fe,
+            encodingId: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fn)) {
+        const value = result[0].substring(1 + TagName.fn.length);
+        // console.log(value);
+
+        const tag: TagFn = {
+            name: TagName.fn,
+            font: value,
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.an)) {
         const value = result[0].substring(1 + TagName.be.length);
         // console.log(value);
@@ -840,8 +862,11 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.pos:
-            case TagName.org:
                 s += `\\pos(${tag.x},${tag.y})`;
+                break;
+
+            case TagName.org:
+                s += `\\org(${tag.x},${tag.y})`;
                 break;
 
             case TagName.move:
@@ -853,8 +878,11 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.clip:
-            case TagName.iclip:
                 s += `\\clip(${tag.drawCommands})`;
+                break;
+
+            case TagName.iclip:
+                s += `\\iclip(${tag.drawCommands})`;
                 break;
 
             case TagName.fad:
@@ -866,7 +894,7 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.fe:
-                s += `\\fe${tag.encoding}`;
+                s += `\\fe${tag.encodingId}`;
                 break;
 
             case TagName.fn:
@@ -1246,6 +1274,36 @@ export function findR(items: ContentItem[]): TagR | null {
     return tag;
 }
 
+export function findFe(items: ContentItem[]): TagFe | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fe;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFn(items: ContentItem[]): TagFn | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fn;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
 export function findFscx(items: ContentItem[]): TagFscx | null {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
@@ -1589,6 +1647,34 @@ export function setFsp(items: ContentItem[], newValue: number): TagFsp {
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setFe(items: ContentItem[], encodingId: number): TagFe {
+    const defaultTag: TagFe = {
+        name: TagName.fe,
+        encodingId: encodingId,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.encodingId = encodingId;
+    }
+
+    return tag;
+}
+
+export function setFn(items: ContentItem[], font: string): TagFn {
+    const defaultTag: TagFn = {
+        name: TagName.fn,
+        font: font,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.font = font;
     }
 
     return tag;

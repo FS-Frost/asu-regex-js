@@ -26,8 +26,8 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] fade
 - [x] fax
 - [x] fay
-- [ ] fe
-- [ ] fn
+- [x] fe
+- [x] fn
 - [x] fr
 - [x] frx
 - [x] fry

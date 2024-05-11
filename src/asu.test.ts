@@ -1351,6 +1351,96 @@ test("create fx and r", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// fe
+test("find fe", () => {
+    const text = "{\\fe1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFe(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fe", () => {
+    const text = "{\\fe0\\frz270}Kirino-san";
+    const expectedText = "{\\fe1\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFe(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.fe,
+        encodingId: 1,
+    } satisfies asu.TagFe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fe", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fe1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFe(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.fe,
+        encodingId: 1,
+    } satisfies asu.TagFe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fe", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fe1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFe(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.fe,
+        encodingId: 1,
+    } satisfies asu.TagFe);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fn
+test("find fn", () => {
+    const text = "{\\fnArial Mincho}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFn(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fn", () => {
+    const text = "{\\fnArial Mincho\\frz270}Kirino-san";
+    const expectedText = "{\\fnArial\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFn(result, "Arial");
+    expect(tag).toEqual({
+        name: asu.TagName.fn,
+        font: "Arial",
+    } satisfies asu.TagFn);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fn", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fnArial Mincho}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFn(result, "Arial Mincho");
+    expect(tag).toEqual({
+        name: asu.TagName.fn,
+        font: "Arial Mincho",
+    } satisfies asu.TagFn);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fn", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fnArial Mincho}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFn(result, "Arial Mincho");
+    expect(tag).toEqual({
+        name: asu.TagName.fn,
+        font: "Arial Mincho",
+    } satisfies asu.TagFn);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // i
 test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";

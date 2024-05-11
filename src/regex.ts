@@ -24,6 +24,10 @@ export const reU = exactly("\\").and("u").and(oneOrMore(digit));
 
 export const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
 
+export const reFe = exactly("\\").and("fe").and(oneOrMore(digit));
+
+export const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
+
 export const reP = exactly("\\").and("p").and(oneOrMore(digit));
 
 export const rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
@@ -99,6 +103,8 @@ export const unitTags = reBe
     .or(reKf)
     .or(reFr)
     .or(reFs)
+    .or(reFe)
+    .or(reFn)
     .or(reAn)
     .or(reQ)
     .or(reU)
