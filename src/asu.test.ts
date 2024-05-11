@@ -226,6 +226,276 @@ test("create fx and blur", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// bord
+test("find bord", () => {
+    const text = "{\\bord3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findBord(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update bord", () => {
+    const text = "{\\fs16\\bord1}Kirino-san";
+    const expectedText = "{\\fs16\\bord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.bord,
+        value: 2,
+    } satisfies asu.TagBord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add bord", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\bord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.bord,
+        value: 2,
+    } satisfies asu.TagBord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and bord", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\bord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.bord,
+        value: 2,
+    } satisfies asu.TagBord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// xbord
+test("find xbord", () => {
+    const text = "{\\xbord3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findXbord(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update xbord", () => {
+    const text = "{\\fs16\\xbord1}Kirino-san";
+    const expectedText = "{\\fs16\\xbord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xbord,
+        value: 2,
+    } satisfies asu.TagXbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add xbord", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\xbord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xbord,
+        value: 2,
+    } satisfies asu.TagXbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and xbord", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\xbord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xbord,
+        value: 2,
+    } satisfies asu.TagXbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// ybord
+test("find ybord", () => {
+    const text = "{\\ybord3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findYbord(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update ybord", () => {
+    const text = "{\\fs16\\ybord1}Kirino-san";
+    const expectedText = "{\\fs16\\ybord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.ybord,
+        value: 2,
+    } satisfies asu.TagYbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add ybord", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\ybord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.ybord,
+        value: 2,
+    } satisfies asu.TagYbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and ybord", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\ybord2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYbord(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.ybord,
+        value: 2,
+    } satisfies asu.TagYbord);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// shad
+test("find shad", () => {
+    const text = "{\\shad3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findShad(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update shad", () => {
+    const text = "{\\fs16\\shad1}Kirino-san";
+    const expectedText = "{\\fs16\\shad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setShad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.shad,
+        value: 2,
+    } satisfies asu.TagShad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add shad", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\shad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setShad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.shad,
+        value: 2,
+    } satisfies asu.TagShad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and shad", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\shad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setShad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.shad,
+        value: 2,
+    } satisfies asu.TagShad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// xshad
+test("find xshad", () => {
+    const text = "{\\xshad3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findXshad(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update xshad", () => {
+    const text = "{\\fs16\\xshad1}Kirino-san";
+    const expectedText = "{\\fs16\\xshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xshad,
+        value: 2,
+    } satisfies asu.TagXshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add xshad", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\xshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xshad,
+        value: 2,
+    } satisfies asu.TagXshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and xshad", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\xshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setXshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.xshad,
+        value: 2,
+    } satisfies asu.TagXshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// yshad
+test("find yshad", () => {
+    const text = "{\\yshad3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findYshad(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update yshad", () => {
+    const text = "{\\fs16\\yshad1}Kirino-san";
+    const expectedText = "{\\fs16\\yshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.yshad,
+        value: 2,
+    } satisfies asu.TagYshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add yshad", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\yshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.yshad,
+        value: 2,
+    } satisfies asu.TagYshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and yshad", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\yshad2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setYshad(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.yshad,
+        value: 2,
+    } satisfies asu.TagYshad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // fr
 test("find fr", () => {
     const text = "{\\fr45}Kirino-san";

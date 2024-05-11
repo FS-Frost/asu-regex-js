@@ -376,6 +376,50 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.xbord)) {
+        const value = result[0].substring(1 + TagName.xbord.length);
+        // console.log(value);
+
+        const tag: TagXbord = {
+            name: TagName.xbord,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.ybord)) {
+        const value = result[0].substring(1 + TagName.ybord.length);
+        // console.log(value);
+
+        const tag: TagYbord = {
+            name: TagName.ybord,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.xshad)) {
+        const value = result[0].substring(1 + TagName.xshad.length);
+        // console.log(value);
+
+        const tag: TagXshad = {
+            name: TagName.xshad,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.yshad)) {
+        const value = result[0].substring(1 + TagName.yshad.length);
+        // console.log(value);
+
+        const tag: TagYshad = {
+            name: TagName.yshad,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.pos)) {
         const value = result[0].substring(1 + TagName.pos.length);
         // console.log(value);
@@ -398,6 +442,28 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
         const tag: TagBlur = {
             name: TagName.blur,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.bord)) {
+        const value = result[0].substring(1 + TagName.bord.length);
+        // console.log(value);
+
+        const tag: TagBord = {
+            name: TagName.bord,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.shad)) {
+        const value = result[0].substring(1 + TagName.shad.length);
+        // console.log(value);
+
+        const tag: TagShad = {
+            name: TagName.shad,
             value: Number(value),
         };
         tags.push(tag);
@@ -737,6 +803,96 @@ export function findBlur(items: ContentItem[]): TagBlur | null {
     }
 
     const tagName = TagName.blur;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findBord(items: ContentItem[]): TagBord | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.bord;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findXbord(items: ContentItem[]): TagXbord | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.xbord;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findYbord(items: ContentItem[]): TagYbord | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.ybord;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findShad(items: ContentItem[]): TagShad | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.shad;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findXshad(items: ContentItem[]): TagXshad | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.xshad;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findYshad(items: ContentItem[]): TagYshad | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.yshad;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

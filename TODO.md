@@ -6,10 +6,10 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] an
 - [x] b
 - [x] be
-- [-] blur
-- [-] bord
-- [-] xbord
-- [-] ybord
+- [x] blur
+- [x] bord
+- [x] xbord
+- [x] ybord
 - [ ] c
 - [ ] 1c
 - [ ] 2c
