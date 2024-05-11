@@ -37,10 +37,10 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] fscy
 - [x] fsp
 - [x] i
-- [-] k
-- [-] K
-- [-] kf
-- [-] ko
+- [x] k
+- [x] K
+- [x] kf
+- [x] ko
 - [x] move(x1,y1,x2,y2)
 - [x] move(x1,y1,x2,y2,t1,t2)
 - [ ] org

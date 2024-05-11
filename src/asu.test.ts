@@ -901,6 +901,186 @@ test("create fx and fsp", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// k lower case
+test("find k lower case", () => {
+    const text = "{\\k36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findKLowerCase(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update k lower case", () => {
+    const text = "{\\k0\\frz270}Kirino-san";
+    const expectedText = "{\\k36\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKLowerCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kLowerCase,
+        value: 36,
+    } satisfies asu.TagKLowerCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add k lower case", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\k36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKLowerCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kLowerCase,
+        value: 36,
+    } satisfies asu.TagKLowerCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and k lower case", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\k36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKLowerCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kLowerCase,
+        value: 36,
+    } satisfies asu.TagKLowerCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// k upper case
+test("find K upper case", () => {
+    const text = "{\\K36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findKUpperCase(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update K upper case", () => {
+    const text = "{\\K0\\frz270}Kirino-san";
+    const expectedText = "{\\K36\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKUpperCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kUpperCase,
+        value: 36,
+    } satisfies asu.TagKUpperCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add K upper case", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\K36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKUpperCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kUpperCase,
+        value: 36,
+    } satisfies asu.TagKUpperCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and K upper case", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\K36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKUpperCase(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kUpperCase,
+        value: 36,
+    } satisfies asu.TagKUpperCase);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// kf
+test("find kf", () => {
+    const text = "{\\kf36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findKf(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update kf", () => {
+    const text = "{\\kf0\\frz270}Kirino-san";
+    const expectedText = "{\\kf36\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKf(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kf,
+        value: 36,
+    } satisfies asu.TagKf);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add kf", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\kf36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKf(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kf,
+        value: 36,
+    } satisfies asu.TagKf);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and kf", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\kf36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKf(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.kf,
+        value: 36,
+    } satisfies asu.TagKf);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// ko
+test("find ko", () => {
+    const text = "{\\ko36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findKo(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update ko", () => {
+    const text = "{\\ko0\\frz270}Kirino-san";
+    const expectedText = "{\\ko36\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKo(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.ko,
+        value: 36,
+    } satisfies asu.TagKo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add ko", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\ko36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKo(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.ko,
+        value: 36,
+    } satisfies asu.TagKo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and ko", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\ko36}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setKo(result, 36);
+    expect(tag).toEqual({
+        name: asu.TagName.ko,
+        value: 36,
+    } satisfies asu.TagKo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // i
 test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";

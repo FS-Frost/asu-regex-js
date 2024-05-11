@@ -601,6 +601,50 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.ko)) {
+        const value = result[0].substring(1 + TagName.ko.length);
+        // console.log(value);
+
+        const tag: TagKo = {
+            name: TagName.ko,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.kf)) {
+        const value = result[0].substring(1 + TagName.kf.length);
+        // console.log(value);
+
+        const tag: TagKf = {
+            name: TagName.kf,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.kLowerCase)) {
+        const value = result[0].substring(1 + TagName.kLowerCase.length);
+        // console.log(value);
+
+        const tag: TagKLowerCase = {
+            name: TagName.kLowerCase,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.kUpperCase)) {
+        const value = result[0].substring(1 + TagName.kUpperCase.length);
+        // console.log(value);
+
+        const tag: TagKUpperCase = {
+            name: TagName.kUpperCase,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.i)) {
         const value = result[0].substring(1 + TagName.i.length);
         // console.log(value);
@@ -1083,6 +1127,66 @@ export function findFsp(items: ContentItem[]): TagFsp | null {
     }
 
     const tagName = TagName.fsp;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findKLowerCase(items: ContentItem[]): TagKLowerCase | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.kLowerCase;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findKUpperCase(items: ContentItem[]): TagKUpperCase | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.kUpperCase;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findKo(items: ContentItem[]): TagKo | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.ko;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findKf(items: ContentItem[]): TagKf | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.kf;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;
