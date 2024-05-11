@@ -53,7 +53,7 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] shad
 - [ ] xshad
 - [ ] yshad
-- [ ] t(fx)
-- [ ] t(accel,fx)
-- [ ] t(t1,t2,accel,fx)
+- [x] t(fx)
+- [x] t(accel,fx)
+- [x] t(t1,t2,accel,fx)
 - [ ] u

@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import * as asu from "./asu";
 
 // be
-test("expected api: find be", () => {
+test("find be", () => {
     const text = "{\\be2}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findBe(result);
@@ -10,7 +10,7 @@ test("expected api: find be", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update be", () => {
+test("update be", () => {
     const text = "{\\fs16\\be1}Kirino-san";
     const expectedText = "{\\fs16\\be2}Kirino-san";
     const result = asu.parseContent(text);
@@ -22,7 +22,7 @@ test("expected api: update be", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add be", () => {
+test("add be", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\be2}Kirino-san";
     const result = asu.parseContent(text);
@@ -34,7 +34,7 @@ test("expected api: add be", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and be", () => {
+test("create fx and be", () => {
     const text = "Kirino-san";
     const expectedText = "{\\be2}Kirino-san";
     const result = asu.parseContent(text);
@@ -47,7 +47,7 @@ test("expected api: create fx and be", () => {
 });
 
 // fr
-test("expected api: find fr", () => {
+test("find fr", () => {
     const text = "{\\fr45}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findFr(result);
@@ -55,7 +55,7 @@ test("expected api: find fr", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update fr", () => {
+test("update fr", () => {
     const text = "{\\fs16\\fr90}Kirino-san";
     const expectedText = "{\\fs16\\fr270}Kirino-san";
     const result = asu.parseContent(text);
@@ -67,7 +67,7 @@ test("expected api: update fr", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add fr", () => {
+test("add fr", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\fr90}Kirino-san";
     const result = asu.parseContent(text);
@@ -79,7 +79,7 @@ test("expected api: add fr", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and fr", () => {
+test("create fx and fr", () => {
     const text = "Kirino-san";
     const expectedText = "{\\fr90}Kirino-san";
     const result = asu.parseContent(text);
@@ -92,7 +92,7 @@ test("expected api: create fx and fr", () => {
 });
 
 // frx
-test("expected api: find frx", () => {
+test("find frx", () => {
     const text = "{\\frx45}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findFrx(result);
@@ -100,7 +100,7 @@ test("expected api: find frx", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update frx", () => {
+test("update frx", () => {
     const text = "{\\fs16\\frx90}Kirino-san";
     const expectedText = "{\\fs16\\frx270}Kirino-san";
     const result = asu.parseContent(text);
@@ -112,7 +112,7 @@ test("expected api: update frx", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add frx", () => {
+test("add frx", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\frx90}Kirino-san";
     const result = asu.parseContent(text);
@@ -124,7 +124,7 @@ test("expected api: add frx", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and frx", () => {
+test("create fx and frx", () => {
     const text = "Kirino-san";
     const expectedText = "{\\frx90}Kirino-san";
     const result = asu.parseContent(text);
@@ -137,7 +137,7 @@ test("expected api: create fx and frx", () => {
 });
 
 // fry
-test("expected api: find fry", () => {
+test("find fry", () => {
     const text = "{\\fry45}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findFry(result);
@@ -145,7 +145,7 @@ test("expected api: find fry", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update fry", () => {
+test("update fry", () => {
     const text = "{\\fs16\\fry90}Kirino-san";
     const expectedText = "{\\fs16\\fry270}Kirino-san";
     const result = asu.parseContent(text);
@@ -157,7 +157,7 @@ test("expected api: update fry", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add fry", () => {
+test("add fry", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\fry90}Kirino-san";
     const result = asu.parseContent(text);
@@ -169,7 +169,7 @@ test("expected api: add fry", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and fry", () => {
+test("create fx and fry", () => {
     const text = "Kirino-san";
     const expectedText = "{\\fry90}Kirino-san";
     const result = asu.parseContent(text);
@@ -182,7 +182,7 @@ test("expected api: create fx and fry", () => {
 });
 
 // frz
-test("expected api: find frz", () => {
+test("find frz", () => {
     const text = "{\\frz45}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findFrz(result);
@@ -190,7 +190,7 @@ test("expected api: find frz", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update frz", () => {
+test("update frz", () => {
     const text = "{\\fs16\\frz90}Kirino-san";
     const expectedText = "{\\fs16\\frz270}Kirino-san";
     const result = asu.parseContent(text);
@@ -202,7 +202,7 @@ test("expected api: update frz", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add frz", () => {
+test("add frz", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\frz90}Kirino-san";
     const result = asu.parseContent(text);
@@ -214,7 +214,7 @@ test("expected api: add frz", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and frz", () => {
+test("create fx and frz", () => {
     const text = "Kirino-san";
     const expectedText = "{\\frz90}Kirino-san";
     const result = asu.parseContent(text);
@@ -227,7 +227,7 @@ test("expected api: create fx and frz", () => {
 });
 
 // i
-test("expected api: find i", () => {
+test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";
     const result = asu.parseContent(text);
     const tag = asu.findI(result);
@@ -235,7 +235,7 @@ test("expected api: find i", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update i", () => {
+test("update i", () => {
     const text = "{\\i0\\frz270}Kirino-san";
     const expectedText = "{\\i1\\frz270}Kirino-san";
     const result = asu.parseContent(text);
@@ -247,7 +247,7 @@ test("expected api: update i", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add i", () => {
+test("add i", () => {
     const text = "{\\fs16}Kirino-san";
     const expectedText = "{\\fs16\\i1}Kirino-san";
     const result = asu.parseContent(text);
@@ -259,7 +259,7 @@ test("expected api: add i", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and i", () => {
+test("create fx and i", () => {
     const text = "Kirino-san";
     const expectedText = "{\\i1}Kirino-san";
     const result = asu.parseContent(text);
@@ -272,7 +272,7 @@ test("expected api: create fx and i", () => {
 });
 
 // fs
-test("expected api: find fs", () => {
+test("find fs", () => {
     const text = "{\\fs32}Kirino-san";
     const result = asu.parseContent(text);
     const tag = asu.findFs(result);
@@ -280,7 +280,7 @@ test("expected api: find fs", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update fs", () => {
+test("update fs", () => {
     const text = "{\\be2\\fs32}Kirino-san";
     const expectedText = "{\\be2\\fs16}Kirino-san";
     const result = asu.parseContent(text);
@@ -292,7 +292,7 @@ test("expected api: update fs", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add fs", () => {
+test("add fs", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\fs16}Kirino-san";
     const result = asu.parseContent(text);
@@ -304,7 +304,7 @@ test("expected api: add fs", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and fs", () => {
+test("create fx and fs", () => {
     const text = "Kirino-san";
     const expectedText = "{\\fs16}Kirino-san";
     const result = asu.parseContent(text);
@@ -317,7 +317,7 @@ test("expected api: create fx and fs", () => {
 });
 
 // pos
-test("expected api: find pos", () => {
+test("find pos", () => {
     const text = "{\\pos(10,20)}Kirino-san";
     const result = asu.parseContent(text);
     const pos = asu.findPos(result);
@@ -325,7 +325,7 @@ test("expected api: find pos", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update pos", () => {
+test("update pos", () => {
     const text = "{\\be2\\pos(-10,20.12)}Kirino-san";
     const expectedText = "{\\be2\\pos(10,20)}Kirino-san";
     const result = asu.parseContent(text);
@@ -338,7 +338,7 @@ test("expected api: update pos", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add pos", () => {
+test("add pos", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\pos(-130.51,40.12)}Kirino-san";
     const result = asu.parseContent(text);
@@ -351,7 +351,7 @@ test("expected api: add pos", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and pos", () => {
+test("create fx and pos", () => {
     const text = "Kirino-san";
     const expectedText = "{\\pos(-130.51,40.12)}Kirino-san";
     const result = asu.parseContent(text);
@@ -365,7 +365,7 @@ test("expected api: create fx and pos", () => {
 });
 
 // move(x1,y1,x2,y2)
-test("expected api: find move(x1,y1,x2,y2)", () => {
+test("find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
     const move = asu.findMove(result);
@@ -373,7 +373,7 @@ test("expected api: find move(x1,y1,x2,y2)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update move(x1,y1,x2,y2)", () => {
+test("update move(x1,y1,x2,y2)", () => {
     const text = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
     const expectedText = "{\\be2\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
@@ -390,7 +390,7 @@ test("expected api: update move(x1,y1,x2,y2)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add move(x1,y1,x2,y2)", () => {
+test("add move(x1,y1,x2,y2)", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
     const result = asu.parseContent(text);
@@ -407,7 +407,7 @@ test("expected api: add move(x1,y1,x2,y2)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and move(x1,y1,x2,y2)", () => {
+test("create fx and move(x1,y1,x2,y2)", () => {
     const text = "Kirino-san";
     const expectedText = "{\\move(-10,20.12,0.52,30983)}Kirino-san";
     const result = asu.parseContent(text);
@@ -425,7 +425,7 @@ test("expected api: create fx and move(x1,y1,x2,y2)", () => {
 });
 
 // move(x1,y1,x2,y2,t1,t2)
-test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
+test("find move(x1,y1,x2,y2,t1,t2)", () => {
     const text = "{\\move(10,20,30,40,50,60)}Kirino-san";
     const result = asu.parseContent(text);
     const move = asu.findMove(result);
@@ -433,7 +433,7 @@ test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update move(x1,y1,x2,y2,t1,t2)", () => {
+test("update move(x1,y1,x2,y2,t1,t2)", () => {
     const text = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
     const expectedText = "{\\be2\\move(10,20,30,40,90,280)}Kirino-san";
     const result = asu.parseContent(text);
@@ -450,7 +450,7 @@ test("expected api: update move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: add move(x1,y1,x2,y2,t1,t2)", () => {
+test("add move(x1,y1,x2,y2,t1,t2)", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\move(-10,20.12,0.52,30983,90,280)}Kirino-san";
     const result = asu.parseContent(text);
@@ -467,7 +467,7 @@ test("expected api: add move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and move(x1,y1,x2,y2,t1,t2)", () => {
+test("create fx and move(x1,y1,x2,y2,t1,t2)", () => {
     const text = "Kirino-san";
     const expectedText = "{\\move(-10,20.12,0.52,30983,90,280)}Kirino-san";
     const result = asu.parseContent(text);
@@ -485,7 +485,7 @@ test("expected api: create fx and move(x1,y1,x2,y2,t1,t2)", () => {
 });
 
 // t(fx)
-test("expected api: find t(fx)", () => {
+test("find t(fx)", () => {
     const text = "{\\t(\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
@@ -493,7 +493,7 @@ test("expected api: find t(fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update t(fx)", () => {
+test("update t(fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
@@ -528,7 +528,7 @@ test("expected api: update t(fx)", () => {
     expect(asu.contentsToString(items)).toEqual(expectedText);
 });
 
-test("expected api: add t(fx)", () => {
+test("add t(fx)", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -564,7 +564,7 @@ test("expected api: add t(fx)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and t(fx)", () => {
+test("create fx and t(fx)", () => {
     const text = "Kirino-san";
     const expectedText = "{\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -601,7 +601,7 @@ test("expected api: create fx and t(fx)", () => {
 });
 
 // t(accel,fx)
-test("expected api: find t(accel,fx)", () => {
+test("find t(accel,fx)", () => {
     const text = "{\\t(10,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
@@ -609,7 +609,7 @@ test("expected api: find t(accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update t(accel,fx)", () => {
+test("update t(accel,fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
@@ -644,7 +644,7 @@ test("expected api: update t(accel,fx)", () => {
     expect(asu.contentsToString(items)).toEqual(expectedText);
 });
 
-test("expected api: add t(accel,fx)", () => {
+test("add t(accel,fx)", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -680,7 +680,7 @@ test("expected api: add t(accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and t(accel,fx)", () => {
+test("create fx and t(accel,fx)", () => {
     const text = "Kirino-san";
     const expectedText = "{\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -717,7 +717,7 @@ test("expected api: create fx and t(accel,fx)", () => {
 });
 
 // t(t1,t2,accel,fx)
-test("expected api: find t(t1,t2,accel,fx)", () => {
+test("find t(t1,t2,accel,fx)", () => {
     const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
@@ -725,7 +725,7 @@ test("expected api: find t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
-test("expected api: update t(t1,t2,accel,fx)", () => {
+test("update t(t1,t2,accel,fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
@@ -760,7 +760,7 @@ test("expected api: update t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(items)).toEqual(expectedText);
 });
 
-test("expected api: add t(t1,t2,accel,fx)", () => {
+test("add t(t1,t2,accel,fx)", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -796,7 +796,7 @@ test("expected api: add t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-test("expected api: create fx and t(t1,t2,accel,fx)", () => {
+test("create fx and t(t1,t2,accel,fx)", () => {
     const text = "Kirino-san";
     const expectedText = "{\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
