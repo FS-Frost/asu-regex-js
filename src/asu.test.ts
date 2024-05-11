@@ -2816,3 +2816,11 @@ test("parse multiple groups", () => {
     ];
     expect(result).toEqual(expected);
 });
+
+test.only("remove tag", () => {
+    const text = "{\\be5\\fs16\\pos(10,20)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
+    const expectedText = "{\\be5\\pos(10,20)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
+    const items = asu.parseContent(text);
+    asu.removeTag(items, asu.TagName.fs);
+    expect(asu.contentsToString(items)).toEqual(expectedText);
+});

@@ -2728,3 +2728,17 @@ function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultT
 
     return [false, tag];
 }
+
+export function removeTag(items: ContentItem[], tagName: TagName): void {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return;
+    }
+
+    const index = fx.tags.findIndex(tag => tag.name === tagName);
+    if (index < 0) {
+        return;
+    }
+
+    fx.tags.splice(index, 1);
+}
