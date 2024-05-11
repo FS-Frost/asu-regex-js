@@ -195,7 +195,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         const x2 = Number(a?.x2 ?? "0");
         const y2 = Number(a?.y2 ?? "0");
         const t1 = a?.move_t1 ? Number(a.move_t1) : null;
-        const t2 = a?.move_t1 ? Number(a.move_t2) : null;
+        const t2 = a?.move_t2 ? Number(a.move_t2) : null;
 
         const tag: TagMove = {
             name: TagName.move,
@@ -634,6 +634,52 @@ export function setMove(
     }
 
     return tag;
+}
+
+export function setT(
+    items: ContentItem[],
+    tags: Tags[],
+    accel: number | null = null,
+    t1: number | null = null,
+    t2: number | null = null,
+): TagT {
+    const defaultTag: TagT = {
+        name: TagName.t,
+        t1: t1,
+        t2: t2,
+        accel: accel,
+        tags: tags,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.t1 = t1;
+        tag.t2 = t2;
+        tag.accel = accel;
+        tag.tags = tags;
+    }
+
+    return tag;
+}
+
+export function tagsToItems(tags: Tags[]): ContentItem[] {
+    const items: ContentItem[] = [
+        {
+            name: "effect",
+            tags: tags,
+        },
+    ];
+
+    return items;
+}
+
+export function itemsToTags(items: ContentItem[]): Tags[] {
+    const fx = items.find(x => x.name === "effect");
+    if (fx == null || fx.name != "effect") {
+        return [];
+    }
+
+    return fx.tags;
 }
 
 function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [boolean, T] {

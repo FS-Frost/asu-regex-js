@@ -484,7 +484,7 @@ test("expected api: create fx and move(x1,y1,x2,y2,t1,t2)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-// t
+// t(fx)
 test("expected api: find t(fx)", () => {
     const text = "{\\t(\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -493,6 +493,114 @@ test("expected api: find t(fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update t(fx)", () => {
+    const text = "{\\t(\\fs16)}Kirino-san";
+    const expectedText = "{\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
+    const items = asu.parseContent(text);
+    let tagT = asu.findT(items);
+    expect(tagT).not.toBeNull();
+    if (tagT == null) {
+        throw "null tag t";
+    }
+
+    const tItems = asu.tagsToItems(tagT.tags);
+    asu.setPos(tItems, 12, -12.14);
+    const updatedItems = asu.itemsToTags(tItems);
+
+    asu.setT(items, updatedItems);
+    expect(tagT).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(items)).toEqual(expectedText);
+});
+
+test("expected api: add t(fx)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ]);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and t(fx)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ]);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// t(accel,fx)
 test("expected api: find t(accel,fx)", () => {
     const text = "{\\t(10,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
@@ -501,12 +609,227 @@ test("expected api: find t(accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update t(accel,fx)", () => {
+    const text = "{\\t(\\fs16)}Kirino-san";
+    const expectedText = "{\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const items = asu.parseContent(text);
+    let tagT = asu.findT(items);
+    expect(tagT).not.toBeNull();
+    if (tagT == null) {
+        throw "null tag t";
+    }
+
+    const tItems = asu.tagsToItems(tagT.tags);
+    asu.setPos(tItems, 12, -12.14);
+    const updatedItems = asu.itemsToTags(tItems);
+
+    asu.setT(items, updatedItems, 120);
+    expect(tagT).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(items)).toEqual(expectedText);
+});
+
+test("expected api: add t(accel,fx)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], 120);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and t(accel,fx)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], 120);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: null,
+        t2: null,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// t(t1,t2,accel,fx)
 test("expected api: find t(t1,t2,accel,fx)", () => {
     const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
     expect(t).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("expected api: update t(t1,t2,accel,fx)", () => {
+    const text = "{\\t(\\fs16)}Kirino-san";
+    const expectedText = "{\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const items = asu.parseContent(text);
+    let tagT = asu.findT(items);
+    expect(tagT).not.toBeNull();
+    if (tagT == null) {
+        throw "null tag t";
+    }
+
+    const tItems = asu.tagsToItems(tagT.tags);
+    asu.setPos(tItems, 12, -12.14);
+    const updatedItems = asu.itemsToTags(tItems);
+
+    asu.setT(items, updatedItems, 120, 20, 420);
+    expect(tagT).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 420,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(items)).toEqual(expectedText);
+});
+
+test("expected api: add t(t1,t2,accel,fx)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], 120, 20, 420);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 420,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and t(t1,t2,accel,fx)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], 120, 20, 420);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 420,
+        accel: 120,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
 // others
