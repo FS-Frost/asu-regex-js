@@ -392,6 +392,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.blur)) {
+        const value = result[0].substring(1 + TagName.blur.length);
+        // console.log(value);
+
+        const tag: TagBlur = {
+            name: TagName.blur,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.frx)) {
         const value = result[0].substring(1 + TagName.frx.length);
         // console.log(value);
@@ -711,6 +722,21 @@ export function findBe(items: ContentItem[]): TagBe | null {
     }
 
     const tagName = TagName.be;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findBlur(items: ContentItem[]): TagBlur | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.blur;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

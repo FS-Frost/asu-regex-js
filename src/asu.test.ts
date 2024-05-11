@@ -181,6 +181,51 @@ test("create fx and b", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// blur
+test("find blur", () => {
+    const text = "{\\blur3}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findBlur(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update blur", () => {
+    const text = "{\\fs16\\blur1}Kirino-san";
+    const expectedText = "{\\fs16\\blur2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBlur(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.blur,
+        value: 2,
+    } satisfies asu.TagBlur);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add blur", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\blur2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBlur(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.blur,
+        value: 2,
+    } satisfies asu.TagBlur);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and blur", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\blur2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setBlur(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.blur,
+        value: 2,
+    } satisfies asu.TagBlur);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // fr
 test("find fr", () => {
     const text = "{\\fr45}Kirino-san";

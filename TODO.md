@@ -4,7 +4,7 @@ https://aegisub.org/docs/latest/ass_tags/
 
 - [x] a
 - [x] an
-- [-] b
+- [x] b
 - [x] be
 - [-] blur
 - [-] bord
