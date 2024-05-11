@@ -1,8 +1,48 @@
 import * as asu from "./asu";
 
 function main() {
-    testContentParser();
+    // testContentParser();
     // testTagParser();
+    copyMove();
+}
+
+function copyMove() {
+    const baseLine = "{\\move(320,470,320,168,0,4963)}COSAS";
+
+    const targetLines: string[] = [
+        "{\\pos(182,421)}LINEA 1",
+        "{\\pos(470,361)}LINEA 2"
+    ];
+
+    let baseItems = asu.parseContent(baseLine);
+    const baseMove = asu.findMove(baseItems);
+    if (baseMove == null) {
+        console.error("base move not found");
+        return;
+    }
+
+    const deltaX = baseMove.x2 - baseMove.x1;
+    const deltaY = baseMove.y2 - baseMove.y1;
+
+    for (let i = 0; i < targetLines.length; i++) {
+        const line = targetLines[i];
+        const items = asu.parseContent(line);
+        const pos = asu.findPos(items);
+        if (pos == null) {
+            console.error(`line ${i + 1}: pos not found`);
+            continue;
+        }
+
+        asu.removeTag(items, asu.TagName.pos);
+        const x1 = pos.x;
+        const y1 = pos.y;
+        const x2 = pos.x + deltaX;
+        const y2 = pos.y + deltaY;
+        asu.setMove(items, x1, y1, x2, y2, baseMove.t1, baseMove.t2);
+        const newLine = asu.contentsToString(items);
+        console.log(newLine);
+        targetLines[i] = newLine;
+    }
 }
 
 function testContentParser() {
