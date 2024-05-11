@@ -1,5 +1,5 @@
 import { createRegExp } from "magic-regexp";
-import { reClip, reFad, reFade, reIclip, reMove, reOrg, rePos, reT, regexContent, regexTags } from "./regex";
+import { reClip, reFad, reFade, reIclip, reLine, reMove, reOrg, rePos, reT, regexContent, regexTags } from "./regex";
 
 export enum TagName {
     a = "a",
@@ -2741,4 +2741,68 @@ export function removeTag(items: ContentItem[], tagName: TagName): void {
     }
 
     fx.tags.splice(index, 1);
+}
+
+type Line = {
+    type: string;
+    layer: number;
+    start: string;
+    end: string;
+    style: string;
+    actor: string;
+    marginLeft: number;
+    marginRight: number;
+    marginVertical: number;
+    effect: string;
+    content: string;
+};
+
+export function parseLine(text: string): Line | null {
+    const re = createRegExp(reLine);
+    const match = text.match(re);
+    if (match == null) {
+        return null;
+    }
+
+    const groups = match.groups;
+    const line: Line = {
+        type: groups?.type ?? "",
+        layer: Number(groups?.layer ?? "0"),
+        start: groups?.start ?? "",
+        end: groups?.end ?? "",
+        style: groups?.style ?? "",
+        actor: groups?.actor ?? "",
+        marginLeft: Number(groups?.marginLeft ?? "0"),
+        marginRight: Number(groups?.marginRight ?? "0"),
+        marginVertical: Number(groups?.marginVertical ?? "0"),
+        effect: groups?.effect ?? "",
+        content: groups?.content ?? "",
+    };
+
+    return line;
+}
+
+export function lineToString(line: Line): string {
+    let s = line.type;
+    s += ": ";
+    s += line.layer;
+    s += ",";
+    s += line.start;
+    s += ",";
+    s += line.end;
+    s += ",";
+    s += line.style;
+    s += ",";
+    s += line.actor;
+    s += ",";
+    s += line.marginLeft;
+    s += ",";
+    s += line.marginRight;
+    s += ",";
+    s += line.marginVertical;
+    s += ",";
+    s += line.effect;
+    s += ",";
+    s += line.content;
+    return s;
 }

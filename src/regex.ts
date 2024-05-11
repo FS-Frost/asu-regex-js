@@ -1,6 +1,41 @@
-import { charNotIn, createRegExp, digit, exactly, oneOrMore } from "magic-regexp";
+import { anyOf, char, charNotIn, createRegExp, digit, exactly, oneOrMore } from "magic-regexp";
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
+
+// Dialogue: 0,0:00:00.00,0:00:05.00,Default,actor,1,2,3,fx,TEXT
+// Comment: 0,0:00:00.00,0:00:05.00,Default,actor,1,2,3,fx,{\pos(182,421)}LINEA 1
+
+const reTime =
+    // 0:
+    oneOrMore(digit).and(exactly(":"))
+        // 00:00
+        .and(digit.times(2)).and(exactly(":"))
+        // 00.00
+        .and(digit.times(2)).and(exactly(".")).and(digit.times(2));
+
+export const reLine =
+    anyOf("Dialogue", "Comment").groupedAs("type")
+        .and(exactly(": "))
+        .and(oneOrMore(digit.groupedAs("layer")))
+        .and(exactly(","))
+        .and(reTime.groupedAs("start"))
+        .and(exactly(","))
+        .and(reTime.groupedAs("end"))
+        .and(exactly(","))
+        .and(oneOrMore(charNotIn(",")).groupedAs("style"))
+        .and(exactly(","))
+        .and(oneOrMore(charNotIn(",")).groupedAs("actor"))
+        .and(exactly(","))
+        .and(oneOrMore(digit).groupedAs("marginLeft"))
+        .and(exactly(","))
+        .and(oneOrMore(digit).groupedAs("marginRight"))
+        .and(exactly(","))
+        .and(oneOrMore(digit).groupedAs("marginVertical"))
+        .and(exactly(","))
+        .and(oneOrMore(charNotIn(",")).groupedAs("effect"))
+        .and(exactly(","))
+        .and(oneOrMore(char).optionally().groupedAs("content"))
+    ;
 
 export const reInt = exactly("-").optionally().and(oneOrMore(digit));
 

@@ -2746,6 +2746,18 @@ test("create fx and t(t1,t2,accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// line
+test("parse line", () => {
+    const text = "Dialogue: 0,1:23:45.67,2:34:56.78,Chitanda,actor,12,23,34,fx,{\\pos(182,421)}LINE 1";
+    const line = asu.parseLine(text);
+    expect(line).not.toBeNull();
+    if (line == null) {
+        throw "null line";
+    }
+
+    expect(asu.lineToString(line)).toEqual(text);
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
@@ -2817,7 +2829,7 @@ test("parse multiple groups", () => {
     expect(result).toEqual(expected);
 });
 
-test.only("remove tag", () => {
+test("remove tag", () => {
     const text = "{\\be5\\fs16\\pos(10,20)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const expectedText = "{\\be5\\pos(10,20)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const items = asu.parseContent(text);
