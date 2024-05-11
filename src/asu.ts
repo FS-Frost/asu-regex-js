@@ -355,10 +355,10 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     if (tagNameSource.startsWith(TagName.move)) {
         const r = createRegExp(reMove);
         const a = result[0].match(r)?.groups;
-        const x1 = Number(a?.x1 ?? "0");
-        const y1 = Number(a?.y1 ?? "0");
-        const x2 = Number(a?.x2 ?? "0");
-        const y2 = Number(a?.y2 ?? "0");
+        const x1 = Number(a?.move_x1 ?? "0");
+        const y1 = Number(a?.move_y1 ?? "0");
+        const x2 = Number(a?.move_x2 ?? "0");
+        const y2 = Number(a?.move_y2 ?? "0");
         const t1 = a?.move_t1 ? Number(a.move_t1) : null;
         const t2 = a?.move_t2 ? Number(a.move_t2) : null;
 
@@ -422,7 +422,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.iclip)) {
         const r = createRegExp(reIclip);
         const a = result[0].match(r)?.groups;
-        const args = a?.args ?? "";
+        const args = a?.iclip_args ?? "";
 
         const tag: TagIclip = {
             name: TagName.iclip,
@@ -503,7 +503,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.clip)) {
         const r = createRegExp(reClip);
         const a = result[0].match(r)?.groups;
-        const args = a?.args ?? "";
+        const args = a?.clip_args ?? "";
 
         const tag: TagClip = {
             name: TagName.clip,
@@ -524,8 +524,8 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.pos)) {
         const r = createRegExp(rePos);
         const a = result[0].match(r)?.groups;
-        const x = Number(a?.x ?? "0");
-        const y = Number(a?.y ?? "0");
+        const x = Number(a?.pos_x ?? "0");
+        const y = Number(a?.pos_y ?? "0");
 
         const tag: TagPos = {
             name: TagName.pos,
@@ -538,8 +538,8 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     else if (tagNameSource.startsWith(TagName.org)) {
         const r = createRegExp(reOrg);
         const a = result[0].match(r)?.groups;
-        const x = Number(a?.x ?? "0");
-        const y = Number(a?.y ?? "0");
+        const x = Number(a?.org_x ?? "0");
+        const y = Number(a?.org_y ?? "0");
 
         const tag: TagOrg = {
             name: TagName.org,

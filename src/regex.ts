@@ -129,9 +129,9 @@ export const reI = exactly("\\").and("i").and(exactly("1").or("0"));
 
 export const reFs = exactly("\\").and("fs").and(oneOrMore(digit));
 
-export const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("x")).and(exactly(",")).and(reFloat.groupedAs("y")).and(exactly(")"));
+export const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 
-export const reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("x")).and(exactly(",")).and(reFloat.groupedAs("y")).and(exactly(")"));
+export const reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
 
 export const reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
 
@@ -139,11 +139,11 @@ export const reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.gr
 
 export const reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
 
-export const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("x1")).and(exactly(",")).and(reFloat.groupedAs("y1")).and(exactly(",")).and(reFloat.groupedAs("x2")).and(exactly(",")).and(reFloat.groupedAs("y2")).and(reMoveTimeArgs).and(exactly(")"));
+export const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
 
-export const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("args")).and(exactly(")"));
+export const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
 
-export const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("args")).and(exactly(")"));
+export const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
 
 export const unitTags = reBe
     .or(reAlpha)
