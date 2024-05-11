@@ -766,6 +766,141 @@ test("create fx and fay", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// fscx
+test("find fscx", () => {
+    const text = "{\\fscx45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFscx(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fscx", () => {
+    const text = "{\\fs16\\fscx90}Kirino-san";
+    const expectedText = "{\\fs16\\fscx270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscx(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fscx,
+        value: 270,
+    } satisfies asu.TagFscx);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fscx", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fscx90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscx(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fscx,
+        value: 90,
+    } satisfies asu.TagFscx);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fscx", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fscx90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscx(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fscx,
+        value: 90,
+    } satisfies asu.TagFscx);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fscy
+test("find fscy", () => {
+    const text = "{\\fscy45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFscy(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fscy", () => {
+    const text = "{\\fs16\\fscy90}Kirino-san";
+    const expectedText = "{\\fs16\\fscy270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscy(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fscy,
+        value: 270,
+    } satisfies asu.TagFscy);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fscy", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fscy90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscy(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fscy,
+        value: 90,
+    } satisfies asu.TagFscy);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fscy", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fscy90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFscy(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fscy,
+        value: 90,
+    } satisfies asu.TagFscy);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fsp
+test("find fsp", () => {
+    const text = "{\\fsp45}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findFsp(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fsp", () => {
+    const text = "{\\fs16\\fsp90}Kirino-san";
+    const expectedText = "{\\fs16\\fsp270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFsp(result, 270);
+    expect(tag).toEqual({
+        name: asu.TagName.fsp,
+        value: 270,
+    } satisfies asu.TagFsp);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fsp", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\fsp90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFsp(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fsp,
+        value: 90,
+    } satisfies asu.TagFsp);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fsp", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fsp90}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFsp(result, 90);
+    expect(tag).toEqual({
+        name: asu.TagName.fsp,
+        value: 90,
+    } satisfies asu.TagFsp);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // i
 test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";

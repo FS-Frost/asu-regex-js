@@ -420,22 +420,6 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    else if (tagNameSource.startsWith(TagName.pos)) {
-        const value = result[0].substring(1 + TagName.pos.length);
-        // console.log(value);
-        const r = createRegExp(rePos);
-        const a = result[0].match(r)?.groups;
-        const x = Number(a?.x ?? "0");
-        const y = Number(a?.y ?? "0");
-
-        const tag: TagPos = {
-            name: TagName.pos,
-            x: x,
-            y: y,
-        };
-        tags.push(tag);
-    }
-
     else if (tagNameSource.startsWith(TagName.blur)) {
         const value = result[0].substring(1 + TagName.blur.length);
         // console.log(value);
@@ -465,6 +449,55 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         const tag: TagShad = {
             name: TagName.shad,
             value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fscx)) {
+        const value = result[0].substring(1 + TagName.fscx.length);
+        // console.log(value);
+
+        const tag: TagFscx = {
+            name: TagName.fscx,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fscy)) {
+        const value = result[0].substring(1 + TagName.fscy.length);
+        // console.log(value);
+
+        const tag: TagFscy = {
+            name: TagName.fscy,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fsp)) {
+        const value = result[0].substring(1 + TagName.fsp.length);
+        // console.log(value);
+
+        const tag: TagFsp = {
+            name: TagName.fsp,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.pos)) {
+        const value = result[0].substring(1 + TagName.pos.length);
+        // console.log(value);
+        const r = createRegExp(rePos);
+        const a = result[0].match(r)?.groups;
+        const x = Number(a?.x ?? "0");
+        const y = Number(a?.y ?? "0");
+
+        const tag: TagPos = {
+            name: TagName.pos,
+            x: x,
+            y: y,
         };
         tags.push(tag);
     }
@@ -1005,6 +1038,51 @@ export function findFay(items: ContentItem[]): TagFay | null {
     }
 
     const tagName = TagName.fay;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFscx(items: ContentItem[]): TagFscx | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fscx;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFscy(items: ContentItem[]): TagFscy | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fscy;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFsp(items: ContentItem[]): TagFsp | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fsp;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

@@ -33,9 +33,9 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] fry
 - [x] frz
 - [x] fs
-- [-] fscx
-- [-] fscy
-- [-] fsp
+- [x] fscx
+- [x] fscy
+- [x] fsp
 - [x] i
 - [-] k
 - [-] K
