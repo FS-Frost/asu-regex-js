@@ -76,6 +76,12 @@ export const reFs = exactly("\\").and("fs").and(oneOrMore(digit));
 
 export const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("x")).and(exactly(",")).and(reFloat.groupedAs("y")).and(exactly(")"));
 
+export const reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("x")).and(exactly(",")).and(reFloat.groupedAs("y")).and(exactly(")"));
+
+export const reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
+
+export const reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
+
 export const reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
 
 export const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("x1")).and(exactly(",")).and(reFloat.groupedAs("y1")).and(exactly(",")).and(reFloat.groupedAs("x2")).and(exactly(",")).and(reFloat.groupedAs("y2")).and(reMoveTimeArgs).and(exactly(")"));
@@ -91,8 +97,11 @@ export const unitTags = reBe
     .or(reShad)
     .or(reFscx)
     .or(reFscy)
+    .or(reFade)
     .or(reFsp)
     .or(rePos)
+    .or(reOrg)
+    .or(reFad)
     .or(rePbo)
     .or(reFrx)
     .or(reFry)

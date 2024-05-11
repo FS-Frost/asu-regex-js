@@ -1,5 +1,5 @@
 import { createRegExp } from "magic-regexp";
-import { reMove, rePos, reT, regexContent, regexTags } from "./regex";
+import { reFad, reFade, reMove, reOrg, rePos, reT, regexContent, regexTags } from "./regex";
 
 export enum TagName {
     a = "a",
@@ -475,6 +475,32 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.fade)) {
+        const value = result[0].substring(1 + TagName.fad.length);
+        // console.log(value);
+        const r = createRegExp(reFade);
+        const a = result[0].match(r)?.groups;
+        const alpha1 = Number(a?.fade_alpha1 ?? "0");
+        const alpha2 = Number(a?.fade_alpha2 ?? "0");
+        const alpha3 = Number(a?.fade_alpha3 ?? "0");
+        const t1 = Number(a?.fade_t1 ?? "0");
+        const t2 = Number(a?.fade_t2 ?? "0");
+        const t3 = Number(a?.fade_t3 ?? "0");
+        const t4 = Number(a?.fade_t4 ?? "0");
+
+        const tag: TagFade = {
+            name: TagName.fade,
+            alpha1: alpha1,
+            alpha2: alpha2,
+            alpha3: alpha3,
+            t1: t1,
+            t2: t2,
+            t3: t3,
+            t4: t4,
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.fsp)) {
         const value = result[0].substring(1 + TagName.fsp.length);
         // console.log(value);
@@ -498,6 +524,38 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.pos,
             x: x,
             y: y,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.org)) {
+        const value = result[0].substring(1 + TagName.org.length);
+        // console.log(value);
+        const r = createRegExp(reOrg);
+        const a = result[0].match(r)?.groups;
+        const x = Number(a?.x ?? "0");
+        const y = Number(a?.y ?? "0");
+
+        const tag: TagOrg = {
+            name: TagName.org,
+            x: x,
+            y: y,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.fad)) {
+        const value = result[0].substring(1 + TagName.fad.length);
+        // console.log(value);
+        const r = createRegExp(reFad);
+        const a = result[0].match(r)?.groups;
+        const fadeIn = Number(a?.in ?? "0");
+        const fadeOut = Number(a?.out ?? "0");
+
+        const tag: TagFad = {
+            name: TagName.fad,
+            in: fadeIn,
+            out: fadeOut,
         };
         tags.push(tag);
     }
@@ -1454,6 +1512,51 @@ export function findPos(items: ContentItem[]): TagPos | null {
     return tag;
 }
 
+export function findOrg(items: ContentItem[]): TagOrg | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.org;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFad(items: ContentItem[]): TagFad | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fad;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findFade(items: ContentItem[]): TagFade | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.fade;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
 export function findMove(items: ContentItem[]): TagMove | null {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
@@ -1971,6 +2074,73 @@ export function setPos(items: ContentItem[], x: number, y: number): TagPos {
     if (!updated) {
         tag.x = x;
         tag.y = y;
+    }
+
+    return tag;
+}
+
+export function setOrg(items: ContentItem[], x: number, y: number): TagOrg {
+    const defaultTag: TagOrg = {
+        name: TagName.org,
+        x: x,
+        y: y,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.x = x;
+        tag.y = y;
+    }
+
+    return tag;
+}
+
+export function setFad(items: ContentItem[], fadeIn: number, fadeOut: number): TagFad {
+    const defaultTag: TagFad = {
+        name: TagName.fad,
+        in: fadeIn,
+        out: fadeOut,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.in = fadeIn;
+        tag.out = fadeOut;
+    }
+
+    return tag;
+}
+
+export function setFade(
+    items: ContentItem[],
+    alpha1: number,
+    alpha2: number,
+    alpha3: number,
+    t1: number,
+    t2: number,
+    t3: number,
+    t4: number,
+): TagFade {
+    const defaultTag: TagFade = {
+        name: TagName.fade,
+        alpha1: alpha1,
+        alpha2: alpha2,
+        alpha3: alpha3,
+        t1: t1,
+        t2: t2,
+        t3: t3,
+        t4: t4,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.alpha1 = alpha1;
+        tag.alpha2 = alpha2;
+        tag.alpha3 = alpha3;
+        tag.t1 = t1;
+        tag.t2 = t2;
+        tag.t3 = t3;
+        tag.t4 = t4;
     }
 
     return tag;

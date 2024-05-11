@@ -1579,6 +1579,165 @@ test("create fx and pos", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// org
+test("find org", () => {
+    const text = "{\\org(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const org = asu.findOrg(result);
+    expect(org).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update org", () => {
+    const text = "{\\be2\\org(-10,20.12)}Kirino-san";
+    const expectedText = "{\\be2\\org(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setOrg(result, 10, 20);
+    expect(tag).toEqual({
+        name: asu.TagName.org,
+        x: 10,
+        y: 20,
+    } satisfies asu.TagOrg);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add org", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\org(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setOrg(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.org,
+        x: -130.51,
+        y: 40.12,
+    } satisfies asu.TagOrg);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and org", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\org(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setOrg(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.org,
+        x: -130.51,
+        y: 40.12,
+    } satisfies asu.TagOrg);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fad
+test("find fad", () => {
+    const text = "{\\fad(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const fad = asu.findFad(result);
+    expect(fad).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fad", () => {
+    const text = "{\\be2\\fad(-10,20.12)}Kirino-san";
+    const expectedText = "{\\be2\\fad(10,20)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFad(result, 10, 20);
+    expect(tag).toEqual({
+        name: asu.TagName.fad,
+        in: 10,
+        out: 20,
+    } satisfies asu.TagFad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fad", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\fad(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFad(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.fad,
+        in: -130.51,
+        out: 40.12,
+    } satisfies asu.TagFad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fad", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fad(-130.51,40.12)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFad(result, -130.51, 40.12);
+    expect(tag).toEqual({
+        name: asu.TagName.fad,
+        in: -130.51,
+        out: 40.12,
+    } satisfies asu.TagFad);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// fade
+test("find fade", () => {
+    const text = "{\\fade(10,20,30,1,2,3,4)}Kirino-san";
+    const result = asu.parseContent(text);
+    const fade = asu.findFade(result);
+    expect(fade).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update fade", () => {
+    const text = "{\\be2\\fade(-10,-20,-30,-1,-2,-3,-4)}Kirino-san";
+    const expectedText = "{\\be2\\fade(10,20,30,1,2,3,4)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFade(result, 10, 20, 30, 1, 2, 3, 4);
+    expect(tag).toEqual({
+        name: asu.TagName.fade,
+        alpha1: 10,
+        alpha2: 20,
+        alpha3: 30,
+        t1: 1,
+        t2: 2,
+        t3: 3,
+        t4: 4,
+    } satisfies asu.TagFade);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add fade", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\fade(10,20,30,1,2,3,4)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFade(result, 10, 20, 30, 1, 2, 3, 4);
+    expect(tag).toEqual({
+        name: asu.TagName.fade,
+        alpha1: 10,
+        alpha2: 20,
+        alpha3: 30,
+        t1: 1,
+        t2: 2,
+        t3: 3,
+        t4: 4,
+    } satisfies asu.TagFade);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and fade", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\fade(10,20,30,1,2,3,4)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setFade(result, 10, 20, 30, 1, 2, 3, 4);
+    expect(tag).toEqual({
+        name: asu.TagName.fade,
+        alpha1: 10,
+        alpha2: 20,
+        alpha3: 30,
+        t1: 1,
+        t2: 2,
+        t3: 3,
+        t4: 4,
+    } satisfies asu.TagFade);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // move(x1,y1,x2,y2)
 test("find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";

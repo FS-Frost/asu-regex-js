@@ -22,8 +22,8 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] 4a
 - [ ] clip
 - [ ] iclip
-- [ ] fad
-- [ ] fade
+- [x] fad
+- [x] fade
 - [x] fax
 - [x] fay
 - [x] fe
@@ -43,7 +43,7 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] ko
 - [x] move(x1,y1,x2,y2)
 - [x] move(x1,y1,x2,y2,t1,t2)
-- [ ] org
+- [x] org
 - [x] p
 - [x] pbo
 - [x] pos
