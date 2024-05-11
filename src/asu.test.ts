@@ -2632,7 +2632,7 @@ test("create fx and t(accel,fx)", () => {
 
 // t(t1,t2,accel,fx)
 test("find t(t1,t2,accel,fx)", () => {
-    const text = "{\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
+    const text = "{\\be2\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))}Kirino-san";
     const result = asu.parseContent(text);
     const t = asu.findT(result);
     expect(t).not.toBeNull();
