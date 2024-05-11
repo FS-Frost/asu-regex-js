@@ -352,13 +352,42 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     // console.log("MATCH:", result[0]);
     const tagNameSource = text.substring(1);
 
-    if (tagNameSource.startsWith(TagName.be)) {
-        const value = result[0].substring(1 + TagName.be.length);
+    if (tagNameSource.startsWith(TagName.move)) {
+        const value = result[0].substring(1 + TagName.move.length);
         // console.log(value);
+        const r = createRegExp(reMove);
+        const a = result[0].match(r)?.groups;
+        const x1 = Number(a?.x1 ?? "0");
+        const y1 = Number(a?.y1 ?? "0");
+        const x2 = Number(a?.x2 ?? "0");
+        const y2 = Number(a?.y2 ?? "0");
+        const t1 = a?.move_t1 ? Number(a.move_t1) : null;
+        const t2 = a?.move_t2 ? Number(a.move_t2) : null;
 
-        const tag: TagBe = {
-            name: TagName.be,
-            value: Number(value),
+        const tag: TagMove = {
+            name: TagName.move,
+            x1: x1,
+            y1: y1,
+            x2: x2,
+            y2: y2,
+            t1: t1,
+            t2: t2,
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.pos)) {
+        const value = result[0].substring(1 + TagName.pos.length);
+        // console.log(value);
+        const r = createRegExp(rePos);
+        const a = result[0].match(r)?.groups;
+        const x = Number(a?.x ?? "0");
+        const y = Number(a?.y ?? "0");
+
+        const tag: TagPos = {
+            name: TagName.pos,
+            x: x,
+            y: y,
         };
         tags.push(tag);
     }
@@ -396,23 +425,34 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.an)) {
+        const value = result[0].substring(1 + TagName.be.length);
+        // console.log(value);
+
+        const tag: TagAn = {
+            name: TagName.an,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.be)) {
+        const value = result[0].substring(1 + TagName.be.length);
+        // console.log(value);
+
+        const tag: TagBe = {
+            name: TagName.be,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.fr)) {
         const value = result[0].substring(1 + TagName.fr.length);
         // console.log(value);
 
         const tag: TagFr = {
             name: TagName.fr,
-            value: Number(value),
-        };
-        tags.push(tag);
-    }
-
-    else if (tagNameSource.startsWith(TagName.i)) {
-        const value = result[0].substring(1 + TagName.i.length);
-        // console.log(value);
-
-        const tag: TagI = {
-            name: TagName.i,
             value: Number(value),
         };
         tags.push(tag);
@@ -429,42 +469,13 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
-    else if (tagNameSource.startsWith(TagName.pos)) {
-        const value = result[0].substring(1 + TagName.pos.length);
+    else if (tagNameSource.startsWith(TagName.i)) {
+        const value = result[0].substring(1 + TagName.i.length);
         // console.log(value);
-        const r = createRegExp(rePos);
-        const a = result[0].match(r)?.groups;
-        const x = Number(a?.x ?? "0");
-        const y = Number(a?.y ?? "0");
 
-        const tag: TagPos = {
-            name: TagName.pos,
-            x: x,
-            y: y,
-        };
-        tags.push(tag);
-    }
-
-    else if (tagNameSource.startsWith(TagName.move)) {
-        const value = result[0].substring(1 + TagName.move.length);
-        // console.log(value);
-        const r = createRegExp(reMove);
-        const a = result[0].match(r)?.groups;
-        const x1 = Number(a?.x1 ?? "0");
-        const y1 = Number(a?.y1 ?? "0");
-        const x2 = Number(a?.x2 ?? "0");
-        const y2 = Number(a?.y2 ?? "0");
-        const t1 = a?.move_t1 ? Number(a.move_t1) : null;
-        const t2 = a?.move_t2 ? Number(a.move_t2) : null;
-
-        const tag: TagMove = {
-            name: TagName.move,
-            x1: x1,
-            y1: y1,
-            x2: x2,
-            y2: y2,
-            t1: t1,
-            t2: t2,
+        const tag: TagI = {
+            name: TagName.i,
+            value: Number(value),
         };
         tags.push(tag);
     }
@@ -644,6 +655,21 @@ export function findA(items: ContentItem[]): TagA | null {
     }
 
     const tagName = TagName.a;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findAn(items: ContentItem[]): TagAn | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.an;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

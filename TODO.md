@@ -3,7 +3,7 @@
 https://aegisub.org/docs/latest/ass_tags/
 
 - [x] a
-- [-] an
+- [x] an
 - [-] b
 - [x] be
 - [-] blur
