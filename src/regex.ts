@@ -1,4 +1,4 @@
-import { createRegExp, digit, exactly, oneOrMore } from "magic-regexp";
+import { charNotIn, createRegExp, digit, exactly, oneOrMore } from "magic-regexp";
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
@@ -21,6 +21,8 @@ export const reQ = exactly("\\").and("q").and(oneOrMore(digit));
 export const reS = exactly("\\").and("s").and(oneOrMore(digit));
 
 export const reU = exactly("\\").and("u").and(oneOrMore(digit));
+
+export const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
 
 export const reP = exactly("\\").and("p").and(oneOrMore(digit));
 
@@ -102,6 +104,7 @@ export const unitTags = reBe
     .or(reU)
     .or(reS)
     .or(reP)
+    .or(reR)
     .or(reI)
     .or(reB)
     .or(reA)

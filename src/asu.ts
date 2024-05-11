@@ -656,6 +656,50 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.q)) {
+        const value = result[0].substring(1 + TagName.q.length);
+        // console.log(value);
+
+        const tag: TagQ = {
+            name: TagName.q,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.s)) {
+        const value = result[0].substring(1 + TagName.s.length);
+        // console.log(value);
+
+        const tag: TagS = {
+            name: TagName.s,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.u)) {
+        const value = result[0].substring(1 + TagName.u.length);
+        // console.log(value);
+
+        const tag: TagU = {
+            name: TagName.u,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.r)) {
+        const value = result[0].substring(1 + TagName.r.length);
+        // console.log(value);
+
+        const tag: TagR = {
+            name: TagName.r,
+            style: value,
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.p)) {
         const value = result[0].substring(1 + TagName.p.length);
         // console.log(value);
@@ -830,7 +874,7 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.r:
-                s += `\\fn${tag.style}`;
+                s += `\\r${tag.style}`;
                 break;
 
             default:
@@ -1134,6 +1178,66 @@ export function findPbo(items: ContentItem[]): TagPbo | null {
     }
 
     const tagName = TagName.pbo;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findQ(items: ContentItem[]): TagQ | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.q;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findS(items: ContentItem[]): TagS | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.s;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findU(items: ContentItem[]): TagU | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.u;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findR(items: ContentItem[]): TagR | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.r;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;
@@ -1751,6 +1855,20 @@ export function setI(items: ContentItem[], newValue: number): TagI {
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.value = newValue;
+    }
+
+    return tag;
+}
+
+export function setR(items: ContentItem[], style: string): TagR {
+    const defaultTag: TagR = {
+        name: TagName.r,
+        style: style,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.style = style;
     }
 
     return tag;

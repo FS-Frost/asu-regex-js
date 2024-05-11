@@ -44,16 +44,16 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] move(x1,y1,x2,y2)
 - [x] move(x1,y1,x2,y2,t1,t2)
 - [ ] org
-- [-] p
-- [-] pbo
+- [x] p
+- [x] pbo
 - [x] pos
-- [-] q
-- [ ] r
-- [-] s
+- [x] q
+- [x] r
+- [x] s
 - [x] shad
 - [x] xshad
 - [x] yshad
 - [x] t(fx)
 - [x] t(accel,fx)
 - [x] t(t1,t2,accel,fx)
-- [-] u
+- [x] u
