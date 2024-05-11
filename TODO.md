@@ -3,13 +3,13 @@
 https://aegisub.org/docs/latest/ass_tags/
 
 - [x] a
-- [ ] an
-- [ ] b
+- [-] an
+- [-] b
 - [x] be
-- [ ] blur
-- [ ] bord
-- [ ] xbord
-- [ ] ybord
+- [-] blur
+- [-] bord
+- [-] xbord
+- [-] ybord
 - [ ] c
 - [ ] 1c
 - [ ] 2c
@@ -24,36 +24,36 @@ https://aegisub.org/docs/latest/ass_tags/
 - [ ] iclip
 - [ ] fad
 - [ ] fade
-- [ ] fax
-- [ ] fay
+- [-] fax
+- [-] fay
 - [ ] fe
 - [ ] fn
-- [ ] fr
-- [ ] frx
-- [ ] fry
-- [ ] frz
+- [x] fr
+- [x] frx
+- [x] fry
+- [x] frz
 - [x] fs
-- [ ] fscx
-- [ ] fscy
-- [ ] fsp
+- [-] fscx
+- [-] fscy
+- [-] fsp
 - [x] i
-- [ ] k
-- [ ] K
-- [ ] kf
-- [ ] ko
+- [-] k
+- [-] K
+- [-] kf
+- [-] ko
 - [x] move(x1,y1,x2,y2)
 - [x] move(x1,y1,x2,y2,t1,t2)
 - [ ] org
-- [ ] p
-- [ ] pbo
+- [-] p
+- [-] pbo
 - [x] pos
-- [ ] q
+- [-] q
 - [ ] r
-- [ ] s
-- [ ] shad
-- [ ] xshad
-- [ ] yshad
+- [-] s
+- [-] shad
+- [-] xshad
+- [-] yshad
 - [x] t(fx)
 - [x] t(accel,fx)
 - [x] t(t1,t2,accel,fx)
-- [ ] u
+- [-] u
