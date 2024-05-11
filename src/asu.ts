@@ -499,6 +499,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.b)) {
+        const value = result[0].substring(1 + TagName.b.length);
+        // console.log(value);
+
+        const tag: TagB = {
+            name: TagName.b,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.a)) {
         const value = result[0].substring(1 + TagName.a.length);
         // console.log(value);
@@ -655,6 +666,21 @@ export function findA(items: ContentItem[]): TagA | null {
     }
 
     const tagName = TagName.a;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findB(items: ContentItem[]): TagB | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.b;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

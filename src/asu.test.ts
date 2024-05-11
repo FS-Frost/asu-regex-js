@@ -136,6 +136,51 @@ test("create fx and be", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// b
+test("find b", () => {
+    const text = "{\\b1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findB(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update b", () => {
+    const text = "{\\fs16\\b1}Kirino-san";
+    const expectedText = "{\\fs16\\b0}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setB(result, 0);
+    expect(tag).toEqual({
+        name: asu.TagName.b,
+        value: 0,
+    } satisfies asu.TagB);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add b", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\b1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setB(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.b,
+        value: 1,
+    } satisfies asu.TagB);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and b", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\b1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setB(result, 1);
+    expect(tag).toEqual({
+        name: asu.TagName.b,
+        value: 1,
+    } satisfies asu.TagB);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // fr
 test("find fr", () => {
     const text = "{\\fr45}Kirino-san";

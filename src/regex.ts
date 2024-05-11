@@ -28,7 +28,7 @@ export const rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
 
 export const reAn = exactly("\\").and("an").and(oneOrMore(digit));
 
-export const reB = exactly("\\").and("be").and(oneOrMore(digit));
+export const reB = exactly("\\").and("b").and(oneOrMore(digit));
 
 export const reBe = exactly("\\").and("be").and(oneOrMore(digit));
 
