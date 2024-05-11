@@ -364,7 +364,7 @@ test("expected api: create fx and pos", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-// move
+// move(x1,y1,x2,y2)
 test("expected api: find move(x1,y1,x2,y2)", () => {
     const text = "{\\move(10,20,30,40)}Kirino-san";
     const result = asu.parseContent(text);
@@ -373,12 +373,115 @@ test("expected api: find move(x1,y1,x2,y2)", () => {
     expect(asu.contentsToString(result)).toEqual(text);
 });
 
+test("expected api: update move(x1,y1,x2,y2)", () => {
+    const text = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
+    const expectedText = "{\\be2\\move(10,20,30,40)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, 10, 20, 30, 40);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: 10,
+        y1: 20,
+        x2: 30,
+        y2: 40,
+        t1: null,
+        t2: null,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: add move(x1,y1,x2,y2)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, -10, 20.12, 0.52, 30983);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: -10,
+        y1: 20.12,
+        x2: 0.52,
+        y2: 30983,
+        t1: null,
+        t2: null,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and move(x1,y1,x2,y2)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\move(-10,20.12,0.52,30983)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, -10, 20.12, 0.52, 30983);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: -10,
+        y1: 20.12,
+        x2: 0.52,
+        y2: 30983,
+        t1: null,
+        t2: null,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// move(x1,y1,x2,y2,t1,t2)
 test("expected api: find move(x1,y1,x2,y2,t1,t2)", () => {
     const text = "{\\move(10,20,30,40,50,60)}Kirino-san";
     const result = asu.parseContent(text);
     const move = asu.findMove(result);
     expect(move).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("expected api: update move(x1,y1,x2,y2,t1,t2)", () => {
+    const text = "{\\be2\\move(-10,20.12,0.52,30983)}Kirino-san";
+    const expectedText = "{\\be2\\move(10,20,30,40,90,280)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, 10, 20, 30, 40, 90, 280);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: 10,
+        y1: 20,
+        x2: 30,
+        y2: 40,
+        t1: 90,
+        t2: 280,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: add move(x1,y1,x2,y2,t1,t2)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\move(-10,20.12,0.52,30983,90,280)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, -10, 20.12, 0.52, 30983, 90, 280);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: -10,
+        y1: 20.12,
+        x2: 0.52,
+        y2: 30983,
+        t1: 90,
+        t2: 280,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("expected api: create fx and move(x1,y1,x2,y2,t1,t2)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\move(-10,20.12,0.52,30983,90,280)}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setMove(result, -10, 20.12, 0.52, 30983, 90, 280);
+    expect(tag).toEqual({
+        name: asu.TagName.move,
+        x1: -10,
+        y1: 20.12,
+        x2: 0.52,
+        y2: 30983,
+        t1: 90,
+        t2: 280,
+    } satisfies asu.TagMove);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
 // t

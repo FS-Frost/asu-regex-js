@@ -604,6 +604,38 @@ export function setPos(items: ContentItem[], x: number, y: number): TagPos {
     return tag;
 }
 
+export function setMove(
+    items: ContentItem[],
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    t1: number | null = null,
+    t2: number | null = null,
+): TagMove {
+    const defaultTag: TagMove = {
+        name: TagName.move,
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        t1: t1,
+        t2: t2,
+    };
+
+    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        tag.x1 = x1;
+        tag.y1 = y1;
+        tag.x2 = x2;
+        tag.y2 = y2;
+        tag.t1 = t1;
+        tag.t2 = t2;
+    }
+
+    return tag;
+}
+
 function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [boolean, T] {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {
