@@ -11,6 +11,7 @@ if (await fs.exists(buildDir)) {
 
 let config: BuildConfig = {
     entrypoints: ['./src/asu.ts'],
+    sourcemap: "external",
 };
 
 const targets: Target[] = [
