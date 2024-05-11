@@ -557,6 +557,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else if (tagNameSource.startsWith(TagName.pbo)) {
+        const value = result[0].substring(1 + TagName.pbo.length);
+        // console.log(value);
+
+        const tag: TagPbo = {
+            name: TagName.pbo,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
     else if (tagNameSource.startsWith(TagName.an)) {
         const value = result[0].substring(1 + TagName.be.length);
         // console.log(value);
@@ -640,6 +651,17 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
         const tag: TagKUpperCase = {
             name: TagName.kUpperCase,
+            value: Number(value),
+        };
+        tags.push(tag);
+    }
+
+    else if (tagNameSource.startsWith(TagName.p)) {
+        const value = result[0].substring(1 + TagName.p.length);
+        // console.log(value);
+
+        const tag: TagP = {
+            name: TagName.p,
             value: Number(value),
         };
         tags.push(tag);
@@ -1082,6 +1104,36 @@ export function findFay(items: ContentItem[]): TagFay | null {
     }
 
     const tagName = TagName.fay;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findP(items: ContentItem[]): TagP | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.p;
+    const tag = fx.tags.find(tag => tag.name == tagName);
+    if (tag?.name != tagName) {
+        return null;
+    }
+
+    return tag;
+}
+
+export function findPbo(items: ContentItem[]): TagPbo | null {
+    const fx = items.find(item => item.name == "effect");
+    if (fx?.name != "effect") {
+        return null;
+    }
+
+    const tagName = TagName.pbo;
     const tag = fx.tags.find(tag => tag.name == tagName);
     if (tag?.name != tagName) {
         return null;

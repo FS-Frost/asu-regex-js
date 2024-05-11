@@ -1081,6 +1081,96 @@ test("create fx and ko", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// p
+test("find p", () => {
+    const text = "{\\p1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findP(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update p", () => {
+    const text = "{\\p1\\frz270}Kirino-san";
+    const expectedText = "{\\p2\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setP(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.p,
+        value: 2,
+    } satisfies asu.TagP);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add p", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\p2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setP(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.p,
+        value: 2,
+    } satisfies asu.TagP);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and p", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\p2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setP(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.p,
+        value: 2,
+    } satisfies asu.TagP);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+// pbo
+test("find pbo", () => {
+    const text = "{\\pbo1}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.findPbo(result);
+    expect(tag).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update pbo", () => {
+    const text = "{\\pbo1\\frz270}Kirino-san";
+    const expectedText = "{\\pbo2\\frz270}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPbo(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.pbo,
+        value: 2,
+    } satisfies asu.TagPbo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("add pbo", () => {
+    const text = "{\\fs16}Kirino-san";
+    const expectedText = "{\\fs16\\pbo2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPbo(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.pbo,
+        value: 2,
+    } satisfies asu.TagPbo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and pbo", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\pbo2}Kirino-san";
+    const result = asu.parseContent(text);
+    const tag = asu.setPbo(result, 2);
+    expect(tag).toEqual({
+        name: asu.TagName.pbo,
+        value: 2,
+    } satisfies asu.TagPbo);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // i
 test("find i", () => {
     const text = "{\\i1}Kirino-san{\\i0}";
