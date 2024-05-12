@@ -11,6 +11,7 @@ if (await fs.exists(buildDir)) {
 
 let config: BuildConfig = {
     entrypoints: ['./src/index.ts'],
+    outdir: "./build",
     sourcemap: "external",
 };
 
@@ -20,7 +21,6 @@ const targets: Target[] = [
 
 for (const target of targets) {
     config.target = target;
-    config.outdir = `./build/${target}`;
     config.minify = false;
     config.naming = {
         entry: `asu.${target}.js`,
@@ -31,7 +31,6 @@ for (const target of targets) {
     config.naming = {
         entry: `asu.${target}.min.js`,
     };
-    config.outdir = `./build/min/${target}`;
     await Bun.build(config);
 }
 
