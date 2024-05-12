@@ -1,6 +1,6 @@
 # asu-regex-js
 
-Library to work with Alpha Station Subtitles (ASS).
+Library to work with SubStation Alpha Subtitles (SSA/ASS).
 
 ## How to use
 

@@ -1,589 +1,3 @@
-var __defProp = Object.defineProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, {
-      get: all[name],
-      enumerable: true,
-      configurable: true,
-      set: (newValue) => all[name] = () => newValue
-    });
-};
-
-// src/asu.ts
-var exports_asu = {};
-__export(exports_asu, {
-  tagsToItems: () => {
-    {
-      return tagsToItems;
-    }
-  },
-  setYshad: () => {
-    {
-      return setYshad;
-    }
-  },
-  setYbord: () => {
-    {
-      return setYbord;
-    }
-  },
-  setXshad: () => {
-    {
-      return setXshad;
-    }
-  },
-  setXbord: () => {
-    {
-      return setXbord;
-    }
-  },
-  setU: () => {
-    {
-      return setU;
-    }
-  },
-  setT: () => {
-    {
-      return setT;
-    }
-  },
-  setShad: () => {
-    {
-      return setShad;
-    }
-  },
-  setS: () => {
-    {
-      return setS;
-    }
-  },
-  setR: () => {
-    {
-      return setR;
-    }
-  },
-  setQ: () => {
-    {
-      return setQ;
-    }
-  },
-  setPos: () => {
-    {
-      return setPos;
-    }
-  },
-  setPbo: () => {
-    {
-      return setPbo;
-    }
-  },
-  setP: () => {
-    {
-      return setP;
-    }
-  },
-  setOrg: () => {
-    {
-      return setOrg;
-    }
-  },
-  setMove: () => {
-    {
-      return setMove;
-    }
-  },
-  setKo: () => {
-    {
-      return setKo;
-    }
-  },
-  setKf: () => {
-    {
-      return setKf;
-    }
-  },
-  setKUpperCase: () => {
-    {
-      return setKUpperCase;
-    }
-  },
-  setKLowerCase: () => {
-    {
-      return setKLowerCase;
-    }
-  },
-  setIclip: () => {
-    {
-      return setIclip;
-    }
-  },
-  setI: () => {
-    {
-      return setI;
-    }
-  },
-  setFsp: () => {
-    {
-      return setFsp;
-    }
-  },
-  setFscy: () => {
-    {
-      return setFscy;
-    }
-  },
-  setFscx: () => {
-    {
-      return setFscx;
-    }
-  },
-  setFs: () => {
-    {
-      return setFs;
-    }
-  },
-  setFrz: () => {
-    {
-      return setFrz;
-    }
-  },
-  setFry: () => {
-    {
-      return setFry;
-    }
-  },
-  setFrx: () => {
-    {
-      return setFrx;
-    }
-  },
-  setFr: () => {
-    {
-      return setFr;
-    }
-  },
-  setFn: () => {
-    {
-      return setFn;
-    }
-  },
-  setFe: () => {
-    {
-      return setFe;
-    }
-  },
-  setFay: () => {
-    {
-      return setFay;
-    }
-  },
-  setFax: () => {
-    {
-      return setFax;
-    }
-  },
-  setFade: () => {
-    {
-      return setFade;
-    }
-  },
-  setFad: () => {
-    {
-      return setFad;
-    }
-  },
-  setColor4: () => {
-    {
-      return setColor4;
-    }
-  },
-  setColor3: () => {
-    {
-      return setColor3;
-    }
-  },
-  setColor2: () => {
-    {
-      return setColor2;
-    }
-  },
-  setColor1: () => {
-    {
-      return setColor1;
-    }
-  },
-  setColor: () => {
-    {
-      return setColor;
-    }
-  },
-  setClip: () => {
-    {
-      return setClip;
-    }
-  },
-  setBord: () => {
-    {
-      return setBord;
-    }
-  },
-  setBlur: () => {
-    {
-      return setBlur;
-    }
-  },
-  setBe: () => {
-    {
-      return setBe;
-    }
-  },
-  setB: () => {
-    {
-      return setB;
-    }
-  },
-  setAn: () => {
-    {
-      return setAn;
-    }
-  },
-  setAlpha4: () => {
-    {
-      return setAlpha4;
-    }
-  },
-  setAlpha3: () => {
-    {
-      return setAlpha3;
-    }
-  },
-  setAlpha2: () => {
-    {
-      return setAlpha2;
-    }
-  },
-  setAlpha1: () => {
-    {
-      return setAlpha1;
-    }
-  },
-  setAlpha: () => {
-    {
-      return setAlpha;
-    }
-  },
-  setA: () => {
-    {
-      return setA;
-    }
-  },
-  removeTag: () => {
-    {
-      return removeTag;
-    }
-  },
-  parseTags: () => {
-    {
-      return parseTags;
-    }
-  },
-  parseLine: () => {
-    {
-      return parseLine;
-    }
-  },
-  parseContent: () => {
-    {
-      return parseContent;
-    }
-  },
-  lineToString: () => {
-    {
-      return lineToString;
-    }
-  },
-  itemsToTags: () => {
-    {
-      return itemsToTags;
-    }
-  },
-  findYshad: () => {
-    {
-      return findYshad;
-    }
-  },
-  findYbord: () => {
-    {
-      return findYbord;
-    }
-  },
-  findXshad: () => {
-    {
-      return findXshad;
-    }
-  },
-  findXbord: () => {
-    {
-      return findXbord;
-    }
-  },
-  findU: () => {
-    {
-      return findU;
-    }
-  },
-  findT: () => {
-    {
-      return findT;
-    }
-  },
-  findShad: () => {
-    {
-      return findShad;
-    }
-  },
-  findS: () => {
-    {
-      return findS;
-    }
-  },
-  findR: () => {
-    {
-      return findR;
-    }
-  },
-  findQ: () => {
-    {
-      return findQ;
-    }
-  },
-  findPos: () => {
-    {
-      return findPos;
-    }
-  },
-  findPbo: () => {
-    {
-      return findPbo;
-    }
-  },
-  findP: () => {
-    {
-      return findP;
-    }
-  },
-  findOrg: () => {
-    {
-      return findOrg;
-    }
-  },
-  findMove: () => {
-    {
-      return findMove;
-    }
-  },
-  findKo: () => {
-    {
-      return findKo;
-    }
-  },
-  findKf: () => {
-    {
-      return findKf;
-    }
-  },
-  findKUpperCase: () => {
-    {
-      return findKUpperCase;
-    }
-  },
-  findKLowerCase: () => {
-    {
-      return findKLowerCase;
-    }
-  },
-  findIclip: () => {
-    {
-      return findIclip;
-    }
-  },
-  findI: () => {
-    {
-      return findI;
-    }
-  },
-  findFsp: () => {
-    {
-      return findFsp;
-    }
-  },
-  findFscy: () => {
-    {
-      return findFscy;
-    }
-  },
-  findFscx: () => {
-    {
-      return findFscx;
-    }
-  },
-  findFs: () => {
-    {
-      return findFs;
-    }
-  },
-  findFrz: () => {
-    {
-      return findFrz;
-    }
-  },
-  findFry: () => {
-    {
-      return findFry;
-    }
-  },
-  findFrx: () => {
-    {
-      return findFrx;
-    }
-  },
-  findFr: () => {
-    {
-      return findFr;
-    }
-  },
-  findFn: () => {
-    {
-      return findFn;
-    }
-  },
-  findFe: () => {
-    {
-      return findFe;
-    }
-  },
-  findFay: () => {
-    {
-      return findFay;
-    }
-  },
-  findFax: () => {
-    {
-      return findFax;
-    }
-  },
-  findFade: () => {
-    {
-      return findFade;
-    }
-  },
-  findFad: () => {
-    {
-      return findFad;
-    }
-  },
-  findColor4: () => {
-    {
-      return findColor4;
-    }
-  },
-  findColor3: () => {
-    {
-      return findColor3;
-    }
-  },
-  findColor2: () => {
-    {
-      return findColor2;
-    }
-  },
-  findColor1: () => {
-    {
-      return findColor1;
-    }
-  },
-  findColor: () => {
-    {
-      return findColor;
-    }
-  },
-  findClip: () => {
-    {
-      return findClip;
-    }
-  },
-  findBord: () => {
-    {
-      return findBord;
-    }
-  },
-  findBlur: () => {
-    {
-      return findBlur;
-    }
-  },
-  findBe: () => {
-    {
-      return findBe;
-    }
-  },
-  findB: () => {
-    {
-      return findB;
-    }
-  },
-  findAn: () => {
-    {
-      return findAn;
-    }
-  },
-  findAlpha4: () => {
-    {
-      return findAlpha4;
-    }
-  },
-  findAlpha3: () => {
-    {
-      return findAlpha3;
-    }
-  },
-  findAlpha2: () => {
-    {
-      return findAlpha2;
-    }
-  },
-  findAlpha1: () => {
-    {
-      return findAlpha1;
-    }
-  },
-  findAlpha: () => {
-    {
-      return findAlpha;
-    }
-  },
-  findA: () => {
-    {
-      return findA;
-    }
-  },
-  contentsToString: () => {
-    {
-      return contentsToString;
-    }
-  },
-  contentEffectToString: () => {
-    {
-      return contentEffectToString;
-    }
-  },
-  TagName: () => {
-    {
-      return TagName;
-    }
-  }
-});
-
 // node_modules/magic-regexp/dist/shared/magic-regexp.b7c910ac.mjs
 var NO_WRAP_RE = /^(\(.*\)|\\?.)$/;
 var wrap = (s) => {
@@ -663,6 +77,7 @@ var createRegExp = (...inputs) => {
 var regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 var reTime = oneOrMore(digit).and(exactly(":")).and(digit.times(2)).and(exactly(":")).and(digit.times(2)).and(exactly(".")).and(digit.times(2));
 var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).and(oneOrMore(digit).optionally().groupedAs("layer")).and(exactly(",")).and(reTime.optionally().groupedAs("start")).and(exactly(",")).and(reTime.optionally().groupedAs("end")).and(exactly(",")).and(oneOrMore(charNotIn(",").optionally()).groupedAs("style")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("actor")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginLeft")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginRight")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginVertical")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("effect")).and(exactly(",")).and(oneOrMore(char).optionally().groupedAs("content"));
+var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 var reA = exactly("\\").and("a").and(oneOrMore(digit));
@@ -710,13 +125,20 @@ var reFrz = exactly("\\").and("frz").and(reFloat);
 var reI = exactly("\\").and("i").and(exactly("1").or("0"));
 var reFs = exactly("\\").and("fs").and(oneOrMore(digit));
 var rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
+var regexPos = createRegExp(rePos);
 var reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
+var regexOrg = createRegExp(reOrg);
 var reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
+var regexFad = createRegExp(reFad);
 var reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
+var regexFade = createRegExp(reFade);
 var reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
 var reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
+var regexMove = createRegExp(reMove);
 var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+var regexClip = createRegExp(reClip);
 var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
+var regexIclip = createRegExp(reIclip);
 var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase);
 var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("arg1").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg2").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
@@ -728,8 +150,7 @@ function parseTags(text, tags) {
   const matchTagT = text.match(regexTagT);
   if (matchTagT && matchTagT[0]) {
     if (tagNameSource.startsWith(TagName.t)) {
-      const r = createRegExp(reTGeneral);
-      const a = matchTagT[0].match(r)?.groups;
+      const a = matchTagT[0].match(regexTagT)?.groups;
       const rawTags = a?.tags ?? "";
       const subtags = [];
       parseTags(rawTags, subtags);
@@ -767,8 +188,7 @@ function parseTags(text, tags) {
     return tags;
   }
   if (tagNameSource.startsWith(TagName.move)) {
-    const r = createRegExp(reMove);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexMove)?.groups;
     const x1 = Number(a?.move_x1 ?? "0");
     const y1 = Number(a?.move_y1 ?? "0");
     const x2 = Number(a?.move_x2 ?? "0");
@@ -821,8 +241,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.iclip)) {
-    const r = createRegExp(reIclip);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexIclip)?.groups;
     const args = a?.iclip_args ?? "";
     const tag = {
       name: TagName.iclip,
@@ -865,8 +284,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.fade)) {
-    const r = createRegExp(reFade);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexFade)?.groups;
     const alpha1 = Number(a?.fade_alpha1 ?? "0");
     const alpha2 = Number(a?.fade_alpha2 ?? "0");
     const alpha3 = Number(a?.fade_alpha3 ?? "0");
@@ -886,8 +304,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.clip)) {
-    const r = createRegExp(reClip);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexClip)?.groups;
     const args = a?.clip_args ?? "";
     const tag = {
       name: TagName.clip,
@@ -902,8 +319,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.pos)) {
-    const r = createRegExp(rePos);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexPos)?.groups;
     const x = Number(a?.pos_x ?? "0");
     const y = Number(a?.pos_y ?? "0");
     const tag = {
@@ -913,8 +329,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.org)) {
-    const r = createRegExp(reOrg);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexOrg)?.groups;
     const x = Number(a?.org_x ?? "0");
     const y = Number(a?.org_y ?? "0");
     const tag = {
@@ -924,8 +339,7 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.fad)) {
-    const r = createRegExp(reFad);
-    const a = matchUnitTags[0].match(r)?.groups;
+    const a = matchUnitTags[0].match(regexFad)?.groups;
     const fadeIn = Number(a?.in ?? "0");
     const fadeOut = Number(a?.out ?? "0");
     const tag = {
@@ -2542,8 +1956,7 @@ function removeTag(items, tagName) {
   fx.tags.splice(index, 1);
 }
 function parseLine(text) {
-  const re = createRegExp(reLine);
-  const match = text.match(re);
+  const match = text.match(regexLine);
   if (match == null) {
     return null;
   }
@@ -2642,8 +2055,121 @@ var TagName;
   TagName2["ybord"] = "ybord";
   TagName2["yshad"] = "yshad";
 })(TagName || (TagName = {}));
+export {
+  tagsToItems,
+  setYshad,
+  setYbord,
+  setXshad,
+  setXbord,
+  setU,
+  setT,
+  setShad,
+  setS,
+  setR,
+  setQ,
+  setPos,
+  setPbo,
+  setP,
+  setOrg,
+  setMove,
+  setKo,
+  setKf,
+  setKUpperCase,
+  setKLowerCase,
+  setIclip,
+  setI,
+  setFsp,
+  setFscy,
+  setFscx,
+  setFs,
+  setFrz,
+  setFry,
+  setFrx,
+  setFr,
+  setFn,
+  setFe,
+  setFay,
+  setFax,
+  setFade,
+  setFad,
+  setColor4,
+  setColor3,
+  setColor2,
+  setColor1,
+  setColor,
+  setClip,
+  setBord,
+  setBlur,
+  setBe,
+  setB,
+  setAn,
+  setAlpha4,
+  setAlpha3,
+  setAlpha2,
+  setAlpha1,
+  setAlpha,
+  setA,
+  removeTag,
+  parseTags,
+  parseLine,
+  parseContent,
+  lineToString,
+  itemsToTags,
+  findYshad,
+  findYbord,
+  findXshad,
+  findXbord,
+  findU,
+  findT,
+  findShad,
+  findS,
+  findR,
+  findQ,
+  findPos,
+  findPbo,
+  findP,
+  findOrg,
+  findMove,
+  findKo,
+  findKf,
+  findKUpperCase,
+  findKLowerCase,
+  findIclip,
+  findI,
+  findFsp,
+  findFscy,
+  findFscx,
+  findFs,
+  findFrz,
+  findFry,
+  findFrx,
+  findFr,
+  findFn,
+  findFe,
+  findFay,
+  findFax,
+  findFade,
+  findFad,
+  findColor4,
+  findColor3,
+  findColor2,
+  findColor1,
+  findColor,
+  findClip,
+  findBord,
+  findBlur,
+  findBe,
+  findB,
+  findAn,
+  findAlpha4,
+  findAlpha3,
+  findAlpha2,
+  findAlpha1,
+  findAlpha,
+  findA,
+  contentsToString,
+  contentEffectToString,
+  TagName
+};
 
-// src/index.ts
-window.asu = exports_asu;
-
-//# debugId=74FC8C5E9CC023FC64756e2164756e21
+//# debugId=5F4E19B36A6A777A64756e2164756e21

@@ -1,5 +1,4 @@
-import { createRegExp } from "magic-regexp";
-import { reClip, reFad, reFade, reIclip, reLine, reMove, reOrg, rePos, reTGeneral, regexContent, regexTagT, regexTags } from "./regex";
+import { regexClip, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
 
 export enum TagName {
     a = "a",
@@ -348,8 +347,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     const matchTagT = text.match(regexTagT);
     if (matchTagT && matchTagT[0]) {
         if (tagNameSource.startsWith(TagName.t)) {
-            const r = createRegExp(reTGeneral);
-            const a = matchTagT[0].match(r)?.groups;
+            const a = matchTagT[0].match(regexTagT)?.groups;
             const rawTags = a?.tags ?? "";
             const subtags: Tags[] = [];
             parseTags(rawTags, subtags);
@@ -396,8 +394,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     // console.log("MATCH:", result[0]);
     if (tagNameSource.startsWith(TagName.move)) {
-        const r = createRegExp(reMove);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexMove)?.groups;
         const x1 = Number(a?.move_x1 ?? "0");
         const y1 = Number(a?.move_y1 ?? "0");
         const x2 = Number(a?.move_x2 ?? "0");
@@ -463,8 +460,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.iclip)) {
-        const r = createRegExp(reIclip);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexIclip)?.groups;
         const args = a?.iclip_args ?? "";
 
         const tag: TagIclip = {
@@ -520,8 +516,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.fade)) {
-        const r = createRegExp(reFade);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexFade)?.groups;
         const alpha1 = Number(a?.fade_alpha1 ?? "0");
         const alpha2 = Number(a?.fade_alpha2 ?? "0");
         const alpha3 = Number(a?.fade_alpha3 ?? "0");
@@ -544,8 +539,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.clip)) {
-        const r = createRegExp(reClip);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexClip)?.groups;
         const args = a?.clip_args ?? "";
 
         const tag: TagClip = {
@@ -565,8 +559,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.pos)) {
-        const r = createRegExp(rePos);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexPos)?.groups;
         const x = Number(a?.pos_x ?? "0");
         const y = Number(a?.pos_y ?? "0");
 
@@ -579,8 +572,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.org)) {
-        const r = createRegExp(reOrg);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexOrg)?.groups;
         const x = Number(a?.org_x ?? "0");
         const y = Number(a?.org_y ?? "0");
 
@@ -593,8 +585,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.fad)) {
-        const r = createRegExp(reFad);
-        const a = matchUnitTags[0].match(r)?.groups;
+        const a = matchUnitTags[0].match(regexFad)?.groups;
         const fadeIn = Number(a?.in ?? "0");
         const fadeOut = Number(a?.out ?? "0");
 
@@ -2681,8 +2672,7 @@ type Line = {
 };
 
 export function parseLine(text: string): Line | null {
-    const re = createRegExp(reLine);
-    const match = text.match(re);
+    const match = text.match(regexLine);
     if (match == null) {
         return null;
     }

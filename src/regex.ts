@@ -13,7 +13,7 @@ const reTime =
         // 00.00
         .and(digit.times(2)).and(exactly(".")).and(digit.times(2));
 
-export const reLine =
+const reLine =
     anyOf("Dialogue", "Comment").groupedAs("type")
         .and(exactly(": "))
         .and(oneOrMore(digit).optionally().groupedAs("layer"))
@@ -37,115 +37,131 @@ export const reLine =
         .and(oneOrMore(char).optionally().groupedAs("content"))
     ;
 
-export const reInt = exactly("-").optionally().and(oneOrMore(digit));
+export const regexLine = createRegExp(reLine) as RegExp;
 
-export const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
+const reInt = exactly("-").optionally().and(oneOrMore(digit));
 
-export const reA = exactly("\\").and("a").and(oneOrMore(digit));
+const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
-export const reColor = exactly("\\").and("c").and(oneOrMore(charNotIn("\\")));
+const reA = exactly("\\").and("a").and(oneOrMore(digit));
 
-export const reColor1 = exactly("\\").and("1c").and(oneOrMore(charNotIn("\\")));
+const reColor = exactly("\\").and("c").and(oneOrMore(charNotIn("\\")));
 
-export const reColor2 = exactly("\\").and("2c").and(oneOrMore(charNotIn("\\")));
+const reColor1 = exactly("\\").and("1c").and(oneOrMore(charNotIn("\\")));
 
-export const reColor3 = exactly("\\").and("3c").and(oneOrMore(charNotIn("\\")));
+const reColor2 = exactly("\\").and("2c").and(oneOrMore(charNotIn("\\")));
 
-export const reColor4 = exactly("\\").and("4c").and(oneOrMore(charNotIn("\\")));
+const reColor3 = exactly("\\").and("3c").and(oneOrMore(charNotIn("\\")));
 
-export const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
+const reColor4 = exactly("\\").and("4c").and(oneOrMore(charNotIn("\\")));
 
-export const reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
+const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
 
-export const reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
+const reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
 
-export const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
+const reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
 
-export const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
+const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
 
-export const reKLowerCase = exactly("\\").and("k").and(oneOrMore(digit));
+const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
 
-export const reKUpperCase = exactly("\\").and("K").and(oneOrMore(digit));
+const reKLowerCase = exactly("\\").and("k").and(oneOrMore(digit));
 
-export const reKf = exactly("\\").and("kf").and(oneOrMore(digit));
+const reKUpperCase = exactly("\\").and("K").and(oneOrMore(digit));
 
-export const reKo = exactly("\\").and("ko").and(oneOrMore(digit));
+const reKf = exactly("\\").and("kf").and(oneOrMore(digit));
 
-export const reQ = exactly("\\").and("q").and(oneOrMore(digit));
+const reKo = exactly("\\").and("ko").and(oneOrMore(digit));
 
-export const reS = exactly("\\").and("s").and(oneOrMore(digit));
+const reQ = exactly("\\").and("q").and(oneOrMore(digit));
 
-export const reU = exactly("\\").and("u").and(oneOrMore(digit));
+const reS = exactly("\\").and("s").and(oneOrMore(digit));
 
-export const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
+const reU = exactly("\\").and("u").and(oneOrMore(digit));
 
-export const reFe = exactly("\\").and("fe").and(oneOrMore(digit));
+const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
 
-export const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
+const reFe = exactly("\\").and("fe").and(oneOrMore(digit));
 
-export const reP = exactly("\\").and("p").and(oneOrMore(digit));
+const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
 
-export const rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
+const reP = exactly("\\").and("p").and(oneOrMore(digit));
 
-export const reAn = exactly("\\").and("an").and(oneOrMore(digit));
+const rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
 
-export const reB = exactly("\\").and("b").and(oneOrMore(digit));
+const reAn = exactly("\\").and("an").and(oneOrMore(digit));
 
-export const reBe = exactly("\\").and("be").and(oneOrMore(digit));
+const reB = exactly("\\").and("b").and(oneOrMore(digit));
 
-export const reBlur = exactly("\\").and("blur").and(oneOrMore(digit));
+const reBe = exactly("\\").and("be").and(oneOrMore(digit));
 
-export const reBord = exactly("\\").and("bord").and(oneOrMore(digit));
+const reBlur = exactly("\\").and("blur").and(oneOrMore(digit));
 
-export const reXbord = exactly("\\").and("xbord").and(oneOrMore(digit));
+const reBord = exactly("\\").and("bord").and(oneOrMore(digit));
 
-export const reYbord = exactly("\\").and("ybord").and(oneOrMore(digit));
+const reXbord = exactly("\\").and("xbord").and(oneOrMore(digit));
 
-export const reShad = exactly("\\").and("shad").and(oneOrMore(digit));
+const reYbord = exactly("\\").and("ybord").and(oneOrMore(digit));
 
-export const reXshad = exactly("\\").and("xshad").and(oneOrMore(digit));
+const reShad = exactly("\\").and("shad").and(oneOrMore(digit));
 
-export const reYshad = exactly("\\").and("yshad").and(oneOrMore(digit));
+const reXshad = exactly("\\").and("xshad").and(oneOrMore(digit));
 
-export const reFax = exactly("\\").and("fax").and(oneOrMore(digit));
+const reYshad = exactly("\\").and("yshad").and(oneOrMore(digit));
 
-export const reFay = exactly("\\").and("fay").and(oneOrMore(digit));
+const reFax = exactly("\\").and("fax").and(oneOrMore(digit));
 
-export const reFscx = exactly("\\").and("fscx").and(oneOrMore(digit));
+const reFay = exactly("\\").and("fay").and(oneOrMore(digit));
 
-export const reFscy = exactly("\\").and("fscy").and(oneOrMore(digit));
+const reFscx = exactly("\\").and("fscx").and(oneOrMore(digit));
 
-export const reFsp = exactly("\\").and("fsp").and(oneOrMore(digit));
+const reFscy = exactly("\\").and("fscy").and(oneOrMore(digit));
 
-export const reFr = exactly("\\").and("fr").and(reFloat);
+const reFsp = exactly("\\").and("fsp").and(oneOrMore(digit));
 
-export const reFrx = exactly("\\").and("frx").and(reFloat);
+const reFr = exactly("\\").and("fr").and(reFloat);
 
-export const reFry = exactly("\\").and("fry").and(reFloat);
+const reFrx = exactly("\\").and("frx").and(reFloat);
 
-export const reFrz = exactly("\\").and("frz").and(reFloat);
+const reFry = exactly("\\").and("fry").and(reFloat);
 
-export const reI = exactly("\\").and("i").and(exactly("1").or("0"));
+const reFrz = exactly("\\").and("frz").and(reFloat);
 
-export const reFs = exactly("\\").and("fs").and(oneOrMore(digit));
+const reI = exactly("\\").and("i").and(exactly("1").or("0"));
 
-export const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
+const reFs = exactly("\\").and("fs").and(oneOrMore(digit));
 
-export const reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
+const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 
-export const reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
+export const regexPos = createRegExp(rePos) as RegExp;
 
-export const reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
+const reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
 
-export const reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
+export const regexOrg = createRegExp(reOrg) as RegExp;
 
-export const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
+const reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
 
-export const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+export const regexFad = createRegExp(reFad) as RegExp;
 
-export const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
+const reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
 
-export const unitTags = reBe
+export const regexFade = createRegExp(reFade) as RegExp;
+
+const reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
+
+const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
+
+export const regexMove = createRegExp(reMove) as RegExp;
+
+const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+
+export const regexClip = createRegExp(reClip) as RegExp;
+
+const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
+
+export const regexIclip = createRegExp(reIclip) as RegExp;
+
+const unitTags = reBe
     .or(reAlpha)
     .or(reXbord)
     .or(reYbord)
@@ -197,13 +213,13 @@ export const unitTags = reBe
     .or(reKLowerCase)
     .or(reKUpperCase);
 
-// export const reTFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// const reTFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-// export const reTAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// const reTAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-// export const reTTimeAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("t1")).and(exactly(",")).and(oneOrMore(digit).groupedAs("t2")).and(exactly(",")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// const reTTimeAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("t1")).and(exactly(",")).and(oneOrMore(digit).groupedAs("t2")).and(exactly(",")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-export const reTGeneral =
+const reTGeneral =
     exactly("\\").at.lineStart()
         .and("t")
         .and(exactly("("))
@@ -214,8 +230,8 @@ export const reTGeneral =
         .and(exactly(")"))
     ;
 
-// export const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
+// const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
 
-export const regexTags = createRegExp(unitTags);
+export const regexTags = createRegExp(unitTags) as RegExp;
 
-export const regexTagT = createRegExp(reTGeneral);
+export const regexTagT = createRegExp(reTGeneral) as RegExp;

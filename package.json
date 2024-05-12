@@ -5,7 +5,9 @@
   "scripts": {
     "bundle": "bun run build.ts"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "dts-bundle-generator": "^9.5.1"
+  },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },

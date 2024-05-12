@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example</title>
-    <script src="asu.browser.js"></script>
-    <script src="app.js"></script>
+    <script type="module">
+        import * as asu from "./asu.browser.js";
+        window.asu = asu;
+    </script>
+    <script src="app.js" defer></script>
 </head>
 
 <body>
