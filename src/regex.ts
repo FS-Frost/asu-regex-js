@@ -197,13 +197,25 @@ export const unitTags = reBe
     .or(reKLowerCase)
     .or(reKUpperCase);
 
-export const reTFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// export const reTFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-export const reTAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// export const reTAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-export const reTTimeAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("t1")).and(exactly(",")).and(oneOrMore(digit).groupedAs("t2")).and(exactly(",")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+// export const reTTimeAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("t1")).and(exactly(",")).and(oneOrMore(digit).groupedAs("t2")).and(exactly(",")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 
-export const reT = reTFx
-    .or(reTAccelFx).or(reTTimeAccelFx);
+export const reTGeneral =
+    exactly("\\").at.lineStart()
+        .and("t")
+        .and(exactly("("))
+        .and(oneOrMore(digit).groupedAs("arg1").and(exactly(",")).optionally())
+        .and(oneOrMore(digit).groupedAs("arg2").and(exactly(",")).optionally())
+        .and(oneOrMore(digit).groupedAs("arg3").and(exactly(",")).optionally())
+        .and(oneOrMore(unitTags).groupedAs("tags"))
+        .and(exactly(")"))
+    ;
 
-export const regexTags = createRegExp(unitTags.or(reT));
+// export const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
+
+export const regexTags = createRegExp(unitTags);
+
+export const regexTagT = createRegExp(reTGeneral);
