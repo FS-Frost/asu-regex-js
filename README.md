@@ -2,7 +2,36 @@
 
 Library to work with SubStation Alpha Subtitles (SSA/ASS).
 
+## Code Documentation
+
+https://fs-frost.github.io/asu-regex-js/
+
+Automatically generated thanks to [TypeDoc](https://typedoc.org/).
+
 ## How to use
+
+Check out the [tests](https://github.com/FS-Frost/asu-regex-js/blob/main/src/asu.test.ts) for more examples.
+
+### Parse a dialogue
+
+```ts
+import * as asu from "asu";
+
+// Update font size from 32 to 16
+const text = "Dialogue: 0,1:23:45.67,2:34:56.78,Chitanda,actor,12,23,34,fx,{\\pos(182,421)}LINE 1";
+
+const line = asu.parseLine(text);
+if (line == null) {
+    console.error("invalid line");
+    return;
+}
+
+line.style = "Oreki";
+line.content = "Some {\\i1}other{\\i0} text";
+
+console.log(asu.lineToString(line));
+// Dialogue: 0,1:23:45.67,2:34:56.78,Oreki,actor,12,23,34,fx,Some {\i1}other{\i0} text
+```
 
 ### Set tag
 
@@ -10,7 +39,7 @@ Library to work with SubStation Alpha Subtitles (SSA/ASS).
 import * as asu from "asu";
 
 // Update font size from 32 to 16
-const dialogue = "{\\be2\\fs32}Kirino-san";
+const text = "{\\be2\\fs32}Kirino-san";
 const items = asu.parseContent(text);
 asu.setFs(items, 16);
 
@@ -23,12 +52,17 @@ console.log(asu.contentsToString(items));
 import * as asu from "asu";
 
 // find blur
-const dialogue = "{\\blur2\\fs32}Kirino-san";
+const text = "{\\blur2\\fs32}Kirino-san";
 const items = asu.parseContent(text);
 const tagBlur = asu.findBlur(items);
-if (tagBlur != null) {
-    console.log("blur found", tagBlur);
+if (tagBlur == null) {
+    console.error("blur not found");
+    return;
 }
+
+tagBlur.value = 4;
+console.log(asu.contentsToString(items));
+// {\blur4\fs32}Kirino-san
 ```
 
 ### Create tag
@@ -37,7 +71,7 @@ if (tagBlur != null) {
 import * as asu from "asu";
 
 // Create pos
-const dialogue = "{\\be2\\fs32}Kirino-san";
+const text = "{\\be2\\fs32}Kirino-san";
 const items = asu.parseContent(text);
 asu.setPos(items, -20, 67.9);
 
@@ -65,3 +99,13 @@ bun test
 ```sh
 bun bundle
 ```
+
+## Generate docs
+
+```sh
+bunx typedoc src/asu.ts
+```
+
+# Asu Web Application
+
+[Asu for SyncRajo Fansub](https://github.com/FS-Frost/asu-web)
