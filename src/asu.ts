@@ -1,5 +1,7 @@
 import { regexClip, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
 
+export * from "./mat";
+
 export enum TagName {
     a = "a",
     alpha = "alpha",

@@ -145,6 +145,40 @@ var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(one
 var regexTags = createRegExp(unitTags);
 var regexTagT = createRegExp(reTGeneral);
 
+// src/mat.ts
+function hexToNumber(s) {
+  return parseInt(s, 16);
+}
+function numberToHex(n) {
+  const int = Math.floor(n);
+  return int.toString(16).toUpperCase();
+}
+function interpolate(min, max, intervals) {
+  const reverse = min > max;
+  let actualMax = max;
+  let actualMin = min;
+  if (reverse) {
+    actualMax = min;
+    actualMin = max;
+  }
+  const range = actualMax - actualMin;
+  const step = range / intervals;
+  let sum = actualMin;
+  const interpolations = [actualMin];
+  for (let i = 1;i < intervals; i++) {
+    sum += step;
+    if (sum > actualMax) {
+      sum = actualMax;
+    }
+    interpolations.push(sum);
+  }
+  interpolations[intervals - 1] = actualMax;
+  if (reverse) {
+    interpolations.reverse();
+  }
+  return interpolations;
+}
+
 // src/asu.ts
 function parseTags(text, tags) {
   const tagNameSource = text.substring(1);
@@ -2114,8 +2148,11 @@ export {
   parseTags,
   parseLine,
   parseContent,
+  numberToHex,
   lineToString,
   itemsToTags,
+  interpolate,
+  hexToNumber,
   findYshad,
   findYbord,
   findXshad,
@@ -2173,4 +2210,4 @@ export {
   TagName
 };
 
-//# debugId=D568C26C5CDD1AC664756e2164756e21
+//# debugId=FF1780AAE7C73F0264756e2164756e21

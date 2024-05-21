@@ -3,5 +3,5 @@
     "editor.formatOnSaveMode": "file",
     "typescript.format.semicolons": "insert",
     "liveServer.settings.port": 3000,
-    "liveServer.settings.root": "/examples",
+    "liveServer.settings.root": "/",
 }
