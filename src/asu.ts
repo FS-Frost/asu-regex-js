@@ -2659,7 +2659,7 @@ export function removeTag(items: ContentItem[], tagName: TagName): void {
     fx.tags.splice(index, 1);
 }
 
-type Line = {
+export type Line = {
     type: string;
     layer: number;
     start: string;

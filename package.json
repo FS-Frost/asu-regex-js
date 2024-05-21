@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "bundle": "bun run build.ts"
+    "bundle": "bun run build.ts",
+    "publish": "bunx jsr publish"
   },
   "devDependencies": {
     "dts-bundle-generator": "^9.5.1",

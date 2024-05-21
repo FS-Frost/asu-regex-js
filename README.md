@@ -108,6 +108,12 @@ bun bundle
 bunx typedoc src/asu.ts
 ```
 
+## Publish to JSR
+
+```sh
+bun run publish
+```
+
 # Asu Web Application
 
 [Asu for SyncRajo Fansub](https://github.com/FS-Frost/asu-web)
