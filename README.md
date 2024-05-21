@@ -4,11 +4,23 @@
 
 Library to work with SubStation Alpha Subtitles (SSA/ASS).
 
-## Code Documentation
+## Install
+
+### JSR (JavaScript Registry)
+
+```sh
+bunx jsr add @fs-frost/asu
+```
+
+For npm, yarn, etc., check out https://jsr.io/@fs-frost/asu.
+
+### Manually
+
+Bundled files for bun, node and browser are available on [\build](https://github.com/FS-Frost/asu-regex-js/tree/main/build).
+
+## Docs
 
 https://fs-frost.github.io/asu-regex-js/
-
-Automatically generated thanks to [TypeDoc](https://typedoc.org/).
 
 ## How to use
 
@@ -17,7 +29,7 @@ Check out the [tests](https://github.com/FS-Frost/asu-regex-js/blob/main/src/asu
 ### Parse a dialogue
 
 ```ts
-import * as asu from "asu";
+import * as asu from "@fs-frost/asu";
 
 // Update font size from 32 to 16
 const text = "Dialogue: 0,1:23:45.67,2:34:56.78,Chitanda,actor,12,23,34,fx,{\\pos(182,421)}LINE 1";
@@ -38,7 +50,7 @@ console.log(asu.lineToString(line));
 ### Set tag
 
 ```ts
-import * as asu from "asu";
+import * as asu from "@fs-frost/asu";
 
 // Update font size from 32 to 16
 const text = "{\\be2\\fs32}Kirino-san";
@@ -51,7 +63,7 @@ console.log(asu.contentsToString(items));
 ### Find tag
 
 ```ts
-import * as asu from "asu";
+import * as asu from "@fs-frost/asu";
 
 // find blur
 const text = "{\\blur2\\fs32}Kirino-san";
@@ -70,7 +82,7 @@ console.log(asu.contentsToString(items));
 ### Create tag
 
 ```ts
-import * as asu from "asu";
+import * as asu from "@fs-frost/asu";
 
 // Create pos
 const text = "{\\be2\\fs32}Kirino-san";
