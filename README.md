@@ -1,5 +1,6 @@
 # asu-regex-js
 
+![jsr](https://jsr.io/badges/@fs-frost/asu)
 ![main](https://github.com/FS-Frost/asu-regex-js/actions/workflows/main.yml/badge.svg)
 
 Library to work with SubStation Alpha Subtitles (SSA/ASS).
