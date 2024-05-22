@@ -1533,7 +1533,7 @@ test("create fx and fs", () => {
 
 // pos
 test("find pos", () => {
-    const text = "{\\pos(10,20)}Kirino-san";
+    const text = "{\\fax-0.1\\fs56\\an4\\1c&H1E2357&\\3c&HF4F4F4&\\bord0\\blur0.4\\frz354.6\\pos(635.6,49.8)\\frx4\\fry354}Tama:";
     const result = asu.parseContent(text);
     const pos = asu.findPos(result);
     expect(pos).not.toBeNull();

@@ -43,7 +43,7 @@ const reInt = exactly("-").optionally().and(oneOrMore(digit));
 
 const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
-const reA = exactly("\\").and("a").and(oneOrMore(digit));
+const reA = exactly("\\").and("a").and(reFloat);
 
 const reHex = letter.or(digit).times(2);
 
@@ -101,59 +101,59 @@ const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
 
 const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
 
-const reKLowerCase = exactly("\\").and("k").and(oneOrMore(digit));
+const reKLowerCase = exactly("\\").and("k").and(reFloat);
 
-const reKUpperCase = exactly("\\").and("K").and(oneOrMore(digit));
+const reKUpperCase = exactly("\\").and("K").and(reFloat);
 
-const reKf = exactly("\\").and("kf").and(oneOrMore(digit));
+const reKf = exactly("\\").and("kf").and(reFloat);
 
-const reKo = exactly("\\").and("ko").and(oneOrMore(digit));
+const reKo = exactly("\\").and("ko").and(reFloat);
 
-const reQ = exactly("\\").and("q").and(oneOrMore(digit));
+const reQ = exactly("\\").and("q").and(reFloat);
 
-const reS = exactly("\\").and("s").and(oneOrMore(digit));
+const reS = exactly("\\").and("s").and(reFloat);
 
-const reU = exactly("\\").and("u").and(oneOrMore(digit));
+const reU = exactly("\\").and("u").and(reFloat);
 
 const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
 
-const reFe = exactly("\\").and("fe").and(oneOrMore(digit));
+const reFe = exactly("\\").and("fe").and(reFloat);
 
 const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
 
-const reP = exactly("\\").and("p").and(oneOrMore(digit));
+const reP = exactly("\\").and("p").and(reFloat);
 
-const rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
+const rePbo = exactly("\\").and("pbo").and(reFloat);
 
-const reAn = exactly("\\").and("an").and(oneOrMore(digit));
+const reAn = exactly("\\").and("an").and(reFloat);
 
-const reB = exactly("\\").and("b").and(oneOrMore(digit));
+const reB = exactly("\\").and("b").and(reFloat);
 
-const reBe = exactly("\\").and("be").and(oneOrMore(digit));
+const reBe = exactly("\\").and("be").and(reFloat);
 
-const reBlur = exactly("\\").and("blur").and(oneOrMore(digit));
+const reBlur = exactly("\\").and("blur").and(reFloat);
 
-const reBord = exactly("\\").and("bord").and(oneOrMore(digit));
+const reBord = exactly("\\").and("bord").and(reFloat);
 
-const reXbord = exactly("\\").and("xbord").and(oneOrMore(digit));
+const reXbord = exactly("\\").and("xbord").and(reFloat);
 
-const reYbord = exactly("\\").and("ybord").and(oneOrMore(digit));
+const reYbord = exactly("\\").and("ybord").and(reFloat);
 
-const reShad = exactly("\\").and("shad").and(oneOrMore(digit));
+const reShad = exactly("\\").and("shad").and(reFloat);
 
-const reXshad = exactly("\\").and("xshad").and(oneOrMore(digit));
+const reXshad = exactly("\\").and("xshad").and(reFloat);
 
-const reYshad = exactly("\\").and("yshad").and(oneOrMore(digit));
+const reYshad = exactly("\\").and("yshad").and(reFloat);
 
-const reFax = exactly("\\").and("fax").and(oneOrMore(digit));
+const reFax = exactly("\\").and("fax").and(reFloat);
 
-const reFay = exactly("\\").and("fay").and(oneOrMore(digit));
+const reFay = exactly("\\").and("fay").and(reFloat);
 
-const reFscx = exactly("\\").and("fscx").and(oneOrMore(digit));
+const reFscx = exactly("\\").and("fscx").and(reFloat);
 
-const reFscy = exactly("\\").and("fscy").and(oneOrMore(digit));
+const reFscy = exactly("\\").and("fscy").and(reFloat);
 
-const reFsp = exactly("\\").and("fsp").and(oneOrMore(digit));
+const reFsp = exactly("\\").and("fsp").and(reFloat);
 
 const reFr = exactly("\\").and("fr").and(reFloat);
 
@@ -165,7 +165,7 @@ const reFrz = exactly("\\").and("frz").and(reFloat);
 
 const reI = exactly("\\").and("i").and(exactly("1").or("0"));
 
-const reFs = exactly("\\").and("fs").and(oneOrMore(digit));
+const reFs = exactly("\\").and("fs").and(reFloat);
 
 const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 
@@ -259,9 +259,9 @@ const reTGeneral =
     exactly("\\").at.lineStart()
         .and("t")
         .and(exactly("("))
-        .and(oneOrMore(digit).groupedAs("arg1").and(exactly(",")).optionally())
-        .and(oneOrMore(digit).groupedAs("arg2").and(exactly(",")).optionally())
-        .and(oneOrMore(digit).groupedAs("arg3").and(exactly(",")).optionally())
+        .and(reFloat.groupedAs("arg1").and(exactly(",")).optionally())
+        .and(reFloat.groupedAs("arg2").and(exactly(",")).optionally())
+        .and(reFloat.groupedAs("arg3").and(exactly(",")).optionally())
         .and(oneOrMore(unitTags).groupedAs("tags"))
         .and(exactly(")"))
     ;
