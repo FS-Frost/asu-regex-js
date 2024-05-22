@@ -115,12 +115,13 @@ var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 var reA = exactly("\\").and("a").and(oneOrMore(digit));
-var reColorBGR = exactly("&H").and(letter.or(digit).times(2).groupedAs("color_bgr_blue")).and(letter.or(digit).times(2).groupedAs("color_bgr_green")).and(letter.or(digit).times(2).groupedAs("color_bgr_red")).and(exactly("&"));
+var reHex = letter.or(digit).times(2);
+var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&"));
 var reColor = exactly("\\c").and(reColorBGR);
-var reColor1 = exactly("\\1c").and(reColorBGR);
-var reColor2 = exactly("\\2c").and(reColorBGR);
-var reColor3 = exactly("\\3c").and(reColorBGR);
-var reColor4 = exactly("\\4c").and(reColorBGR);
+var reColor1 = exactly("\\1c").and(exactly("&H")).and(reHex.groupedAs("color1_bgr_blue")).and(reHex.groupedAs("color1_bgr_green")).and(reHex.groupedAs("color1_bgr_red")).and(exactly("&"));
+var reColor2 = exactly("\\2c").and(exactly("&H")).and(reHex.groupedAs("color2_bgr_blue")).and(reHex.groupedAs("color2_bgr_green")).and(reHex.groupedAs("color2_bgr_red")).and(exactly("&"));
+var reColor3 = exactly("\\3c").and(exactly("&H")).and(reHex.groupedAs("color3_bgr_blue")).and(reHex.groupedAs("color3_bgr_green")).and(reHex.groupedAs("color3_bgr_red")).and(exactly("&"));
+var reColor4 = exactly("\\4c").and(exactly("&H")).and(reHex.groupedAs("color4_bgr_blue")).and(reHex.groupedAs("color4_bgr_green")).and(reHex.groupedAs("color4_bgr_red")).and(exactly("&"));
 var regexColorBGR = createRegExp(reColorBGR);
 var regexColor = createRegExp(reColor);
 var regexColor1 = createRegExp(reColor1);
@@ -489,9 +490,9 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color1)) {
     const groups = matchUnitTags[0].match(regexColor1)?.groups;
-    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+    const blue = Number(hexToNumber(groups?.color1_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color1_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color1_bgr_red ?? "0"));
     const tag = {
       name: TagName.color1,
       blue,
@@ -501,9 +502,9 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color2)) {
     const groups = matchUnitTags[0].match(regexColor2)?.groups;
-    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+    const blue = Number(hexToNumber(groups?.color2_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color2_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color2_bgr_red ?? "0"));
     const tag = {
       name: TagName.color2,
       blue,
@@ -513,9 +514,9 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color3)) {
     const groups = matchUnitTags[0].match(regexColor3)?.groups;
-    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+    const blue = Number(hexToNumber(groups?.color3_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color3_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color3_bgr_red ?? "0"));
     const tag = {
       name: TagName.color3,
       blue,
@@ -525,9 +526,9 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color4)) {
     const groups = matchUnitTags[0].match(regexColor4)?.groups;
-    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+    const blue = Number(hexToNumber(groups?.color4_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color4_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color4_bgr_red ?? "0"));
     const tag = {
       name: TagName.color4,
       blue,
@@ -2281,4 +2282,4 @@ export {
   TagName
 };
 
-//# debugId=CD1041664D7938F464756e2164756e21
+//# debugId=AC503BDF1DBEBF4764756e2164756e21

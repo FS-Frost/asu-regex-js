@@ -1,4 +1,4 @@
-import { anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore } from "magic-regexp";
+import { Input, anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore } from "magic-regexp";
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
@@ -45,21 +45,39 @@ const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
 const reA = exactly("\\").and("a").and(oneOrMore(digit));
 
+const reHex = letter.or(digit).times(2);
+
 const reColorBGR = exactly("&H")
-    .and(letter.or(digit).times(2).groupedAs("color_bgr_blue"))
-    .and(letter.or(digit).times(2).groupedAs("color_bgr_green"))
-    .and(letter.or(digit).times(2).groupedAs("color_bgr_red"))
+    .and(reHex.groupedAs("color_bgr_blue"))
+    .and(reHex.groupedAs("color_bgr_green"))
+    .and(reHex.groupedAs("color_bgr_red"))
     .and(exactly("&"));
 
 const reColor = exactly("\\c").and(reColorBGR);
 
-const reColor1 = exactly("\\1c").and(reColorBGR);
+const reColor1 = exactly("\\1c").and(exactly("&H"))
+    .and(reHex.groupedAs("color1_bgr_blue"))
+    .and(reHex.groupedAs("color1_bgr_green"))
+    .and(reHex.groupedAs("color1_bgr_red"))
+    .and(exactly("&"));
 
-const reColor2 = exactly("\\2c").and(reColorBGR);
+const reColor2 = exactly("\\2c").and(exactly("&H"))
+    .and(reHex.groupedAs("color2_bgr_blue"))
+    .and(reHex.groupedAs("color2_bgr_green"))
+    .and(reHex.groupedAs("color2_bgr_red"))
+    .and(exactly("&"));
 
-const reColor3 = exactly("\\3c").and(reColorBGR);
+const reColor3 = exactly("\\3c").and(exactly("&H"))
+    .and(reHex.groupedAs("color3_bgr_blue"))
+    .and(reHex.groupedAs("color3_bgr_green"))
+    .and(reHex.groupedAs("color3_bgr_red"))
+    .and(exactly("&"));
 
-const reColor4 = exactly("\\4c").and(reColorBGR);
+const reColor4 = exactly("\\4c").and(exactly("&H"))
+    .and(reHex.groupedAs("color4_bgr_blue"))
+    .and(reHex.groupedAs("color4_bgr_green"))
+    .and(reHex.groupedAs("color4_bgr_red"))
+    .and(exactly("&"));
 
 export const regexColorBGR = createRegExp(reColorBGR) as RegExp;
 

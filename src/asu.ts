@@ -729,9 +729,9 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.color1)) {
         const groups = matchUnitTags[0].match(regexColor1)?.groups;
-        const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+        const blue = Number(hexToNumber(groups?.color1_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(groups?.color1_bgr_green ?? "0"));
+        const red = Number(hexToNumber(groups?.color1_bgr_red ?? "0"));
 
         const tag: Tag1c = {
             name: TagName.color1,
@@ -745,9 +745,9 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.color2)) {
         const groups = matchUnitTags[0].match(regexColor2)?.groups;
-        const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+        const blue = Number(hexToNumber(groups?.color2_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(groups?.color2_bgr_green ?? "0"));
+        const red = Number(hexToNumber(groups?.color2_bgr_red ?? "0"));
 
         const tag: Tag2c = {
             name: TagName.color2,
@@ -761,9 +761,9 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.color3)) {
         const groups = matchUnitTags[0].match(regexColor3)?.groups;
-        const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+        const blue = Number(hexToNumber(groups?.color3_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(groups?.color3_bgr_green ?? "0"));
+        const red = Number(hexToNumber(groups?.color3_bgr_red ?? "0"));
 
         const tag: Tag3c = {
             name: TagName.color3,
@@ -777,9 +777,9 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
 
     else if (tagNameSource.startsWith(TagName.color4)) {
         const groups = matchUnitTags[0].match(regexColor4)?.groups;
-        const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+        const blue = Number(hexToNumber(groups?.color4_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(groups?.color4_bgr_green ?? "0"));
+        const red = Number(hexToNumber(groups?.color4_bgr_red ?? "0"));
 
         const tag: Tag4c = {
             name: TagName.color4,
