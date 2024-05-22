@@ -1,4 +1,5 @@
-import { regexClip, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
+import { hexToNumber, numberToHex } from "./mat";
+import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
 
 export * from "./mat";
 
@@ -99,27 +100,37 @@ export type TagYbord = {
 
 export type TagC = {
     name: TagName.color;
-    value: string;
+    red: number;
+    green: number;
+    blue: number;
 };
 
 export type Tag1c = {
     name: TagName.color1;
-    value: string;
+    red: number;
+    green: number;
+    blue: number;
 };
 
 export type Tag2c = {
     name: TagName.color2;
-    value: string;
+    red: number;
+    green: number;
+    blue: number;
 };
 
 export type Tag3c = {
     name: TagName.color3;
-    value: string;
+    red: number;
+    green: number;
+    blue: number;
 };
 
 export type Tag4c = {
     name: TagName.color4;
-    value: string;
+    red: number;
+    green: number;
+    blue: number;
 };
 
 export type TagAlpha = {
@@ -726,38 +737,66 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.color1)) {
-        const value = matchUnitTags[0].substring(1 + TagName.color1.length);
+        const groups = matchUnitTags[0].match(regexColor1)?.groups;
+        const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+        const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+        const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+
         const tag: Tag1c = {
             name: TagName.color1,
-            value: value,
+            red: red,
+            green: green,
+            blue: blue,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.color2)) {
-        const value = matchUnitTags[0].substring(1 + TagName.color2.length);
+        const groups = matchUnitTags[0].match(regexColor2)?.groups;
+        const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+        const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+        const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+
         const tag: Tag2c = {
             name: TagName.color2,
-            value: value,
+            red: red,
+            green: green,
+            blue: blue,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.color3)) {
-        const value = matchUnitTags[0].substring(1 + TagName.color3.length);
+        const groups = matchUnitTags[0].match(regexColor3)?.groups;
+        const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+        const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+        const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+
         const tag: Tag3c = {
             name: TagName.color3,
-            value: value,
+            red: red,
+            green: green,
+            blue: blue,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.color4)) {
-        const value = matchUnitTags[0].substring(1 + TagName.color4.length);
+        const groups = matchUnitTags[0].match(regexColor4)?.groups;
+        const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+        const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+        const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+
         const tag: Tag4c = {
             name: TagName.color4,
-            value: value,
+            red: red,
+            green: green,
+            blue: blue,
         };
+
         tags.push(tag);
     }
 
@@ -870,11 +909,18 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else if (tagNameSource.startsWith(TagName.color)) {
-        const value = matchUnitTags[0].substring(1 + TagName.color.length);
+        const groups = matchUnitTags[0].match(regexColor)?.groups;
+        const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+        const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+        const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+
         const tag: TagC = {
             name: TagName.color,
-            value: value,
+            red: red,
+            green: green,
+            blue: blue,
         };
+
         tags.push(tag);
     }
 
@@ -974,11 +1020,8 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.pos:
-                s += `\\pos(${tag.x},${tag.y})`;
-                break;
-
             case TagName.org:
-                s += `\\org(${tag.x},${tag.y})`;
+                s += `\\${tag.name}(${tag.x},${tag.y})`;
                 break;
 
             case TagName.move:
@@ -990,11 +1033,8 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.clip:
-                s += `\\clip(${tag.drawCommands})`;
-                break;
-
             case TagName.iclip:
-                s += `\\iclip(${tag.drawCommands})`;
+                s += `\\${tag.name}(${tag.drawCommands})`;
                 break;
 
             case TagName.fad:
@@ -1015,6 +1055,17 @@ export function contentEffectToString(item: ContentEffect): string {
 
             case TagName.r:
                 s += `\\r${tag.style}`;
+                break;
+
+            case TagName.color:
+            case TagName.color1:
+            case TagName.color2:
+            case TagName.color3:
+            case TagName.color4:
+                const hexRed = numberToHex(tag.red);
+                const hexGreen = numberToHex(tag.green);
+                const hexBlue = numberToHex(tag.blue);
+                s += `\\${tag.name}&H${hexRed}${hexGreen}${hexBlue}&`;
                 break;
 
             default:
@@ -1863,71 +1914,91 @@ export function setB(items: ContentItem[], newValue: number): TagB {
     return tag;
 }
 
-export function setColor(items: ContentItem[], newValue: string): TagC {
+export function setColor(items: ContentItem[], red: number, green: number, blue: number): TagC {
     const defaultTag: TagC = {
         name: TagName.color,
-        value: newValue,
+        red: red,
+        green: green,
+        blue: blue,
     };
 
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
-        tag.value = newValue;
+        tag.red = red;
+        tag.green = green;
+        tag.blue = blue;
     }
 
     return tag;
 }
 
-export function setColor1(items: ContentItem[], newValue: string): Tag1c {
+export function setColor1(items: ContentItem[], red: number, green: number, blue: number): Tag1c {
     const defaultTag: Tag1c = {
         name: TagName.color1,
-        value: newValue,
+        red: red,
+        green: green,
+        blue: blue,
     };
 
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
-        tag.value = newValue;
+        tag.red = red;
+        tag.green = green;
+        tag.blue = blue;
     }
 
     return tag;
 }
 
-export function setColor2(items: ContentItem[], newValue: string): Tag2c {
+export function setColor2(items: ContentItem[], red: number, green: number, blue: number): Tag2c {
     const defaultTag: Tag2c = {
         name: TagName.color2,
-        value: newValue,
+        red: red,
+        green: green,
+        blue: blue,
     };
 
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
-        tag.value = newValue;
+        tag.red = red;
+        tag.green = green;
+        tag.blue = blue;
     }
 
     return tag;
 }
 
-export function setColor3(items: ContentItem[], newValue: string): Tag3c {
+export function setColor3(items: ContentItem[], red: number, green: number, blue: number): Tag3c {
     const defaultTag: Tag3c = {
         name: TagName.color3,
-        value: newValue,
+        red: red,
+        green: green,
+        blue: blue,
     };
 
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
-        tag.value = newValue;
+        tag.red = red;
+        tag.green = green;
+        tag.blue = blue;
     }
 
     return tag;
 }
 
-export function setColor4(items: ContentItem[], newValue: string): Tag4c {
+export function setColor4(items: ContentItem[], red: number, green: number, blue: number): Tag4c {
     const defaultTag: Tag4c = {
         name: TagName.color4,
-        value: newValue,
+        red: red,
+        green: green,
+        blue: blue,
     };
 
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
-        tag.value = newValue;
+        tag.red = red;
+        tag.green = green;
+        tag.blue = blue;
     }
 
     return tag;

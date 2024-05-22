@@ -91,23 +91,33 @@ export type TagYbord = {
 };
 export type TagC = {
 	name: TagName.color;
-	value: string;
+	red: number;
+	green: number;
+	blue: number;
 };
 export type Tag1c = {
 	name: TagName.color1;
-	value: string;
+	red: number;
+	green: number;
+	blue: number;
 };
 export type Tag2c = {
 	name: TagName.color2;
-	value: string;
+	red: number;
+	green: number;
+	blue: number;
 };
 export type Tag3c = {
 	name: TagName.color3;
-	value: string;
+	red: number;
+	green: number;
+	blue: number;
 };
 export type Tag4c = {
 	name: TagName.color4;
-	value: string;
+	red: number;
+	green: number;
+	blue: number;
 };
 export type TagAlpha = {
 	name: TagName.alpha;
@@ -355,11 +365,11 @@ export declare function findT(items: ContentItem[]): TagT | null;
 export declare function setA(items: ContentItem[], newValue: number): TagA;
 export declare function setAn(items: ContentItem[], newValue: number): TagAn;
 export declare function setB(items: ContentItem[], newValue: number): TagB;
-export declare function setColor(items: ContentItem[], newValue: string): TagC;
-export declare function setColor1(items: ContentItem[], newValue: string): Tag1c;
-export declare function setColor2(items: ContentItem[], newValue: string): Tag2c;
-export declare function setColor3(items: ContentItem[], newValue: string): Tag3c;
-export declare function setColor4(items: ContentItem[], newValue: string): Tag4c;
+export declare function setColor(items: ContentItem[], red: number, green: number, blue: number): TagC;
+export declare function setColor1(items: ContentItem[], red: number, green: number, blue: number): Tag1c;
+export declare function setColor2(items: ContentItem[], red: number, green: number, blue: number): Tag2c;
+export declare function setColor3(items: ContentItem[], red: number, green: number, blue: number): Tag3c;
+export declare function setColor4(items: ContentItem[], red: number, green: number, blue: number): Tag4c;
 export declare function setAlpha(items: ContentItem[], newValue: string): TagAlpha;
 export declare function setAlpha1(items: ContentItem[], newValue: string): Tag1a;
 export declare function setAlpha2(items: ContentItem[], newValue: string): Tag2a;

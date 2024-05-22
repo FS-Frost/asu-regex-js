@@ -1,8 +1,18 @@
 import { BuildConfig, Target } from "bun";
 import fs from "node:fs/promises";
 
-console.log("Generating declaration file...");
-Bun.spawnSync(["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", "build/asu.d.ts"]);
+{
+    console.log("Generating declaration file...");
+    const cmdAArgs: string[] = ["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", "build/asu.d.ts", "--no-check"];
+    console.log(cmdAArgs.join(" "));
+    const cmdResult = Bun.spawnSync(cmdAArgs);
+    if (!cmdResult.success) {
+        console.error(`ERROR: DTS generation failed with exit code ${cmdResult.exitCode}`);
+        console.error(cmdResult.stderr.toString());
+        process.exit(1);
+    }
+}
+
 const dtsContent = await fs.readFile("./build/asu.d.ts");
 
 const buildDir = "./build";
@@ -43,4 +53,17 @@ for (const target of targets) {
 
 console.log(`Out directory: ${buildDir}`);
 
-Bun.spawnSync(["cp", "build/asu.browser.js", "examples/asu.browser.js"]);
+{
+    console.log("Copying browser build to examples...");
+    const cmdArgs: string[] = ["cp", "build/asu.browser.js", "examples/asu.browser.js"];
+    console.log(cmdArgs.join(" "));
+    const cmdResult = Bun.spawnSync(cmdArgs);
+    if (!cmdResult.success) {
+        console.error(`ERROR: failed to copy browser build to examples with exit code ${cmdResult.exitCode}`);
+        console.error(cmdResult.stderr.toString());
+        process.exit(1);
+    }
+
+}
+
+console.log("DONE");

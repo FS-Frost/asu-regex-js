@@ -1,4 +1,4 @@
-import { anyOf, char, charNotIn, createRegExp, digit, exactly, oneOrMore } from "magic-regexp";
+import { anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore } from "magic-regexp";
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
@@ -45,15 +45,31 @@ const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
 const reA = exactly("\\").and("a").and(oneOrMore(digit));
 
-const reColor = exactly("\\").and("c").and(oneOrMore(charNotIn("\\")));
+const reColorRGB = exactly("&H")
+    .and(letter.or(digit).times(2).groupedAs("color_rgb_red"))
+    .and(letter.or(digit).times(2).groupedAs("color_rgb_green"))
+    .and(letter.or(digit).times(2).groupedAs("color_rgb_blue"))
+    .and(exactly("&"));
 
-const reColor1 = exactly("\\").and("1c").and(oneOrMore(charNotIn("\\")));
+const reColor = exactly("\\").and(reColorRGB);
 
-const reColor2 = exactly("\\").and("2c").and(oneOrMore(charNotIn("\\")));
+const reColor1 = exactly("\\1c").and(reColorRGB);
 
-const reColor3 = exactly("\\").and("3c").and(oneOrMore(charNotIn("\\")));
+const reColor2 = exactly("\\2c").and(reColorRGB);
 
-const reColor4 = exactly("\\").and("4c").and(oneOrMore(charNotIn("\\")));
+const reColor3 = exactly("\\3c").and(reColorRGB);
+
+const reColor4 = exactly("\\4c").and(reColorRGB);
+
+export const regexColor = createRegExp(reColor) as RegExp;
+
+export const regexColor1 = createRegExp(reColor1) as RegExp;
+
+export const regexColor2 = createRegExp(reColor2) as RegExp;
+
+export const regexColor3 = createRegExp(reColor3) as RegExp;
+
+export const regexColor4 = createRegExp(reColor4) as RegExp;
 
 const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
 

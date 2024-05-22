@@ -1,3 +1,37 @@
+// src/mat.ts
+function hexToNumber(s) {
+  return parseInt(s, 16);
+}
+function numberToHex(n) {
+  const int = Math.floor(n);
+  return int.toString(16).padStart(2, "0").toUpperCase();
+}
+function interpolate(min, max, intervals) {
+  const reverse = min > max;
+  let actualMax = max;
+  let actualMin = min;
+  if (reverse) {
+    actualMax = min;
+    actualMin = max;
+  }
+  const range = actualMax - actualMin;
+  const step = range / intervals;
+  let sum = actualMin;
+  const interpolations = [actualMin];
+  for (let i = 1;i < intervals; i++) {
+    sum += step;
+    if (sum > actualMax) {
+      sum = actualMax;
+    }
+    interpolations.push(sum);
+  }
+  interpolations[intervals - 1] = actualMax;
+  if (reverse) {
+    interpolations.reverse();
+  }
+  return interpolations;
+}
+
 // node_modules/magic-regexp/dist/shared/magic-regexp.b7c910ac.mjs
 var NO_WRAP_RE = /^(\(.*\)|\\?.)$/;
 var wrap = (s) => {
@@ -81,11 +115,17 @@ var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 var reA = exactly("\\").and("a").and(oneOrMore(digit));
-var reColor = exactly("\\").and("c").and(oneOrMore(charNotIn("\\")));
-var reColor1 = exactly("\\").and("1c").and(oneOrMore(charNotIn("\\")));
-var reColor2 = exactly("\\").and("2c").and(oneOrMore(charNotIn("\\")));
-var reColor3 = exactly("\\").and("3c").and(oneOrMore(charNotIn("\\")));
-var reColor4 = exactly("\\").and("4c").and(oneOrMore(charNotIn("\\")));
+var reColorRGB = exactly("&H").and(letter.or(digit).times(2).groupedAs("color_rgb_red")).and(letter.or(digit).times(2).groupedAs("color_rgb_green")).and(letter.or(digit).times(2).groupedAs("color_rgb_blue")).and(exactly("&"));
+var reColor = exactly("\\").and(reColorRGB);
+var reColor1 = exactly("\\1c").and(reColorRGB);
+var reColor2 = exactly("\\2c").and(reColorRGB);
+var reColor3 = exactly("\\3c").and(reColorRGB);
+var reColor4 = exactly("\\4c").and(reColorRGB);
+var regexColor = createRegExp(reColor);
+var regexColor1 = createRegExp(reColor1);
+var regexColor2 = createRegExp(reColor2);
+var regexColor3 = createRegExp(reColor3);
+var regexColor4 = createRegExp(reColor4);
 var reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
 var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
 var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
@@ -143,40 +183,6 @@ var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).
 var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("arg1").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg2").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
 var regexTagT = createRegExp(reTGeneral);
-
-// src/mat.ts
-function hexToNumber(s) {
-  return parseInt(s, 16);
-}
-function numberToHex(n) {
-  const int = Math.floor(n);
-  return int.toString(16).toUpperCase();
-}
-function interpolate(min, max, intervals) {
-  const reverse = min > max;
-  let actualMax = max;
-  let actualMin = min;
-  if (reverse) {
-    actualMax = min;
-    actualMin = max;
-  }
-  const range = actualMax - actualMin;
-  const step = range / intervals;
-  let sum = actualMin;
-  const interpolations = [actualMin];
-  for (let i = 1;i < intervals; i++) {
-    sum += step;
-    if (sum > actualMax) {
-      sum = actualMax;
-    }
-    interpolations.push(sum);
-  }
-  interpolations[intervals - 1] = actualMax;
-  if (reverse) {
-    interpolations.reverse();
-  }
-  return interpolations;
-}
 
 // src/asu.ts
 function parseTags(text, tags) {
@@ -481,31 +487,51 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color1)) {
-    const value = matchUnitTags[0].substring(1 + TagName.color1.length);
+    const groups = matchUnitTags[0].match(regexColor1)?.groups;
+    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
     const tag = {
       name: TagName.color1,
-      value
+      red,
+      green,
+      blue
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color2)) {
-    const value = matchUnitTags[0].substring(1 + TagName.color2.length);
+    const groups = matchUnitTags[0].match(regexColor2)?.groups;
+    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
     const tag = {
       name: TagName.color2,
-      value
+      red,
+      green,
+      blue
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color3)) {
-    const value = matchUnitTags[0].substring(1 + TagName.color3.length);
+    const groups = matchUnitTags[0].match(regexColor3)?.groups;
+    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
     const tag = {
       name: TagName.color3,
-      value
+      red,
+      green,
+      blue
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color4)) {
-    const value = matchUnitTags[0].substring(1 + TagName.color4.length);
+    const groups = matchUnitTags[0].match(regexColor4)?.groups;
+    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
     const tag = {
       name: TagName.color4,
-      value
+      red,
+      green,
+      blue
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.alpha1)) {
@@ -593,10 +619,15 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color)) {
-    const value = matchUnitTags[0].substring(1 + TagName.color.length);
+    const groups = matchUnitTags[0].match(regexColor)?.groups;
+    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
+    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
     const tag = {
       name: TagName.color,
-      value
+      red,
+      green,
+      blue
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.b)) {
@@ -665,10 +696,8 @@ function contentEffectToString(item) {
         }
         break;
       case TagName.pos:
-        s += `\\pos(${tag.x},${tag.y})`;
-        break;
       case TagName.org:
-        s += `\\org(${tag.x},${tag.y})`;
+        s += `\\${tag.name}(${tag.x},${tag.y})`;
         break;
       case TagName.move:
         s += `\\move(${tag.x1},${tag.y1},${tag.x2},${tag.y2}`;
@@ -678,10 +707,8 @@ function contentEffectToString(item) {
         s += ")";
         break;
       case TagName.clip:
-        s += `\\clip(${tag.drawCommands})`;
-        break;
       case TagName.iclip:
-        s += `\\iclip(${tag.drawCommands})`;
+        s += `\\${tag.name}(${tag.drawCommands})`;
         break;
       case TagName.fad:
         s += `\\fad(${tag.in},${tag.out})`;
@@ -697,6 +724,16 @@ function contentEffectToString(item) {
         break;
       case TagName.r:
         s += `\\r${tag.style}`;
+        break;
+      case TagName.color:
+      case TagName.color1:
+      case TagName.color2:
+      case TagName.color3:
+      case TagName.color4:
+        const hexRed = numberToHex(tag.red);
+        const hexGreen = numberToHex(tag.green);
+        const hexBlue = numberToHex(tag.blue);
+        s += `\\${tag.name}&H${hexRed}${hexGreen}${hexBlue}&`;
         break;
       default:
         s += `\\${tag.name}${tag.value}`;
@@ -1373,58 +1410,78 @@ function setB(items, newValue) {
   }
   return tag;
 }
-function setColor(items, newValue) {
+function setColor(items, red, green, blue) {
   const defaultTag = {
     name: TagName.color,
-    value: newValue
+    red,
+    green,
+    blue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.value = newValue;
+    tag.red = red;
+    tag.green = green;
+    tag.blue = blue;
   }
   return tag;
 }
-function setColor1(items, newValue) {
+function setColor1(items, red, green, blue) {
   const defaultTag = {
     name: TagName.color1,
-    value: newValue
+    red,
+    green,
+    blue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.value = newValue;
+    tag.red = red;
+    tag.green = green;
+    tag.blue = blue;
   }
   return tag;
 }
-function setColor2(items, newValue) {
+function setColor2(items, red, green, blue) {
   const defaultTag = {
     name: TagName.color2,
-    value: newValue
+    red,
+    green,
+    blue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.value = newValue;
+    tag.red = red;
+    tag.green = green;
+    tag.blue = blue;
   }
   return tag;
 }
-function setColor3(items, newValue) {
+function setColor3(items, red, green, blue) {
   const defaultTag = {
     name: TagName.color3,
-    value: newValue
+    red,
+    green,
+    blue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.value = newValue;
+    tag.red = red;
+    tag.green = green;
+    tag.blue = blue;
   }
   return tag;
 }
-function setColor4(items, newValue) {
+function setColor4(items, red, green, blue) {
   const defaultTag = {
     name: TagName.color4,
-    value: newValue
+    red,
+    green,
+    blue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.value = newValue;
+    tag.red = red;
+    tag.green = green;
+    tag.blue = blue;
   }
   return tag;
 }
@@ -2209,4 +2266,4 @@ export {
   TagName
 };
 
-//# debugId=BFFBCADC0F05D91764756e2164756e21
+//# debugId=F3778B47B61D641264756e2164756e21

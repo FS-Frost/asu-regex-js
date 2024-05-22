@@ -9,6 +9,13 @@ test("math: number to hex from 0 to 255", () => {
     }
 });
 
+test("math: number to hex format single digit", () => {
+    for (let n = 0; n <= 9; n++) {
+        const hex = numberToHex(n);
+        expect(hex).toEqual(`0${n}`);
+    }
+});
+
 test("math: interpolate integer numbers", () => {
     const intervals = 255;
     const list = interpolate(0, 100, intervals);

@@ -4,7 +4,7 @@ export function hexToNumber(s: string): number {
 
 export function numberToHex(n: number): string {
     const int = Math.floor(n);
-    return int.toString(16).toUpperCase();
+    return int.toString(16).padStart(2, "0").toUpperCase();
 }
 
 export function interpolate(min: number, max: number, intervals: number): number[] {
