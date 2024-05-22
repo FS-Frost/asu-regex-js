@@ -45,23 +45,23 @@ const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
 const reA = exactly("\\").and("a").and(oneOrMore(digit));
 
-const reColorRGB = exactly("&H")
-    .and(letter.or(digit).times(2).groupedAs("color_rgb_red"))
-    .and(letter.or(digit).times(2).groupedAs("color_rgb_green"))
-    .and(letter.or(digit).times(2).groupedAs("color_rgb_blue"))
+const reColorBGR = exactly("&H")
+    .and(letter.or(digit).times(2).groupedAs("color_bgr_blue"))
+    .and(letter.or(digit).times(2).groupedAs("color_bgr_green"))
+    .and(letter.or(digit).times(2).groupedAs("color_bgr_red"))
     .and(exactly("&"));
 
-const reColor = exactly("\\").and(reColorRGB);
+const reColor = exactly("\\c").and(reColorBGR);
 
-const reColor1 = exactly("\\1c").and(reColorRGB);
+const reColor1 = exactly("\\1c").and(reColorBGR);
 
-const reColor2 = exactly("\\2c").and(reColorRGB);
+const reColor2 = exactly("\\2c").and(reColorBGR);
 
-const reColor3 = exactly("\\3c").and(reColorRGB);
+const reColor3 = exactly("\\3c").and(reColorBGR);
 
-const reColor4 = exactly("\\4c").and(reColorRGB);
+const reColor4 = exactly("\\4c").and(reColorBGR);
 
-export const regexColorRGB = createRegExp(reColorRGB) as RegExp;
+export const regexColorBGR = createRegExp(reColorBGR) as RegExp;
 
 export const regexColor = createRegExp(reColor) as RegExp;
 

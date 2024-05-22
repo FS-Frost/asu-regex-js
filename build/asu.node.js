@@ -115,13 +115,13 @@ var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 var reA = exactly("\\").and("a").and(oneOrMore(digit));
-var reColorRGB = exactly("&H").and(letter.or(digit).times(2).groupedAs("color_rgb_red")).and(letter.or(digit).times(2).groupedAs("color_rgb_green")).and(letter.or(digit).times(2).groupedAs("color_rgb_blue")).and(exactly("&"));
-var reColor = exactly("\\").and(reColorRGB);
-var reColor1 = exactly("\\1c").and(reColorRGB);
-var reColor2 = exactly("\\2c").and(reColorRGB);
-var reColor3 = exactly("\\3c").and(reColorRGB);
-var reColor4 = exactly("\\4c").and(reColorRGB);
-var regexColorRGB = createRegExp(reColorRGB);
+var reColorBGR = exactly("&H").and(letter.or(digit).times(2).groupedAs("color_bgr_blue")).and(letter.or(digit).times(2).groupedAs("color_bgr_green")).and(letter.or(digit).times(2).groupedAs("color_bgr_red")).and(exactly("&"));
+var reColor = exactly("\\c").and(reColorBGR);
+var reColor1 = exactly("\\1c").and(reColorBGR);
+var reColor2 = exactly("\\2c").and(reColorBGR);
+var reColor3 = exactly("\\3c").and(reColorBGR);
+var reColor4 = exactly("\\4c").and(reColorBGR);
+var regexColorBGR = createRegExp(reColorBGR);
 var regexColor = createRegExp(reColor);
 var regexColor1 = createRegExp(reColor1);
 var regexColor2 = createRegExp(reColor2);
@@ -489,50 +489,50 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color1)) {
     const groups = matchUnitTags[0].match(regexColor1)?.groups;
-    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
-    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
-    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
     const tag = {
       name: TagName.color1,
-      red,
+      blue,
       green,
-      blue
+      red
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color2)) {
     const groups = matchUnitTags[0].match(regexColor2)?.groups;
-    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
-    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
-    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
     const tag = {
       name: TagName.color2,
-      red,
+      blue,
       green,
-      blue
+      red
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color3)) {
     const groups = matchUnitTags[0].match(regexColor3)?.groups;
-    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
-    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
-    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
     const tag = {
       name: TagName.color3,
-      red,
+      blue,
       green,
-      blue
+      red
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color4)) {
     const groups = matchUnitTags[0].match(regexColor4)?.groups;
-    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
-    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
-    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
     const tag = {
       name: TagName.color4,
-      red,
+      blue,
       green,
-      blue
+      red
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.alpha1)) {
@@ -621,14 +621,14 @@ function parseTags(text, tags) {
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.color)) {
     const groups = matchUnitTags[0].match(regexColor)?.groups;
-    const red = Number(hexToNumber(groups?.color_rgb_red ?? "0"));
-    const green = Number(hexToNumber(groups?.color_rgb_green ?? "0"));
-    const blue = Number(hexToNumber(groups?.color_rgb_blue ?? "0"));
+    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
     const tag = {
       name: TagName.color,
-      red,
+      blue,
       green,
-      blue
+      red
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.b)) {
@@ -731,10 +731,10 @@ function contentEffectToString(item) {
       case TagName.color2:
       case TagName.color3:
       case TagName.color4:
-        const hexRed = numberToHex(tag.red);
-        const hexGreen = numberToHex(tag.green);
         const hexBlue = numberToHex(tag.blue);
-        s += `\\${tag.name}&H${hexRed}${hexGreen}${hexBlue}&`;
+        const hexGreen = numberToHex(tag.green);
+        const hexRed = numberToHex(tag.red);
+        s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
         break;
       default:
         s += `\\${tag.name}${tag.value}`;
@@ -1411,78 +1411,78 @@ function setB(items, newValue) {
   }
   return tag;
 }
-function setColor(items, red, green, blue) {
+function setColor(items, blue, green, red) {
   const defaultTag = {
     name: TagName.color,
-    red,
+    blue,
     green,
-    blue
+    red
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.red = red;
-    tag.green = green;
     tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
   }
   return tag;
 }
-function setColor1(items, red, green, blue) {
+function setColor1(items, blue, green, red) {
   const defaultTag = {
     name: TagName.color1,
-    red,
+    blue,
     green,
-    blue
+    red
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.red = red;
-    tag.green = green;
     tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
   }
   return tag;
 }
-function setColor2(items, red, green, blue) {
+function setColor2(items, blue, green, red) {
   const defaultTag = {
     name: TagName.color2,
-    red,
+    blue,
     green,
-    blue
+    red
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.red = red;
-    tag.green = green;
     tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
   }
   return tag;
 }
-function setColor3(items, red, green, blue) {
+function setColor3(items, blue, green, red) {
   const defaultTag = {
     name: TagName.color3,
-    red,
+    blue,
     green,
-    blue
+    red
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.red = red;
-    tag.green = green;
     tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
   }
   return tag;
 }
-function setColor4(items, red, green, blue) {
+function setColor4(items, blue, green, red) {
   const defaultTag = {
     name: TagName.color4,
-    red,
+    blue,
     green,
-    blue
+    red
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.red = red;
-    tag.green = green;
     tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
   }
   return tag;
 }
@@ -2092,16 +2092,16 @@ function lineToString(line) {
   s += line.content;
   return s;
 }
-function parseColorRGB(text) {
-  const match = text.match(regexColorRGB);
+function parseColorBGR(text) {
+  const match = text.match(regexColorBGR);
   if (match == null) {
     return null;
   }
   const groups = match.groups;
   const color = {
-    red: hexToNumber(groups?.color_rgb_red ?? ""),
-    green: hexToNumber(groups?.color_rgb_green ?? ""),
-    blue: hexToNumber(groups?.color_rgb_blue ?? "")
+    blue: hexToNumber(groups?.color_bgr_blue ?? ""),
+    green: hexToNumber(groups?.color_bgr_green ?? ""),
+    red: hexToNumber(groups?.color_bgr_red ?? "")
   };
   return color;
 }
@@ -2218,7 +2218,7 @@ export {
   parseTags,
   parseLine,
   parseContent,
-  parseColorRGB,
+  parseColorBGR,
   numberToHex,
   lineToString,
   itemsToTags,
@@ -2281,4 +2281,4 @@ export {
   TagName
 };
 
-//# debugId=3C946D218C34654364756e2164756e21
+//# debugId=B8C123E043D3101E64756e2164756e21

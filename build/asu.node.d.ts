@@ -89,35 +89,25 @@ export type TagYbord = {
 	name: TagName.ybord;
 	value: number;
 };
-export type TagC = {
+export type ColorBGR = {
+	blue: number;
+	green: number;
+	red: number;
+};
+export type TagC = ColorBGR & {
 	name: TagName.color;
-	red: number;
-	green: number;
-	blue: number;
 };
-export type Tag1c = {
+export type Tag1c = ColorBGR & {
 	name: TagName.color1;
-	red: number;
-	green: number;
-	blue: number;
 };
-export type Tag2c = {
+export type Tag2c = ColorBGR & {
 	name: TagName.color2;
-	red: number;
-	green: number;
-	blue: number;
 };
-export type Tag3c = {
+export type Tag3c = ColorBGR & {
 	name: TagName.color3;
-	red: number;
-	green: number;
-	blue: number;
 };
-export type Tag4c = {
+export type Tag4c = ColorBGR & {
 	name: TagName.color4;
-	red: number;
-	green: number;
-	blue: number;
 };
 export type TagAlpha = {
 	name: TagName.alpha;
@@ -365,11 +355,11 @@ export declare function findT(items: ContentItem[]): TagT | null;
 export declare function setA(items: ContentItem[], newValue: number): TagA;
 export declare function setAn(items: ContentItem[], newValue: number): TagAn;
 export declare function setB(items: ContentItem[], newValue: number): TagB;
-export declare function setColor(items: ContentItem[], red: number, green: number, blue: number): TagC;
-export declare function setColor1(items: ContentItem[], red: number, green: number, blue: number): Tag1c;
-export declare function setColor2(items: ContentItem[], red: number, green: number, blue: number): Tag2c;
-export declare function setColor3(items: ContentItem[], red: number, green: number, blue: number): Tag3c;
-export declare function setColor4(items: ContentItem[], red: number, green: number, blue: number): Tag4c;
+export declare function setColor(items: ContentItem[], blue: number, green: number, red: number): TagC;
+export declare function setColor1(items: ContentItem[], blue: number, green: number, red: number): Tag1c;
+export declare function setColor2(items: ContentItem[], blue: number, green: number, red: number): Tag2c;
+export declare function setColor3(items: ContentItem[], blue: number, green: number, red: number): Tag3c;
+export declare function setColor4(items: ContentItem[], blue: number, green: number, red: number): Tag4c;
 export declare function setAlpha(items: ContentItem[], newValue: string): TagAlpha;
 export declare function setAlpha1(items: ContentItem[], newValue: string): Tag1a;
 export declare function setAlpha2(items: ContentItem[], newValue: string): Tag2a;
@@ -432,11 +422,6 @@ export type Line = {
 };
 export declare function parseLine(text: string): Line | null;
 export declare function lineToString(line: Line): string;
-export type ColorRGB = {
-	red: number;
-	green: number;
-	blue: number;
-};
-export declare function parseColorRGB(text: string): ColorRGB | null;
+export declare function parseColorBGR(text: string): ColorBGR | null;
 
 export {};

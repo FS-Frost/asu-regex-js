@@ -1828,29 +1828,29 @@ test("create fx and iclip", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
-// color RGB
-test("parse color RGB", () => {
+// color BGR
+test("parse color BGR", () => {
     const text = "\\1c&HC14200&";
-    const color = asu.parseColorRGB(text);
+    const color = asu.parseColorBGR(text);
     expect(color).not.toBeNull();
     if (color == null) {
-        throw "null color RGB";
+        throw "null color BGR";
     }
 
-    const expectedColor: asu.ColorRGB = {
-        red: 193,
+    const expectedColor: asu.ColorBGR = {
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     };
 
     expect(color).toEqual(expectedColor);
 });
 
 // color
-test("find color1", () => {
-    const text = "{\\1c&HC14200&}Kirino-san";
+test("find color", () => {
+    const text = "{\\c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const tag = asu.findColor1(result);
+    const tag = asu.findColor(result);
     expect(tag).not.toBeNull();
     expect(asu.contentsToString(result)).toEqual(text);
 });
@@ -1859,15 +1859,15 @@ test("update color", () => {
     const text = "{\\be2\\c&H28AB72&}Kirino-san";
     const expectedText = "{\\be2\\c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("c1");
+    const blue = asu.hexToNumber("c1");
     const green = asu.hexToNumber("42");
-    const blue = asu.hexToNumber("00");
-    const tag = asu.setColor(result, red, green, blue);
+    const red = asu.hexToNumber("00");
+    const tag = asu.setColor(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color,
-        red: 193,
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     } satisfies asu.TagC);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1876,15 +1876,15 @@ test("add color", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.TagC);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1893,15 +1893,15 @@ test("create fx and color", () => {
     const text = "Kirino-san";
     const expectedText = "{\\c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.TagC);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1919,15 +1919,15 @@ test("update color1", () => {
     const text = "{\\be2\\1c&H28AB72&}Kirino-san";
     const expectedText = "{\\be2\\1c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("c1");
+    const blue = asu.hexToNumber("c1");
     const green = asu.hexToNumber("42");
-    const blue = asu.hexToNumber("00");
-    const tag = asu.setColor1(result, red, green, blue);
+    const red = asu.hexToNumber("00");
+    const tag = asu.setColor1(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color1,
-        red: 193,
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     } satisfies asu.Tag1c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1936,15 +1936,15 @@ test("add color1", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\1c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor1(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor1(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color1,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag1c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1953,15 +1953,15 @@ test("create fx and color1", () => {
     const text = "Kirino-san";
     const expectedText = "{\\1c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor1(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor1(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color1,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag1c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1979,15 +1979,15 @@ test("update color2", () => {
     const text = "{\\be2\\2c&H28AB72&}Kirino-san";
     const expectedText = "{\\be2\\2c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("c1");
+    const blue = asu.hexToNumber("c1");
     const green = asu.hexToNumber("42");
-    const blue = asu.hexToNumber("00");
-    const tag = asu.setColor2(result, red, green, blue);
+    const red = asu.hexToNumber("00");
+    const tag = asu.setColor2(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color2,
-        red: 193,
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     } satisfies asu.Tag2c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -1996,15 +1996,15 @@ test("add color2", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\2c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor2(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor2(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color2,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag2c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2013,15 +2013,15 @@ test("create fx and color2", () => {
     const text = "Kirino-san";
     const expectedText = "{\\2c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor2(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor2(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color2,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag2c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2039,15 +2039,15 @@ test("update color3", () => {
     const text = "{\\be2\\3c&H28AB72&}Kirino-san";
     const expectedText = "{\\be2\\3c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("c1");
+    const blue = asu.hexToNumber("c1");
     const green = asu.hexToNumber("42");
-    const blue = asu.hexToNumber("00");
-    const tag = asu.setColor3(result, red, green, blue);
+    const red = asu.hexToNumber("00");
+    const tag = asu.setColor3(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color3,
-        red: 193,
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     } satisfies asu.Tag3c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2056,15 +2056,15 @@ test("add color3", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\3c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor3(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor3(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color3,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag3c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2073,15 +2073,15 @@ test("create fx and color3", () => {
     const text = "Kirino-san";
     const expectedText = "{\\3c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor3(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor3(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color3,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag3c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2099,15 +2099,15 @@ test("update color4", () => {
     const text = "{\\be2\\4c&H28AB72&}Kirino-san";
     const expectedText = "{\\be2\\4c&HC14200&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("c1");
+    const blue = asu.hexToNumber("c1");
     const green = asu.hexToNumber("42");
-    const blue = asu.hexToNumber("00");
-    const tag = asu.setColor4(result, red, green, blue);
+    const red = asu.hexToNumber("00");
+    const tag = asu.setColor4(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color4,
-        red: 193,
+        blue: 193,
         green: 66,
-        blue: 0,
+        red: 0,
     } satisfies asu.Tag4c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2116,15 +2116,15 @@ test("add color4", () => {
     const text = "{\\be2}Kirino-san";
     const expectedText = "{\\be2\\4c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor4(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor4(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color4,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag4c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
@@ -2133,15 +2133,15 @@ test("create fx and color4", () => {
     const text = "Kirino-san";
     const expectedText = "{\\4c&H28AB72&}Kirino-san";
     const result = asu.parseContent(text);
-    const red = asu.hexToNumber("28");
+    const blue = asu.hexToNumber("28");
     const green = asu.hexToNumber("AB");
-    const blue = asu.hexToNumber("72");
-    const tag = asu.setColor4(result, red, green, blue);
+    const red = asu.hexToNumber("72");
+    const tag = asu.setColor4(result, blue, green, red);
     expect(tag).toEqual({
         name: asu.TagName.color4,
-        red: 40,
+        blue: 40,
         green: 171,
-        blue: 114,
+        red: 114,
     } satisfies asu.Tag4c);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
