@@ -432,5 +432,11 @@ export type Line = {
 };
 export declare function parseLine(text: string): Line | null;
 export declare function lineToString(line: Line): string;
+export type ColorRGB = {
+	red: number;
+	green: number;
+	blue: number;
+};
+export declare function parseColorRGB(text: string): ColorRGB | null;
 
 export {};

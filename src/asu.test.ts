@@ -1828,6 +1828,24 @@ test("create fx and iclip", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// color RGB
+test("parse color RGB", () => {
+    const text = "\\1c&HC14200&";
+    const color = asu.parseColorRGB(text);
+    expect(color).not.toBeNull();
+    if (color == null) {
+        throw "null color RGB";
+    }
+
+    const expectedColor: asu.ColorRGB = {
+        red: 193,
+        green: 66,
+        blue: 0,
+    };
+
+    expect(color).toEqual(expectedColor);
+});
+
 // color
 test("find color1", () => {
     const text = "{\\1c&HC14200&}Kirino-san";

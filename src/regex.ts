@@ -61,6 +61,8 @@ const reColor3 = exactly("\\3c").and(reColorRGB);
 
 const reColor4 = exactly("\\4c").and(reColorRGB);
 
+export const regexColorRGB = createRegExp(reColorRGB) as RegExp;
+
 export const regexColor = createRegExp(reColor) as RegExp;
 
 export const regexColor1 = createRegExp(reColor1) as RegExp;

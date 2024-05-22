@@ -122,6 +122,7 @@ var reColor1 = exactly("\\1c").and(reColorRGB);
 var reColor2 = exactly("\\2c").and(reColorRGB);
 var reColor3 = exactly("\\3c").and(reColorRGB);
 var reColor4 = exactly("\\4c").and(reColorRGB);
+var regexColorRGB = createRegExp(reColorRGB);
 var regexColor = createRegExp(reColor);
 var regexColor1 = createRegExp(reColor1);
 var regexColor2 = createRegExp(reColor2);
@@ -2092,6 +2093,19 @@ function lineToString(line) {
   s += line.content;
   return s;
 }
+function parseColorRGB(text) {
+  const match = text.match(regexColorRGB);
+  if (match == null) {
+    return null;
+  }
+  const groups = match.groups;
+  const color = {
+    red: hexToNumber(groups?.color_rgb_red ?? ""),
+    green: hexToNumber(groups?.color_rgb_green ?? ""),
+    blue: hexToNumber(groups?.color_rgb_blue ?? "")
+  };
+  return color;
+}
 var TagName;
 (function(TagName2) {
   TagName2["a"] = "a";
@@ -2205,6 +2219,7 @@ export {
   parseTags,
   parseLine,
   parseContent,
+  parseColorRGB,
   numberToHex,
   lineToString,
   itemsToTags,
@@ -2267,4 +2282,4 @@ export {
   TagName
 };
 
-//# debugId=A99072F392F98C8E64756e2164756e21
+//# debugId=AE0D85962F37A9F464756e2164756e21

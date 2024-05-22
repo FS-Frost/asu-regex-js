@@ -1,5 +1,5 @@
 import { hexToNumber, numberToHex } from "./mat";
-import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
+import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorRGB, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
 
 export * from "./mat";
 
@@ -2791,4 +2791,26 @@ export function lineToString(line: Line): string {
     s += ",";
     s += line.content;
     return s;
+}
+
+export type ColorRGB = {
+    red: number;
+    green: number;
+    blue: number;
+};
+
+export function parseColorRGB(text: string): ColorRGB | null {
+    const match = text.match(regexColorRGB);
+    if (match == null) {
+        return null;
+    }
+
+    const groups = match.groups;
+    const color: ColorRGB = {
+        red: hexToNumber(groups?.color_rgb_red ?? ""),
+        green: hexToNumber(groups?.color_rgb_green ?? ""),
+        blue: hexToNumber(groups?.color_rgb_blue ?? ""),
+    };
+
+    return color;
 }
