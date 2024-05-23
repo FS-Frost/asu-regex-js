@@ -51,7 +51,9 @@ export declare enum TagName {
 	s = "s",
 	shad = "shad",
 	t = "t",
+	text = "text",
 	u = "u",
+	unknown = "unknown",
 	xbord = "xbord",
 	xshad = "xshad",
 	ybord = "ybord",
@@ -237,6 +239,10 @@ export type TagU = {
 	name: TagName.u;
 	value: number;
 };
+export type TagUnknown = {
+	name: TagName.unknown;
+	value: string;
+};
 export type TagBe = {
 	name: TagName.be;
 	value: number;
@@ -286,7 +292,11 @@ export type TagT = {
 	accel: number | null;
 	tags: Tags[];
 };
-export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
+export type TagText = {
+	name: TagName.text;
+	value: string;
+};
+export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagUnknown | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
 export declare function parseTags(text: string, tags: Tags[]): Tags[];
 export type ContentEffect = {
 	name: "effect";

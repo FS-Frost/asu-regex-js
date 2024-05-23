@@ -110,12 +110,13 @@ var createRegExp = (...inputs) => {
 
 // src/regex.ts
 var regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
+var regexText = /^[^\\]+/g;
 var reTime = oneOrMore(digit).and(exactly(":")).and(digit.times(2)).and(exactly(":")).and(digit.times(2)).and(exactly(".")).and(digit.times(2));
 var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).and(oneOrMore(digit).optionally().groupedAs("layer")).and(exactly(",")).and(reTime.optionally().groupedAs("start")).and(exactly(",")).and(reTime.optionally().groupedAs("end")).and(exactly(",")).and(oneOrMore(charNotIn(",").optionally()).groupedAs("style")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("actor")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginLeft")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginRight")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginVertical")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("effect")).and(exactly(",")).and(oneOrMore(char).optionally().groupedAs("content"));
 var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
-var reA = exactly("\\").and("a").and(oneOrMore(digit));
+var reA = exactly("\\").and("a").and(reFloat);
 var reHex = letter.or(digit).times(2);
 var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&"));
 var reColor = exactly("\\c").and(reColorBGR);
@@ -134,39 +135,39 @@ var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
 var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
 var reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
 var reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
-var reKLowerCase = exactly("\\").and("k").and(oneOrMore(digit));
-var reKUpperCase = exactly("\\").and("K").and(oneOrMore(digit));
-var reKf = exactly("\\").and("kf").and(oneOrMore(digit));
-var reKo = exactly("\\").and("ko").and(oneOrMore(digit));
-var reQ = exactly("\\").and("q").and(oneOrMore(digit));
-var reS = exactly("\\").and("s").and(oneOrMore(digit));
-var reU = exactly("\\").and("u").and(oneOrMore(digit));
+var reKLowerCase = exactly("\\").and("k").and(reFloat);
+var reKUpperCase = exactly("\\").and("K").and(reFloat);
+var reKf = exactly("\\").and("kf").and(reFloat);
+var reKo = exactly("\\").and("ko").and(reFloat);
+var reQ = exactly("\\").and("q").and(reFloat);
+var reS = exactly("\\").and("s").and(reFloat);
+var reU = exactly("\\").and("u").and(reFloat);
 var reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
-var reFe = exactly("\\").and("fe").and(oneOrMore(digit));
+var reFe = exactly("\\").and("fe").and(reFloat);
 var reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
-var reP = exactly("\\").and("p").and(oneOrMore(digit));
-var rePbo = exactly("\\").and("pbo").and(oneOrMore(digit));
-var reAn = exactly("\\").and("an").and(oneOrMore(digit));
-var reB = exactly("\\").and("b").and(oneOrMore(digit));
-var reBe = exactly("\\").and("be").and(oneOrMore(digit));
-var reBlur = exactly("\\").and("blur").and(oneOrMore(digit));
-var reBord = exactly("\\").and("bord").and(oneOrMore(digit));
-var reXbord = exactly("\\").and("xbord").and(oneOrMore(digit));
-var reYbord = exactly("\\").and("ybord").and(oneOrMore(digit));
-var reShad = exactly("\\").and("shad").and(oneOrMore(digit));
-var reXshad = exactly("\\").and("xshad").and(oneOrMore(digit));
-var reYshad = exactly("\\").and("yshad").and(oneOrMore(digit));
-var reFax = exactly("\\").and("fax").and(oneOrMore(digit));
-var reFay = exactly("\\").and("fay").and(oneOrMore(digit));
-var reFscx = exactly("\\").and("fscx").and(oneOrMore(digit));
-var reFscy = exactly("\\").and("fscy").and(oneOrMore(digit));
-var reFsp = exactly("\\").and("fsp").and(oneOrMore(digit));
+var reP = exactly("\\").and("p").and(reFloat);
+var rePbo = exactly("\\").and("pbo").and(reFloat);
+var reAn = exactly("\\").and("an").and(reFloat);
+var reB = exactly("\\").and("b").and(reFloat);
+var reBe = exactly("\\").and("be").and(reFloat);
+var reBlur = exactly("\\").and("blur").and(reFloat);
+var reBord = exactly("\\").and("bord").and(reFloat);
+var reXbord = exactly("\\").and("xbord").and(reFloat);
+var reYbord = exactly("\\").and("ybord").and(reFloat);
+var reShad = exactly("\\").and("shad").and(reFloat);
+var reXshad = exactly("\\").and("xshad").and(reFloat);
+var reYshad = exactly("\\").and("yshad").and(reFloat);
+var reFax = exactly("\\").and("fax").and(reFloat);
+var reFay = exactly("\\").and("fay").and(reFloat);
+var reFscx = exactly("\\").and("fscx").and(reFloat);
+var reFscy = exactly("\\").and("fscy").and(reFloat);
+var reFsp = exactly("\\").and("fsp").and(reFloat);
 var reFr = exactly("\\").and("fr").and(reFloat);
 var reFrx = exactly("\\").and("frx").and(reFloat);
 var reFry = exactly("\\").and("fry").and(reFloat);
 var reFrz = exactly("\\").and("frz").and(reFloat);
 var reI = exactly("\\").and("i").and(exactly("1").or("0"));
-var reFs = exactly("\\").and("fs").and(oneOrMore(digit));
+var reFs = exactly("\\").and("fs").and(reFloat);
 var rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 var regexPos = createRegExp(rePos);
 var reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
@@ -182,8 +183,9 @@ var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn
 var regexClip = createRegExp(reClip);
 var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
 var regexIclip = createRegExp(reIclip);
-var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase);
-var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("arg1").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg2").and(exactly(",")).optionally()).and(oneOrMore(digit).groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")));
+var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase).or(reUnknown);
+var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
 var regexTagT = createRegExp(reTGeneral);
 
@@ -191,53 +193,34 @@ var regexTagT = createRegExp(reTGeneral);
 function parseTags(text, tags) {
   const tagNameSource = text.substring(1);
   const matchTagT = text.match(regexTagT);
-  if (matchTagT && matchTagT[0]) {
-    if (tagNameSource.startsWith(TagName.t)) {
-      const a = matchTagT[0].match(regexTagT)?.groups;
-      const rawTags = a?.tags ?? "";
-      const subtags = [];
-      parseTags(rawTags, subtags);
-      const arg1 = a?.arg1 ? Number(a.arg1) : null;
-      const arg2 = a?.arg2 ? Number(a.arg2) : null;
-      const arg3 = a?.arg3 ? Number(a.arg3) : null;
-      const tag = {
-        name: TagName.t,
-        accel: null,
-        t1: null,
-        t2: null,
-        tags: subtags
-      };
-      if (arg1 !== null && arg2 !== null && arg3 !== null) {
-        tag.t1 = arg1;
-        tag.t2 = arg2;
-        tag.accel = arg3;
-      } else if (arg1 !== null && arg2 !== null && arg3 === null) {
-        tag.t1 = arg1;
-        tag.t2 = arg2;
-        tag.accel = null;
-      } else if (arg1 !== null) {
-        tag.accel = arg1;
-      }
-      tags.push(tag);
-    }
-    text = text.substring(matchTagT[0].length);
+  if (matchTagT && matchTagT.length > 0) {
+    return parseTagT(text, tags, tagNameSource, matchTagT);
+  }
+  const matchText = text.match(regexText);
+  if (matchText && matchText.length > 0) {
+    const value = matchText[0];
+    tags.push({
+      name: TagName.text,
+      value
+    });
+    text = text.substring(value.length);
     if (text.length > 0) {
       parseTags(text, tags);
     }
     return tags;
   }
   const matchUnitTags = text.match(regexTags);
-  if (!matchUnitTags || !matchUnitTags[0]) {
+  if (!matchUnitTags || matchUnitTags.length == 0) {
     return tags;
   }
   if (tagNameSource.startsWith(TagName.move)) {
-    const a = matchUnitTags[0].match(regexMove)?.groups;
-    const x1 = Number(a?.move_x1 ?? "0");
-    const y1 = Number(a?.move_y1 ?? "0");
-    const x2 = Number(a?.move_x2 ?? "0");
-    const y2 = Number(a?.move_y2 ?? "0");
-    const t1 = a?.move_t1 ? Number(a.move_t1) : null;
-    const t2 = a?.move_t2 ? Number(a.move_t2) : null;
+    const match = matchUnitTags[0].match(regexMove)?.groups;
+    const x1 = Number(match?.move_x1 ?? "0");
+    const y1 = Number(match?.move_y1 ?? "0");
+    const x2 = Number(match?.move_x2 ?? "0");
+    const y2 = Number(match?.move_y2 ?? "0");
+    const t1 = match?.move_t1 ? Number(match.move_t1) : null;
+    const t2 = match?.move_t2 ? Number(match.move_t2) : null;
     const tag = {
       name: TagName.move,
       x1,
@@ -284,8 +267,8 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.iclip)) {
-    const a = matchUnitTags[0].match(regexIclip)?.groups;
-    const args = a?.iclip_args ?? "";
+    const match = matchUnitTags[0].match(regexIclip)?.groups;
+    const args = match?.iclip_args ?? "";
     const tag = {
       name: TagName.iclip,
       drawCommands: args
@@ -327,14 +310,14 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.fade)) {
-    const a = matchUnitTags[0].match(regexFade)?.groups;
-    const alpha1 = Number(a?.fade_alpha1 ?? "0");
-    const alpha2 = Number(a?.fade_alpha2 ?? "0");
-    const alpha3 = Number(a?.fade_alpha3 ?? "0");
-    const t1 = Number(a?.fade_t1 ?? "0");
-    const t2 = Number(a?.fade_t2 ?? "0");
-    const t3 = Number(a?.fade_t3 ?? "0");
-    const t4 = Number(a?.fade_t4 ?? "0");
+    const match = matchUnitTags[0].match(regexFade)?.groups;
+    const alpha1 = Number(match?.fade_alpha1 ?? "0");
+    const alpha2 = Number(match?.fade_alpha2 ?? "0");
+    const alpha3 = Number(match?.fade_alpha3 ?? "0");
+    const t1 = Number(match?.fade_t1 ?? "0");
+    const t2 = Number(match?.fade_t2 ?? "0");
+    const t3 = Number(match?.fade_t3 ?? "0");
+    const t4 = Number(match?.fade_t4 ?? "0");
     const tag = {
       name: TagName.fade,
       alpha1,
@@ -347,8 +330,8 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.clip)) {
-    const a = matchUnitTags[0].match(regexClip)?.groups;
-    const args = a?.clip_args ?? "";
+    const match = matchUnitTags[0].match(regexClip)?.groups;
+    const args = match?.clip_args ?? "";
     const tag = {
       name: TagName.clip,
       drawCommands: args
@@ -362,9 +345,9 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.pos)) {
-    const a = matchUnitTags[0].match(regexPos)?.groups;
-    const x = Number(a?.pos_x ?? "0");
-    const y = Number(a?.pos_y ?? "0");
+    const match = matchUnitTags[0].match(regexPos)?.groups;
+    const x = Number(match?.pos_x ?? "0");
+    const y = Number(match?.pos_y ?? "0");
     const tag = {
       name: TagName.pos,
       x,
@@ -372,9 +355,9 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.org)) {
-    const a = matchUnitTags[0].match(regexOrg)?.groups;
-    const x = Number(a?.org_x ?? "0");
-    const y = Number(a?.org_y ?? "0");
+    const match = matchUnitTags[0].match(regexOrg)?.groups;
+    const x = Number(match?.org_x ?? "0");
+    const y = Number(match?.org_y ?? "0");
     const tag = {
       name: TagName.org,
       x,
@@ -382,9 +365,9 @@ function parseTags(text, tags) {
     };
     tags.push(tag);
   } else if (tagNameSource.startsWith(TagName.fad)) {
-    const a = matchUnitTags[0].match(regexFad)?.groups;
-    const fadeIn = Number(a?.in ?? "0");
-    const fadeOut = Number(a?.out ?? "0");
+    const match = matchUnitTags[0].match(regexFad)?.groups;
+    const fadeIn = Number(match?.in ?? "0");
+    const fadeOut = Number(match?.out ?? "0");
     const tag = {
       name: TagName.fad,
       in: fadeIn,
@@ -647,6 +630,13 @@ function parseTags(text, tags) {
       value: Number.isNaN(value) ? 0 : value
     };
     tags.push(tag);
+  } else {
+    const value = matchUnitTags[0];
+    const tag = {
+      name: TagName.unknown,
+      value
+    };
+    tags.push(tag);
   }
   text = text.substring(matchUnitTags[0].length);
   if (text.length > 0) {
@@ -654,6 +644,41 @@ function parseTags(text, tags) {
   }
   return tags;
 }
+var parseTagT = function(text, tags, tagNameSource, matchTagT) {
+  if (tagNameSource.startsWith(TagName.t)) {
+    const match = matchTagT[0].match(regexTagT)?.groups;
+    const rawTags = match?.tags ?? "";
+    const subtags = [];
+    parseTags(rawTags, subtags);
+    const arg1 = match?.arg1 ? Number(match.arg1) : null;
+    const arg2 = match?.arg2 ? Number(match.arg2) : null;
+    const arg3 = match?.arg3 ? Number(match.arg3) : null;
+    const tag = {
+      name: TagName.t,
+      accel: null,
+      t1: null,
+      t2: null,
+      tags: subtags
+    };
+    if (arg1 !== null && arg2 !== null && arg3 !== null) {
+      tag.t1 = arg1;
+      tag.t2 = arg2;
+      tag.accel = arg3;
+    } else if (arg1 !== null && arg2 !== null && arg3 === null) {
+      tag.t1 = arg1;
+      tag.t2 = arg2;
+      tag.accel = null;
+    } else if (arg1 !== null) {
+      tag.accel = arg1;
+    }
+    tags.push(tag);
+  }
+  text = text.substring(matchTagT[0].length);
+  if (text.length > 0) {
+    parseTags(text, tags);
+  }
+  return tags;
+};
 function parseContent(text) {
   const items = [];
   const result = text.matchAll(regexContent);
@@ -737,6 +762,10 @@ function contentEffectToString(item) {
         const hexGreen = numberToHex(tag.green);
         const hexRed = numberToHex(tag.red);
         s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
+        break;
+      case TagName.text:
+      case TagName.unknown:
+        s += tag.value;
         break;
       default:
         s += `\\${tag.name}${tag.value}`;
@@ -2156,7 +2185,9 @@ var TagName;
   TagName2["s"] = "s";
   TagName2["shad"] = "shad";
   TagName2["t"] = "t";
+  TagName2["text"] = "text";
   TagName2["u"] = "u";
+  TagName2["unknown"] = "unknown";
   TagName2["xbord"] = "xbord";
   TagName2["xshad"] = "xshad";
   TagName2["ybord"] = "ybord";
@@ -2283,4 +2314,4 @@ export {
   TagName
 };
 
-//# debugId=F1CA3F5B2B9DBF5764756e2164756e21
+//# debugId=CFD84E71F5E3932064756e2164756e21
