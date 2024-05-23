@@ -2851,6 +2851,17 @@ test("parse line", () => {
     expect(asu.lineToString(line)).toEqual(text);
 });
 
+test("parse content prefixed with {=text}", () => {
+    const text = "{=6\\fs32}{\\pos(182,421)}LINE 1";
+    const items = asu.parseContent(text);
+    expect(items).not.toBeNull();
+    if (items == null) {
+        throw "null items";
+    }
+
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";

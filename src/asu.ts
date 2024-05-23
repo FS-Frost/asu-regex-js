@@ -1,5 +1,5 @@
 import { hexToNumber, numberToHex } from "./mat";
-import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags } from "./regex";
+import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags, regexText } from "./regex";
 
 export * from "./mat";
 
@@ -51,6 +51,7 @@ export enum TagName {
     s = "s",
     shad = "shad",
     t = "t",
+    text = "text",
     u = "u",
     xbord = "xbord",
     xshad = "xshad",
@@ -341,17 +342,38 @@ export type TagT = {
     tags: Tags[];
 };
 
-export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
+export type TagText = {
+    name: TagName.text;
+    value: string;
+};
+
+export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     const tagNameSource = text.substring(1);
     const matchTagT = text.match(regexTagT);
-    if (matchTagT && matchTagT[0]) {
+    if (matchTagT && matchTagT.length > 0) {
         return parseTagT(text, tags, tagNameSource, matchTagT);
     }
 
+    const matchText = text.match(regexText);
+    if (matchText && matchText.length > 0) {
+        const value = matchText[0];
+        tags.push({
+            name: TagName.text,
+            value: value,
+        } satisfies TagText);
+
+        text = text.substring(value.length);
+        if (text.length > 0) {
+            parseTags(text, tags);
+        }
+
+        return tags;
+    }
+
     const matchUnitTags = text.match(regexTags);
-    if (!matchUnitTags || !matchUnitTags[0]) {
+    if (!matchUnitTags || matchUnitTags.length == 0) {
         return tags;
     }
 
@@ -937,6 +959,10 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         tags.push(tag);
     }
 
+    else {
+        // console.log("UNKNOWN TAG:", matchUnitTags[0]);
+    }
+
     text = text.substring(matchUnitTags[0].length);
     if (text.length > 0) {
         parseTags(text, tags);
@@ -1098,6 +1124,10 @@ export function contentEffectToString(item: ContentEffect): string {
                 const hexGreen = numberToHex(tag.green);
                 const hexRed = numberToHex(tag.red);
                 s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
+                break;
+
+            case TagName.text:
+                s += tag.value;
                 break;
 
             default:

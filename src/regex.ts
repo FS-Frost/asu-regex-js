@@ -2,6 +2,8 @@ import { anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
+export const regexText = /^[^\\]+/g;
+
 // Dialogue: 0,0:00:00.00,0:00:05.00,Default,actor,1,2,3,fx,TEXT
 // Comment: 0,0:00:00.00,0:00:05.00,Default,actor,1,2,3,fx,{\pos(182,421)}LINEA 1
 
