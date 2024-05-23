@@ -37,6 +37,11 @@ jobs:
               with:
                   branch: gh-pages
                   folder: docs
+
+            - name: Release
+              uses: softprops/action-gh-release@v2
+              with:
+                files: build
     publish:
         runs-on: ubuntu-latest
         needs: test-build-deploy
