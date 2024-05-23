@@ -2723,6 +2723,131 @@ test("create fx and t(accel,fx)", () => {
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
+// t(t1,t2,fx)
+test("find t(t1,t2,fx)", () => {
+    const text = "{\\org(83,0.56)\\t(10,20,\\fs32\\be2\\pos(12,-12.14))\\fs32}Kirino-san";
+    const result = asu.parseContent(text);
+    const t = asu.findT(result);
+    expect(t).not.toBeNull();
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("update t(t1,t2,fx)", () => {
+    const text = "{\\t(\\fs16)}Kirino-san";
+    const expectedText = "{\\t(20,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const items = asu.parseContent(text);
+    let tagT = asu.findT(items);
+    expect(tagT).not.toBeNull();
+    if (tagT == null) {
+        throw "null tag t";
+    }
+
+    const tItems = asu.tagsToItems(tagT.tags);
+    asu.setPos(tItems, 12, -12.14);
+    const updatedItems = asu.itemsToTags(tItems);
+
+    const accel = null;
+    const t1 = 20;
+    const t2 = 120;
+    asu.setT(items, updatedItems, accel, t1, t2);
+    expect(tagT).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 120,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(items)).toEqual(expectedText);
+});
+
+test("add t(t1,t2,fx)", () => {
+    const text = "{\\be2}Kirino-san";
+    const expectedText = "{\\be2\\t(20,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const accel = null;
+    const t1 = 20;
+    const t2 = 120;
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], accel, t1, t2);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 120,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
+test("create fx and t(t1,t2,fx)", () => {
+    const text = "Kirino-san";
+    const expectedText = "{\\t(20,120,\\fs16\\pos(12,-12.14))}Kirino-san";
+    const result = asu.parseContent(text);
+    const accel = null;
+    const t1 = 20;
+    const t2 = 120;
+    const tag = asu.setT(result, [
+        {
+            name: asu.TagName.fs,
+            value: 16,
+        } satisfies asu.TagFs,
+        {
+            name: asu.TagName.pos,
+            x: 12,
+            y: -12.14,
+        } satisfies asu.TagPos,
+    ], accel, t1, t2);
+
+    expect(tag).toEqual({
+        name: asu.TagName.t,
+        t1: 20,
+        t2: 120,
+        accel: null,
+        tags: [
+            {
+                name: asu.TagName.fs,
+                value: 16,
+            } satisfies asu.TagFs,
+            {
+                name: asu.TagName.pos,
+                x: 12,
+                y: -12.14,
+            } satisfies asu.TagPos,
+        ],
+    } satisfies asu.TagT);
+    expect(asu.contentsToString(result)).toEqual(expectedText);
+});
+
 // t(t1,t2,accel,fx)
 test("find t(t1,t2,accel,fx)", () => {
     const text = "{\\org(83,0.56)\\t(10,20,30,\\fs32\\be2\\pos(12,-12.14))\\fs32}Kirino-san";
@@ -2851,8 +2976,25 @@ test("parse line", () => {
     expect(asu.lineToString(line)).toEqual(text);
 });
 
+test("parse invalid line", () => {
+    const text = "not a line";
+    const line = asu.parseLine(text);
+    expect(line).toBeNull();
+});
+
 test("parse content prefixed with {=text}", () => {
     const text = "{=6\\fs32}{\\pos(182,421)}LINE 1";
+    const items = asu.parseContent(text);
+    expect(items).not.toBeNull();
+    if (items == null) {
+        throw "null items";
+    }
+
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
+test("parse empty content", () => {
+    const text = "{}LINE 1";
     const items = asu.parseContent(text);
     expect(items).not.toBeNull();
     if (items == null) {
@@ -2950,4 +3092,361 @@ test("remove tag", () => {
     const items = asu.parseContent(text);
     asu.removeTag(items, asu.TagName.fs);
     expect(asu.contentsToString(items)).toEqual(expectedText);
+});
+
+test("remove not found tag", () => {
+    const text = "{\\be5\\pos(10,20)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
+    const items = asu.parseContent(text);
+    asu.removeTag(items, asu.TagName.fs);
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
+test("remove tag on content without fx", () => {
+    const text = "Buenos días";
+    const items = asu.parseContent(text);
+    asu.removeTag(items, asu.TagName.fs);
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
+test("itemsToTags equals tagsToItems", () => {
+    const text = "TEXTO";
+    const originalItems = asu.parseContent(text);
+    const tags = asu.itemsToTags(originalItems);
+    expect(tags).toEqual([]);
+
+    const newItems = asu.tagsToItems(tags);
+    expect(newItems).toEqual([
+        {
+            name: "effect",
+            tags: [],
+        },
+    ]);
+});
+
+test("can't find fx group", () => {
+    const text = "Kirino-san";
+    const result = asu.parseContent(text);
+    let tag: asu.Tags | null;
+
+    tag = asu.findA(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findB(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor1(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor2(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor3(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor4(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha1(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha2(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha3(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha4(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAn(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBe(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBlur(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findXbord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findYbord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findShad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findXshad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findYshad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFr(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFrx(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFry(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFrz(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFax(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFay(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findP(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findPbo(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findQ(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findS(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findU(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findR(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFe(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFn(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFscx(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFscy(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFsp(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKLowerCase(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKUpperCase(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKo(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKf(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findI(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFs(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findPos(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findOrg(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFade(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findClip(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findIclip(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findMove(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findT(result);
+    expect(tag).toBeNull();
+
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
+test("can't find tag", () => {
+    const text = "{}Kirino-san";
+    const result = asu.parseContent(text);
+    let tag: asu.Tags | null;
+
+    tag = asu.findA(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findB(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor1(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor2(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor3(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findColor4(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha1(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha2(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha3(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAlpha4(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findAn(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBe(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBlur(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findBord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findXbord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findYbord(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findShad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findXshad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findYshad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFr(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFrx(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFry(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFrz(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFax(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFay(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findP(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findPbo(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findQ(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findS(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findU(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findR(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFe(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFn(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFscx(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFscy(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFsp(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKLowerCase(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKUpperCase(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKo(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findKf(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findI(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFs(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findPos(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findOrg(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFad(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findFade(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findClip(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findIclip(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findMove(result);
+    expect(tag).toBeNull();
+
+    tag = asu.findT(result);
+    expect(tag).toBeNull();
+
+    expect(asu.contentsToString(result)).toEqual(text);
 });

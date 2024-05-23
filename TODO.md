@@ -2,6 +2,7 @@
 
 https://aegisub.org/docs/latest/ass_tags/
 
+## Parse tags
 - [x] a
 - [x] an
 - [x] b
@@ -57,3 +58,16 @@ https://aegisub.org/docs/latest/ass_tags/
 - [x] t(accel,fx)
 - [x] t(t1,t2,accel,fx)
 - [x] u
+
+## Update API
+
+old:
+setT(tags, accel, t1, t2)
+ 
+new:
+setT({
+    tags: [],
+    accel: 0,
+    t1: 0,
+    t2: 0,
+})

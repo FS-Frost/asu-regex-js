@@ -106,7 +106,7 @@ bun install
 ## Run tests
 
 ```sh
-bun test
+bun test --coverage
 ```
 
 ## Bundle
