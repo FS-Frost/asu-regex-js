@@ -1,4 +1,4 @@
-import { Input, anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore } from "magic-regexp";
+import { anyOf, char, charNotIn, createRegExp, digit, exactly, letter, oneOrMore } from "magic-regexp";
 
 export const regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 
@@ -249,24 +249,14 @@ const unitTags = reBe
     .or(reKLowerCase)
     .or(reKUpperCase);
 
-// const reTFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
-
-// const reTAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
-
-// const reTTimeAccelFx = exactly("\\").and("t").and(exactly("(")).and(oneOrMore(digit).groupedAs("t1")).and(exactly(",")).and(oneOrMore(digit).groupedAs("t2")).and(exactly(",")).and(oneOrMore(digit).groupedAs("accel")).and(exactly(",")).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
-
-const reTGeneral =
-    exactly("\\").at.lineStart()
-        .and("t")
-        .and(exactly("("))
-        .and(reFloat.groupedAs("arg1").and(exactly(",")).optionally())
-        .and(reFloat.groupedAs("arg2").and(exactly(",")).optionally())
-        .and(reFloat.groupedAs("arg3").and(exactly(",")).optionally())
-        .and(oneOrMore(unitTags).groupedAs("tags"))
-        .and(exactly(")"))
-    ;
-
-// const reT = reTFx.or(reTAccelFx).or(reTTimeAccelFx);
+const reTGeneral = exactly("\\").at.lineStart()
+    .and("t")
+    .and(exactly("("))
+    .and(reFloat.groupedAs("arg1").and(exactly(",")).optionally())
+    .and(reFloat.groupedAs("arg2").and(exactly(",")).optionally())
+    .and(reFloat.groupedAs("arg3").and(exactly(",")).optionally())
+    .and(oneOrMore(unitTags).groupedAs("tags"))
+    .and(exactly(")"));
 
 export const regexTags = createRegExp(unitTags) as RegExp;
 

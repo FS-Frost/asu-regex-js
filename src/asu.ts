@@ -344,51 +344,10 @@ export type TagT = {
 export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
-    // console.log("");
-    // console.log(text);
-
     const tagNameSource = text.substring(1);
     const matchTagT = text.match(regexTagT);
     if (matchTagT && matchTagT[0]) {
-        if (tagNameSource.startsWith(TagName.t)) {
-            const a = matchTagT[0].match(regexTagT)?.groups;
-            const rawTags = a?.tags ?? "";
-            const subtags: Tags[] = [];
-            parseTags(rawTags, subtags);
-
-            const arg1 = a?.arg1 ? Number(a.arg1) : null;
-            const arg2 = a?.arg2 ? Number(a.arg2) : null;
-            const arg3 = a?.arg3 ? Number(a.arg3) : null;
-
-            const tag: TagT = {
-                name: TagName.t,
-                accel: null,
-                t1: null,
-                t2: null,
-                tags: subtags,
-            };
-
-            if (arg1 !== null && arg2 !== null && arg3 !== null) {
-                tag.t1 = arg1;
-                tag.t2 = arg2;
-                tag.accel = arg3;
-            } else if (arg1 !== null && arg2 !== null && arg3 === null) {
-                tag.t1 = arg1;
-                tag.t2 = arg2;
-                tag.accel = null;
-            } else if (arg1 !== null) {
-                tag.accel = arg1;
-            }
-
-            tags.push(tag);
-        }
-
-        text = text.substring(matchTagT[0].length);
-        if (text.length > 0) {
-            parseTags(text, tags);
-        }
-
-        return tags;
+        return parseTagT(text, tags, tagNameSource, matchTagT);
     }
 
     const matchUnitTags = text.match(regexTags);
@@ -396,15 +355,14 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         return tags;
     }
 
-    // console.log("MATCH:", result[0]);
     if (tagNameSource.startsWith(TagName.move)) {
-        const a = matchUnitTags[0].match(regexMove)?.groups;
-        const x1 = Number(a?.move_x1 ?? "0");
-        const y1 = Number(a?.move_y1 ?? "0");
-        const x2 = Number(a?.move_x2 ?? "0");
-        const y2 = Number(a?.move_y2 ?? "0");
-        const t1 = a?.move_t1 ? Number(a.move_t1) : null;
-        const t2 = a?.move_t2 ? Number(a.move_t2) : null;
+        const match = matchUnitTags[0].match(regexMove)?.groups;
+        const x1 = Number(match?.move_x1 ?? "0");
+        const y1 = Number(match?.move_y1 ?? "0");
+        const x2 = Number(match?.move_x2 ?? "0");
+        const y2 = Number(match?.move_y2 ?? "0");
+        const t1 = match?.move_t1 ? Number(match.move_t1) : null;
+        const t2 = match?.move_t2 ? Number(match.move_t2) : null;
 
         const tag: TagMove = {
             name: TagName.move,
@@ -415,6 +373,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t1: t1,
             t2: t2,
         };
+
         tags.push(tag);
     }
 
@@ -424,6 +383,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.alpha,
             value: value,
         };
+
         tags.push(tag);
     }
 
@@ -433,6 +393,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.xbord,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -442,6 +403,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.ybord,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -451,6 +413,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.xshad,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -460,17 +423,19 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.yshad,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.iclip)) {
-        const a = matchUnitTags[0].match(regexIclip)?.groups;
-        const args = a?.iclip_args ?? "";
+        const match = matchUnitTags[0].match(regexIclip)?.groups;
+        const args = match?.iclip_args ?? "";
 
         const tag: TagIclip = {
             name: TagName.iclip,
             drawCommands: args,
         };
+
         tags.push(tag);
     }
 
@@ -480,6 +445,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.blur,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -489,6 +455,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.bord,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -498,6 +465,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.shad,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -507,6 +475,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fscx,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -516,18 +485,19 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fscy,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.fade)) {
-        const a = matchUnitTags[0].match(regexFade)?.groups;
-        const alpha1 = Number(a?.fade_alpha1 ?? "0");
-        const alpha2 = Number(a?.fade_alpha2 ?? "0");
-        const alpha3 = Number(a?.fade_alpha3 ?? "0");
-        const t1 = Number(a?.fade_t1 ?? "0");
-        const t2 = Number(a?.fade_t2 ?? "0");
-        const t3 = Number(a?.fade_t3 ?? "0");
-        const t4 = Number(a?.fade_t4 ?? "0");
+        const match = matchUnitTags[0].match(regexFade)?.groups;
+        const alpha1 = Number(match?.fade_alpha1 ?? "0");
+        const alpha2 = Number(match?.fade_alpha2 ?? "0");
+        const alpha3 = Number(match?.fade_alpha3 ?? "0");
+        const t1 = Number(match?.fade_t1 ?? "0");
+        const t2 = Number(match?.fade_t2 ?? "0");
+        const t3 = Number(match?.fade_t3 ?? "0");
+        const t4 = Number(match?.fade_t4 ?? "0");
 
         const tag: TagFade = {
             name: TagName.fade,
@@ -539,17 +509,19 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t3: t3,
             t4: t4,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.clip)) {
-        const a = matchUnitTags[0].match(regexClip)?.groups;
-        const args = a?.clip_args ?? "";
+        const match = matchUnitTags[0].match(regexClip)?.groups;
+        const args = match?.clip_args ?? "";
 
         const tag: TagClip = {
             name: TagName.clip,
             drawCommands: args,
         };
+
         tags.push(tag);
     }
 
@@ -559,45 +531,49 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fsp,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.pos)) {
-        const a = matchUnitTags[0].match(regexPos)?.groups;
-        const x = Number(a?.pos_x ?? "0");
-        const y = Number(a?.pos_y ?? "0");
+        const match = matchUnitTags[0].match(regexPos)?.groups;
+        const x = Number(match?.pos_x ?? "0");
+        const y = Number(match?.pos_y ?? "0");
 
         const tag: TagPos = {
             name: TagName.pos,
             x: x,
             y: y,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.org)) {
-        const a = matchUnitTags[0].match(regexOrg)?.groups;
-        const x = Number(a?.org_x ?? "0");
-        const y = Number(a?.org_y ?? "0");
+        const match = matchUnitTags[0].match(regexOrg)?.groups;
+        const x = Number(match?.org_x ?? "0");
+        const y = Number(match?.org_y ?? "0");
 
         const tag: TagOrg = {
             name: TagName.org,
             x: x,
             y: y,
         };
+
         tags.push(tag);
     }
 
     else if (tagNameSource.startsWith(TagName.fad)) {
-        const a = matchUnitTags[0].match(regexFad)?.groups;
-        const fadeIn = Number(a?.in ?? "0");
-        const fadeOut = Number(a?.out ?? "0");
+        const match = matchUnitTags[0].match(regexFad)?.groups;
+        const fadeIn = Number(match?.in ?? "0");
+        const fadeOut = Number(match?.out ?? "0");
 
         const tag: TagFad = {
             name: TagName.fad,
             in: fadeIn,
             out: fadeOut,
         };
+
         tags.push(tag);
     }
 
@@ -607,6 +583,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.frx,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -616,6 +593,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fry,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -625,6 +603,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.frz,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -634,6 +613,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fax,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -643,6 +623,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fay,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -652,6 +633,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.pbo,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -661,6 +643,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fe,
             encodingId: Number(value),
         };
+
         tags.push(tag);
     }
 
@@ -670,6 +653,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fn,
             font: value,
         };
+
         tags.push(tag);
     }
 
@@ -679,6 +663,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.an,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -688,6 +673,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.be,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -697,6 +683,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fr,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -706,6 +693,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.fs,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -715,6 +703,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.ko,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -724,6 +713,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.kf,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -797,6 +787,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.alpha1,
             value: value,
         };
+
         tags.push(tag);
     }
 
@@ -806,6 +797,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.alpha2,
             value: value,
         };
+
         tags.push(tag);
     }
 
@@ -815,6 +807,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.alpha3,
             value: value,
         };
+
         tags.push(tag);
     }
 
@@ -824,6 +817,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.alpha4,
             value: value,
         };
+
         tags.push(tag);
     }
 
@@ -833,6 +827,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.kLowerCase,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -842,6 +837,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.kUpperCase,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -851,6 +847,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.q,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -860,6 +857,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.s,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -869,6 +867,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.u,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -878,6 +877,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.r,
             style: value,
         };
+
         tags.push(tag);
     }
 
@@ -887,6 +887,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.p,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -896,6 +897,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.i,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -921,6 +923,7 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.b,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
@@ -930,10 +933,53 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             name: TagName.a,
             value: Number.isNaN(value) ? 0 : value,
         };
+
         tags.push(tag);
     }
 
     text = text.substring(matchUnitTags[0].length);
+    if (text.length > 0) {
+        parseTags(text, tags);
+    }
+
+    return tags;
+}
+
+function parseTagT(text: string, tags: Tags[], tagNameSource: string, matchTagT: RegExpMatchArray): Tags[] {
+    if (tagNameSource.startsWith(TagName.t)) {
+        const match = matchTagT[0].match(regexTagT)?.groups;
+        const rawTags = match?.tags ?? "";
+        const subtags: Tags[] = [];
+        parseTags(rawTags, subtags);
+
+        const arg1 = match?.arg1 ? Number(match.arg1) : null;
+        const arg2 = match?.arg2 ? Number(match.arg2) : null;
+        const arg3 = match?.arg3 ? Number(match.arg3) : null;
+
+        const tag: TagT = {
+            name: TagName.t,
+            accel: null,
+            t1: null,
+            t2: null,
+            tags: subtags,
+        };
+
+        if (arg1 !== null && arg2 !== null && arg3 !== null) {
+            tag.t1 = arg1;
+            tag.t2 = arg2;
+            tag.accel = arg3;
+        } else if (arg1 !== null && arg2 !== null && arg3 === null) {
+            tag.t1 = arg1;
+            tag.t2 = arg2;
+            tag.accel = null;
+        } else if (arg1 !== null) {
+            tag.accel = arg1;
+        }
+
+        tags.push(tag);
+    }
+
+    text = text.substring(matchTagT[0].length);
     if (text.length > 0) {
         parseTags(text, tags);
     }
@@ -959,13 +1005,10 @@ export function parseContent(text: string): ContentItem[] {
 
     for (const match of result) {
         if (match.groups?.fx) {
-            // console.log("FX :", match.groups.fx);
-
             // remove curly braces {}
             const rawTags = match.groups.fx.substring(1, match.groups.fx.length - 1);
             const tags: Tags[] = [];
             parseTags(rawTags, tags);
-            // console.log("tags:", tags.length);
 
             items.push({
                 name: "effect",
@@ -975,8 +1018,6 @@ export function parseContent(text: string): ContentItem[] {
         }
 
         if (match.groups?.txt) {
-            // console.log("TXT:", match.groups.txt);
-
             items.push({
                 name: "text",
                 value: match.groups?.txt,
