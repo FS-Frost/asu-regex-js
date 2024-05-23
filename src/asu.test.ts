@@ -2862,6 +2862,17 @@ test("parse content prefixed with {=text}", () => {
     expect(asu.contentsToString(items)).toEqual(text);
 });
 
+test("parse unknown tag", () => {
+    const text = "{\\t(0,32,41,\\frx90)\\haru22\\fs32}LINE 1";
+    const items = asu.parseContent(text);
+    expect(items).not.toBeNull();
+    if (items == null) {
+        throw "null items";
+    }
+
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";

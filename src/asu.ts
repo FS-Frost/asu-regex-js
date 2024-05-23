@@ -53,6 +53,7 @@ export enum TagName {
     t = "t",
     text = "text",
     u = "u",
+    unknown = "unknown",
     xbord = "xbord",
     xshad = "xshad",
     ybord = "ybord",
@@ -283,6 +284,11 @@ export type TagU = {
     value: number;
 };
 
+export type TagUnknown = {
+    name: TagName.unknown;
+    value: string;
+};
+
 export type TagBe = {
     name: TagName.be;
     value: number;
@@ -347,7 +353,7 @@ export type TagText = {
     value: string;
 };
 
-export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
+export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagUnknown | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     const tagNameSource = text.substring(1);
@@ -960,7 +966,13 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
     }
 
     else {
-        // console.log("UNKNOWN TAG:", matchUnitTags[0]);
+        const value = matchUnitTags[0];
+        const tag: TagUnknown = {
+            name: TagName.unknown,
+            value: value,
+        };
+
+        tags.push(tag);
     }
 
     text = text.substring(matchUnitTags[0].length);
@@ -1127,6 +1139,7 @@ export function contentEffectToString(item: ContentEffect): string {
                 break;
 
             case TagName.text:
+            case TagName.unknown:
                 s += tag.value;
                 break;
 

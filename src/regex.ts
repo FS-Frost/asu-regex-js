@@ -199,6 +199,8 @@ const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charN
 
 export const regexIclip = createRegExp(reIclip) as RegExp;
 
+const reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")));
+
 const unitTags = reBe
     .or(reAlpha)
     .or(reXbord)
@@ -249,7 +251,8 @@ const unitTags = reBe
     .or(reB)
     .or(reA)
     .or(reKLowerCase)
-    .or(reKUpperCase);
+    .or(reKUpperCase)
+    .or(reUnknown);
 
 const reTGeneral = exactly("\\").at.lineStart()
     .and("t")
