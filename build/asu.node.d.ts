@@ -445,6 +445,8 @@ export type Line = {
 };
 export declare function parseLine(text: string): Line | null;
 export declare function lineToString(line: Line): string;
+export declare function calculateLineDurationInSeconds(line: Line): number;
 export declare function parseColorBGR(text: string): ColorBGR | null;
+export declare function generateDefaultLine(): Line;
 
 export {};

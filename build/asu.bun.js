@@ -2207,6 +2207,10 @@ function lineToString(line) {
   s += line.content;
   return s;
 }
+function calculateLineDurationInSeconds(line) {
+  const duration = timeToSeconds(line.end) - timeToSeconds(line.start);
+  return duration;
+}
 function parseColorBGR(text) {
   const match = text.match(regexColorBGR);
   if (match == null) {
@@ -2219,6 +2223,29 @@ function parseColorBGR(text) {
     red: hexToNumber(groups?.color_bgr_red ?? "")
   };
   return color;
+}
+function generateDefaultLine() {
+  return {
+    type: "Dialogue",
+    layer: 0,
+    start: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+    },
+    end: {
+      hours: 0,
+      minutes: 0,
+      seconds: 5
+    },
+    style: "Default",
+    actor: "",
+    marginLeft: 0,
+    marginRight: 0,
+    marginVertical: 0,
+    effect: "",
+    content: ""
+  };
 }
 var TagName;
 (function(TagName2) {
@@ -2348,6 +2375,7 @@ export {
   itemsToTags,
   interpolate,
   hexToNumber,
+  generateDefaultLine,
   findYshad,
   findYbord,
   findXshad,
@@ -2402,8 +2430,9 @@ export {
   findA,
   contentsToString,
   contentEffectToString,
+  calculateLineDurationInSeconds,
   adjustTimeOverplus,
   TagName
 };
 
-//# debugId=119105BE6852AF9A64756e2164756e21
+//# debugId=4A83764CF39608FC64756e2164756e21

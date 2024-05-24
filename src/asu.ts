@@ -1,6 +1,6 @@
 import { hexToNumber, numberToHex } from "./mat";
 import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags, regexText } from "./regex";
-import { Time, parseTime, timeToString } from "./time";
+import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
 export * from "./mat";
 
@@ -2881,6 +2881,11 @@ export function lineToString(line: Line): string {
     return s;
 }
 
+export function calculateLineDurationInSeconds(line: Line): number {
+    const duration = timeToSeconds(line.end) - timeToSeconds(line.start);
+    return duration;
+}
+
 export function parseColorBGR(text: string): ColorBGR | null {
     const match = text.match(regexColorBGR);
     if (match == null) {
@@ -2895,4 +2900,28 @@ export function parseColorBGR(text: string): ColorBGR | null {
     };
 
     return color;
+}
+
+export function generateDefaultLine(): Line {
+    return {
+        type: "Dialogue",
+        layer: 0,
+        start: {
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+        },
+        end: {
+            hours: 0,
+            minutes: 0,
+            seconds: 5,
+        },
+        style: "Default",
+        actor: "",
+        marginLeft: 0,
+        marginRight: 0,
+        marginVertical: 0,
+        effect: "",
+        content: "",
+    };
 }

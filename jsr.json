@@ -1,5 +1,5 @@
 {
     "name": "@fs-frost/asu",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "exports": "./src/asu.ts"
 }
