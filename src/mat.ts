@@ -25,11 +25,6 @@ export function interpolate(min: number, max: number, intervals: number): number
 
     for (let i = 1; i < intervals; i++) {
         sum += step;
-
-        if (sum > actualMax) {
-            sum = actualMax;
-        }
-
         interpolations.push(sum);
     }
 
@@ -45,7 +40,7 @@ export function interpolate(min: number, max: number, intervals: number): number
 
 export function truncate(n: number, decimals: number): number {
     decimals = Math.floor(decimals);
-    const regexPattern = `/(-?\d+\.?\d{{1,${decimals}}})/`;
+    const regexPattern = `(-?\\d+.?\\d{1,${decimals}})`;
     const regexNumber = new RegExp(regexPattern);
     const match = n.toString().match(regexNumber);
     if (!match || match.length === 0) {

@@ -1,5 +1,3 @@
-import { truncate } from "./mat";
-
 export type Time = {
     hours: number;
     minutes: number;
@@ -40,8 +38,6 @@ export function parseTime(text: string): Time | null {
 }
 
 export function adjustTimeOverplus(time: Time): void {
-    time.seconds = truncate(time.seconds, 2);
-
     if (time.seconds >= 60) {
         time.seconds -= 60;
         time.minutes++;
