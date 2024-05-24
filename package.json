@@ -4,10 +4,13 @@
   "type": "module",
   "scripts": {
     "bundle": "bun run build.ts",
-    "publish": "bunx jsr publish"
+    "test": "bun test",
+    "publish": "bun ./node_modules/jsr/dist/bin.js publish",
+    "test:publish": "bun ./node_modules/jsr/dist/bin.js publish --dry-run"
   },
   "devDependencies": {
     "dts-bundle-generator": "^9.5.1",
+    "jsr": "^0.12.4",
     "typedoc": "^0.25.13"
   },
   "peerDependencies": {

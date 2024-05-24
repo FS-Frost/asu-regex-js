@@ -22,6 +22,6 @@ export enum Encodings {
     OEM = 255,
 };
 
-export const Encoding = z.nativeEnum(Encodings);
+export const Encoding: z.ZodNativeEnum<typeof Encodings> = z.nativeEnum(Encodings);
 
 export type Encoding = z.infer<typeof Encoding>;
