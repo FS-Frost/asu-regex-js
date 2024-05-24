@@ -3015,6 +3015,17 @@ test("parse unknown tag", () => {
     expect(asu.contentsToString(items)).toEqual(text);
 });
 
+test("parse karaoke fx tag", () => {
+    const text = "Comment: 0,0:02:24.88,0:02:29.58,Romaji,,0,0,0,karaoke,{\\-hidamari\\kf17}i{\\-hidamari\\kf22}tsu{\\-hidamari\\kf23}ma{\\-hidamari\\kf24}de{\\-hidamari\\kf19}mo {\\-hidamari\\kf19}i{\\-hidamari\\kf26}tsu{\\-hidamari\\kf21}ma{\\-hidamari\\kf21}de{\\-hidamari\\kf21}mo {\\-hidamari\\kf23}ma{\\-hidamari\\kf19}mo{\\-hidamari\\kf25}t{\\-hidamari\\kf18}te{\\-hidamari\\kf24}yu{\\-hidamari\\kf148}ku";
+    const items = asu.parseContent(text);
+    expect(items).not.toBeNull();
+    if (items == null) {
+        throw "null items";
+    }
+
+    expect(asu.contentsToString(items)).toEqual(text);
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";

@@ -71,3 +71,7 @@ setT({
     t1: 0,
     t2: 0,
 })
+
+## Parse ASS File
+
+https://github.com/FS-Frost/Asu.Utilidades/tree/master/Core/AssFile
