@@ -21,9 +21,6 @@ function interpolate(min, max, intervals) {
   const interpolations = [actualMin];
   for (let i = 1;i < intervals; i++) {
     sum += step;
-    if (sum > actualMax) {
-      sum = actualMax;
-    }
     interpolations.push(sum);
   }
   interpolations[intervals - 1] = actualMax;
@@ -34,7 +31,7 @@ function interpolate(min, max, intervals) {
 }
 function truncate(n, decimals) {
   decimals = Math.floor(decimals);
-  const regexPattern = `/(-?d+.?d{{1,${decimals}}})/`;
+  const regexPattern = `(-?\\d+.?\\d{1,${decimals}})`;
   const regexNumber = new RegExp(regexPattern);
   const match = n.toString().match(regexNumber);
   if (!match || match.length === 0) {
@@ -199,6 +196,7 @@ var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).
 var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
 var regexTagT = createRegExp(reTGeneral);
+
 // src/time.ts
 function secondsToTime(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -228,7 +226,6 @@ function parseTime(text) {
   return time;
 }
 function adjustTimeOverplus(time) {
-  time.seconds = truncate(time.seconds, 2);
   if (time.seconds >= 60) {
     time.seconds -= 60;
     time.minutes++;
@@ -2163,11 +2160,19 @@ function parseLine(text) {
     return null;
   }
   const groups = match.groups;
+  const start = parseTime(groups?.start ?? "");
+  if (start == null) {
+    return null;
+  }
+  const end = parseTime(groups?.end ?? "");
+  if (end == null) {
+    return null;
+  }
   const line = {
     type: groups?.type ?? "",
     layer: Number(groups?.layer ?? "0"),
-    start: groups?.start ?? "",
-    end: groups?.end ?? "",
+    start,
+    end,
     style: groups?.style ?? "",
     actor: groups?.actor ?? "",
     marginLeft: Number(groups?.marginLeft ?? "0"),
@@ -2183,9 +2188,9 @@ function lineToString(line) {
   s += ": ";
   s += line.layer;
   s += ",";
-  s += line.start;
+  s += timeToString(line.start);
   s += ",";
-  s += line.end;
+  s += timeToString(line.end);
   s += ",";
   s += line.style;
   s += ",";
@@ -2401,4 +2406,4 @@ export {
   TagName
 };
 
-//# debugId=B4E1EA88FC783F7164756e2164756e21
+//# debugId=119105BE6852AF9A64756e2164756e21

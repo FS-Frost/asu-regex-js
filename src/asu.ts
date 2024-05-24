@@ -1,5 +1,6 @@
 import { hexToNumber, numberToHex } from "./mat";
 import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags, regexText } from "./regex";
+import { Time, parseTime, timeToString } from "./time";
 
 export * from "./mat";
 
@@ -2810,8 +2811,8 @@ export function removeTag(items: ContentItem[], tagName: TagName): void {
 export type Line = {
     type: string;
     layer: number;
-    start: string;
-    end: string;
+    start: Time;
+    end: Time;
     style: string;
     actor: string;
     marginLeft: number;
@@ -2828,11 +2829,21 @@ export function parseLine(text: string): Line | null {
     }
 
     const groups = match.groups;
+    const start = parseTime(groups?.start ?? "");
+    if (start == null) {
+        return null;
+    }
+
+    const end = parseTime(groups?.end ?? "");
+    if (end == null) {
+        return null;
+    }
+
     const line: Line = {
         type: groups?.type ?? "",
         layer: Number(groups?.layer ?? "0"),
-        start: groups?.start ?? "",
-        end: groups?.end ?? "",
+        start: start,
+        end: end,
         style: groups?.style ?? "",
         actor: groups?.actor ?? "",
         marginLeft: Number(groups?.marginLeft ?? "0"),
@@ -2850,9 +2861,9 @@ export function lineToString(line: Line): string {
     s += ": ";
     s += line.layer;
     s += ",";
-    s += line.start;
+    s += timeToString(line.start);
     s += ",";
-    s += line.end;
+    s += timeToString(line.end);
     s += ",";
     s += line.style;
     s += ",";
