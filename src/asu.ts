@@ -3,6 +3,8 @@ import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColo
 
 export * from "./mat";
 
+export * from "./time";
+
 export enum TagName {
     a = "a",
     alpha = "alpha",

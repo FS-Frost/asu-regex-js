@@ -42,3 +42,16 @@ export function interpolate(min: number, max: number, intervals: number): number
 
     return interpolations;
 }
+
+export function truncate(n: number, decimals: number): number {
+    decimals = Math.floor(decimals);
+    const regexPattern = `/(-?\d+\.?\d{{1,${decimals}}})/`;
+    const regexNumber = new RegExp(regexPattern);
+    const match = n.toString().match(regexNumber);
+    if (!match || match.length === 0) {
+        return n;
+    }
+
+    const truncatedNumber = Number(match[0]);
+    return truncatedNumber;
+}

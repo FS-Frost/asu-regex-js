@@ -3,6 +3,19 @@
 export declare function hexToNumber(s: string): number;
 export declare function numberToHex(n: number): string;
 export declare function interpolate(min: number, max: number, intervals: number): number[];
+export declare function truncate(n: number, decimals: number): number;
+export type Time = {
+	hours: number;
+	minutes: number;
+	seconds: number;
+};
+export declare function secondsToTime(seconds: number): Time;
+export declare function parseTime(text: string): Time | null;
+export declare function adjustTimeOverplus(time: Time): void;
+export declare function timeToString(time: Time): string;
+export declare function timeToSeconds(time: Time): number;
+export declare function sumTimes(t1: Time, t2: Time): Time;
+export declare function subtractTimes(minuend: Time, subtracting: Time): Time;
 export declare enum TagName {
 	a = "a",
 	alpha = "alpha",

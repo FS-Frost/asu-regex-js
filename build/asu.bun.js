@@ -32,6 +32,17 @@ function interpolate(min, max, intervals) {
   }
   return interpolations;
 }
+function truncate(n, decimals) {
+  decimals = Math.floor(decimals);
+  const regexPattern = `/(-?d+.?d{{1,${decimals}}})/`;
+  const regexNumber = new RegExp(regexPattern);
+  const match = n.toString().match(regexNumber);
+  if (!match || match.length === 0) {
+    return n;
+  }
+  const truncatedNumber = Number(match[0]);
+  return truncatedNumber;
+}
 
 // node_modules/magic-regexp/dist/shared/magic-regexp.b7c910ac.mjs
 var NO_WRAP_RE = /^(\(.*\)|\\?.)$/;
@@ -188,6 +199,74 @@ var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).
 var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
 var regexTagT = createRegExp(reTGeneral);
+// src/time.ts
+function secondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds / 3600 - hours) * 60);
+  seconds = seconds - hours * 3600 - minutes * 60;
+  return {
+    hours,
+    minutes,
+    seconds
+  };
+}
+function parseTime(text) {
+  const regexTime = /(?<h>\d+):(?<m>[0-9]{1,2}?):(?<s>[0-9]{1,2}(?:\.[0-9]{1,2})?)/;
+  const match = text.match(regexTime);
+  if (!match || match.length === 0) {
+    return null;
+  }
+  const hours = Math.floor(Number(match.groups?.h ?? "0"));
+  const minutes = Math.floor(Number(match.groups?.m ?? "0"));
+  const seconds = Number(match.groups?.s ?? "0");
+  const time = {
+    hours,
+    minutes,
+    seconds
+  };
+  adjustTimeOverplus(time);
+  return time;
+}
+function adjustTimeOverplus(time) {
+  time.seconds = truncate(time.seconds, 2);
+  if (time.seconds >= 60) {
+    time.seconds -= 60;
+    time.minutes++;
+  }
+  if (time.minutes >= 60) {
+    time.minutes -= 60;
+    time.hours++;
+  }
+  if (time.hours >= 9) {
+    time.hours = 9;
+    time.minutes = 59;
+    time.seconds = 59.99;
+  }
+}
+function timeToString(time) {
+  adjustTimeOverplus(time);
+  const hours = time.hours.toFixed(0);
+  const minutes = time.minutes.toFixed(0).padStart("00".length, "0");
+  const seconds = time.seconds.toFixed(2).padStart("00.00".length, "0");
+  return `${hours}:${minutes}:${seconds}`;
+}
+function timeToSeconds(time) {
+  adjustTimeOverplus(time);
+  const seconds = time.hours * 3600 + time.minutes * 60 + time.seconds;
+  return seconds;
+}
+function sumTimes(t1, t2) {
+  const seconds1 = timeToSeconds(t1);
+  const seconds2 = timeToSeconds(t2);
+  const totalSeconds = seconds1 + seconds2;
+  return secondsToTime(totalSeconds);
+}
+function subtractTimes(minuend, subtracting) {
+  const minuendSeconds = timeToSeconds(minuend);
+  const subtractingSeconds = timeToSeconds(subtracting);
+  const deltaSeconds = minuendSeconds - subtractingSeconds;
+  return secondsToTime(deltaSeconds);
+}
 
 // src/asu.ts
 function parseTags(text, tags) {
@@ -2194,7 +2273,12 @@ var TagName;
   TagName2["yshad"] = "yshad";
 })(TagName || (TagName = {}));
 export {
+  truncate,
+  timeToString,
+  timeToSeconds,
   tagsToItems,
+  sumTimes,
+  subtractTimes,
   setYshad,
   setYbord,
   setXshad,
@@ -2247,7 +2331,9 @@ export {
   setAlpha1,
   setAlpha,
   setA,
+  secondsToTime,
   removeTag,
+  parseTime,
   parseTags,
   parseLine,
   parseContent,
@@ -2311,7 +2397,8 @@ export {
   findA,
   contentsToString,
   contentEffectToString,
+  adjustTimeOverplus,
   TagName
 };
 
-//# debugId=CFD84E71F5E3932064756e2164756e21
+//# debugId=B4E1EA88FC783F7164756e2164756e21
