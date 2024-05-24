@@ -2,6 +2,10 @@ import { hexToNumber, numberToHex } from "./mat";
 import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags, regexText } from "./regex";
 import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
+export * from "./assFile/assFile";
+
+export * from "./karaoke";
+
 export * from "./mat";
 
 export * from "./time";

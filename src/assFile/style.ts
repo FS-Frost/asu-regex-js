@@ -1,0 +1,63 @@
+import { Alignment } from "./alignment";
+import { Encoding } from "./encoding";
+
+export type Style = {
+    name: string;
+    fontName: string;
+    fontSize: number;
+    primaryAlpha: string;
+    primaryColor: string;
+    secondaryAlpha: string;
+    secondaryColor: string;
+    outlineAlpha: string;
+    outlineColor: string;
+    backAlpha: string;
+    backColor: string;
+    bold: number;
+    italic: number;
+    underline: number;
+    strikeOut: number;
+    scaleX: number;
+    scaleY: number;
+    spacing: number;
+    angle: number;
+    borderStyle: number;
+    outline: number;
+    shadow: number;
+    alignment: Alignment;
+    marginLeft: number;
+    marginRight: number;
+    marginVertical: number;
+    encoding: Encoding;
+};
+
+export function styleToString(style: Style): string {
+    let s = `Style: ${style.name}`;
+    s += `,${style.fontName}`;
+    s += `,${style.fontSize}`;
+    s += `,${style.primaryAlpha}`;
+    s += `,${style.primaryColor}`;
+    s += `,${style.secondaryAlpha}`;
+    s += `,${style.secondaryColor}`;
+    s += `,${style.outlineAlpha}`;
+    s += `,${style.outlineColor}`;
+    s += `,${style.backAlpha}`;
+    s += `,${style.backColor}`;
+    s += `,${style.bold}`;
+    s += `,${style.italic}`;
+    s += `,${style.underline}`;
+    s += `,${style.strikeOut}`;
+    s += `,${style.scaleX}`;
+    s += `,${style.scaleY}`;
+    s += `,${style.spacing}`;
+    s += `,${style.angle}`;
+    s += `,${style.borderStyle}`;
+    s += `,${style.outline}`;
+    s += `,${style.shadow}`;
+    s += `,${style.alignment}`;
+    s += `,${style.marginLeft}`;
+    s += `,${style.marginRight}`;
+    s += `,${style.marginVertical}`;
+    s += `,${style.encoding}`;
+    return s;
+}

@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/bun": "^1.1.1",
     "hono": "^3.10.4",
-    "magic-regexp": "^0.7.0"
+    "magic-regexp": "^0.7.0",
+    "zod": "^3.23.8"
   }
 }

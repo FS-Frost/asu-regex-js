@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
+    "files.insertFinalNewline": true,
     "typescript.format.semicolons": "insert",
     "liveServer.settings.port": 3000,
     "liveServer.settings.root": "/",
