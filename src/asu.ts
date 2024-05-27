@@ -1174,6 +1174,33 @@ export function contentsToString(items: ContentItem[]): string {
     return s;
 }
 
+export function mergeNeighboringEffects(items: ContentItem[]): void {
+    let indexToRemove: number[] = [];
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.name != "effect") {
+            continue;
+        }
+
+        const nextItem = items[i + 1];
+        if (nextItem.name != "effect") {
+            i++;
+            continue;
+        }
+
+        if (nextItem == null) {
+            break;
+        }
+
+        item.tags.push(...nextItem.tags);
+        indexToRemove.push(i + 1);
+    }
+
+    for (const index of indexToRemove) {
+        items.splice(index, 1);
+    }
+}
+
 export function findA(items: ContentItem[]): TagA | null {
     const fx = items.find(item => item.name == "effect");
     if (fx?.name != "effect") {

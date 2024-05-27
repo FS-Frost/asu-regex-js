@@ -5263,6 +5263,28 @@ function contentsToString(items) {
   }
   return s;
 }
+function mergeNeighboringEffects(items) {
+  let indexToRemove = [];
+  for (let i = 0;i < items.length; i++) {
+    const item = items[i];
+    if (item.name != "effect") {
+      continue;
+    }
+    const nextItem = items[i + 1];
+    if (nextItem.name != "effect") {
+      i++;
+      continue;
+    }
+    if (nextItem == null) {
+      break;
+    }
+    item.tags.push(...nextItem.tags);
+    indexToRemove.push(i + 1);
+  }
+  for (const index of indexToRemove) {
+    items.splice(index, 1);
+  }
+}
 function findA(items) {
   const fx = items.find((item) => item.name == "effect");
   if (fx?.name != "effect") {
@@ -6775,6 +6797,7 @@ export {
   parseColorBGR,
   parseASSFile,
   numberToHex,
+  mergeNeighboringEffects,
   lineToString,
   itemsToTags,
   isRomajiWord,
@@ -6841,4 +6864,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=CE05FE6948AB41D464756e2164756e21
+//# debugId=EC6AA231CC548FDB64756e2164756e21
