@@ -1,5 +1,7 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+/examples/build
+/examples/bundles/files.json
 /examples/docs
 /temp
 

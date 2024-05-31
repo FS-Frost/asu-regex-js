@@ -28,9 +28,14 @@ jobs:
               run: |
                   bun test
 
+            - name: Bundle
+              run: |
+                  bun bundle && \
+                  mv ./build ./examples/build
+
             - name: Generate docs
               run: |
-                  bunx typedoc src/asu.ts --out ./examples/docs
+                  bun docs
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@4.1.7

@@ -3041,6 +3041,41 @@ test("parse karaoke fx tag", () => {
     expect(asu.contentsToString(items)).toEqual(text);
 });
 
+test("parse tags with bad args", () => {
+    const texts: string[] = [
+        "{\\fsCuarentaYDos}",
+        "{\\move(!$scenter!,0,0,0,0,0)}",
+        "{\\move(0,!$smiddle!,0,0,0,0)}",
+        "{\\move(0,0,!$scenter!,0,0,0)}",
+        "{\\move(0,0,0,!$smiddle!,0,0)}",
+        "{\\move(0,0,0,0,!$t1!,)}",
+        "{\\move(0,0,0,0,0,!$t2!)}",
+        "{\\move(!$scenter!,!$smiddle!,!$scenter!,!$smiddle!,!$t1!,!$t2!)}",
+        "{\\move(!$scenter!,0,0,0)}",
+        "{\\move(0,!$smiddle!,0,0)}",
+        "{\\move(0,0,!$scenter!,0)}",
+        "{\\move(0,0,0,!$smiddle!)}",
+        "{\\move(!$scenter!,!$smiddle!,!$scenter!,!$smiddle!)}",
+    ];
+
+    for (const text of texts) {
+        const items = asu.parseContent(text);
+        expect(items).not.toBeNull();
+        if (items == null) {
+            throw `null items for:\n${text}`;
+        }
+
+        expect(asu.contentsToString(items)).toEqual(text);
+
+        const fx = items.find(x => x.name == "effect");
+        if (fx?.name != "effect") {
+            throw `null fx for:\n${text}`;
+        }
+
+        expect(fx.tags[0].name).toEqual(asu.TagName.unknown);
+    }
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";

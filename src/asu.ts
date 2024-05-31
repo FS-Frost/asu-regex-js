@@ -1,5 +1,5 @@
 import { hexToNumber, numberToHex } from "./mat";
-import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColor4, regexColorBGR, regexContent, regexFad, regexFade, regexIclip, regexLine, regexMove, regexOrg, regexPos, regexTagT, regexTags, regexText } from "./regex";
+import * as regex from "./regex";
 import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
 export * from "./assFile/assFile";
@@ -373,14 +373,15 @@ export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord
 
 export function parseTags(text: string, tags: Tags[]): Tags[] {
     const tagNameSource = text.substring(1);
-    const matchTagT = text.match(regexTagT);
+    const matchTagT = text.match(regex.regexTagT);
     if (matchTagT && matchTagT.length > 0) {
         return parseTagT(text, tags, tagNameSource, matchTagT);
     }
 
-    const matchText = text.match(regexText);
+    const matchText = text.match(regex.regexText);
     if (matchText && matchText.length > 0) {
         const value = matchText[0];
+
         tags.push({
             name: TagName.text,
             value: value,
@@ -394,13 +395,24 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
         return tags;
     }
 
-    const matchUnitTags = text.match(regexTags);
+    const matchUnitTags = text.match(regex.regexTags);
     if (!matchUnitTags || matchUnitTags.length == 0) {
         return tags;
     }
 
-    if (tagNameSource.startsWith(TagName.move)) {
-        const match = matchUnitTags[0].match(regexMove)?.groups;
+    function parseNextTag(tags: Tags[], parsedTag: Tags, parsedTextLength: number): Tags[] {
+        tags.push(parsedTag);
+
+        text = text.substring(parsedTextLength);
+        if (text.length > 0) {
+            parseTags(text, tags);
+        }
+
+        return tags;
+    }
+
+    let match = matchUnitTags[0].match(regex.regexMove)?.groups;
+    if (match != null) {
         const x1 = Number(match?.move_x1 ?? "0");
         const y1 = Number(match?.move_y1 ?? "0");
         const x2 = Number(match?.move_x2 ?? "0");
@@ -418,61 +430,71 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t2: t2,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.alpha)) {
-        const value = matchUnitTags[0].substring(1 + TagName.alpha.length);
+    match = matchUnitTags[0].match(regex.regexAlpha)?.groups;
+    if (match != null) {
+        const value = match?.alpha_value ?? "";
+
         const tag: TagAlpha = {
             name: TagName.alpha,
             value: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.xbord)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.xbord.length));
+    match = matchUnitTags[0].match(regex.regexXbord)?.groups;
+    if (match != null) {
+        const value = Number(match?.xbord_value ?? "0");
+
         const tag: TagXbord = {
             name: TagName.xbord,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.ybord)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.ybord.length));
+    match = matchUnitTags[0].match(regex.regexYbord)?.groups;
+    if (match != null) {
+        const value = Number(match?.ybord_value ?? "0");
+
         const tag: TagYbord = {
             name: TagName.ybord,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.xshad)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.xshad.length));
+    match = matchUnitTags[0].match(regex.regexXshad)?.groups;
+    if (match != null) {
+        const value = Number(match?.xshad_value ?? "0");
+
         const tag: TagXshad = {
             name: TagName.xshad,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.yshad)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.yshad.length));
+    match = matchUnitTags[0].match(regex.regexYshad)?.groups;
+    if (match != null) {
+        const value = Number(match?.yshad_value ?? "0");
+
         const tag: TagYshad = {
             name: TagName.yshad,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.iclip)) {
-        const match = matchUnitTags[0].match(regexIclip)?.groups;
+    match = matchUnitTags[0].match(regex.regexIclip)?.groups;
+    if (match != null) {
         const args = match?.iclip_args ?? "";
 
         const tag: TagIclip = {
@@ -480,61 +502,71 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             drawCommands: args,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.blur)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.blur.length));
+    match = matchUnitTags[0].match(regex.regexBlur)?.groups;
+    if (match != null) {
+        const value = Number(match?.blur_value ?? "0");
+
         const tag: TagBlur = {
             name: TagName.blur,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.bord)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.bord.length));
+    match = matchUnitTags[0].match(regex.regexBord)?.groups;
+    if (match != null) {
+        const value = Number(match?.bord_value ?? "0");
+
         const tag: TagBord = {
             name: TagName.bord,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.shad)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.shad.length));
+    match = matchUnitTags[0].match(regex.regexShad)?.groups;
+    if (match != null) {
+        const value = Number(match?.shad_value ?? "0");
+
         const tag: TagShad = {
             name: TagName.shad,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fscx)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fscx.length));
+    match = matchUnitTags[0].match(regex.regexFscx)?.groups;
+    if (match != null) {
+        const value = Number(match?.fscx_value ?? "0");
+
         const tag: TagFscx = {
             name: TagName.fscx,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fscy)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fscy.length));
+    match = matchUnitTags[0].match(regex.regexFscy)?.groups;
+    if (match != null) {
+        const value = Number(match?.fscy_value ?? "0");
+
         const tag: TagFscy = {
             name: TagName.fscy,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fade)) {
-        const match = matchUnitTags[0].match(regexFade)?.groups;
+    match = matchUnitTags[0].match(regex.regexFade)?.groups;
+    if (match != null) {
         const alpha1 = Number(match?.fade_alpha1 ?? "0");
         const alpha2 = Number(match?.fade_alpha2 ?? "0");
         const alpha3 = Number(match?.fade_alpha3 ?? "0");
@@ -554,11 +586,11 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             t4: t4,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.clip)) {
-        const match = matchUnitTags[0].match(regexClip)?.groups;
+    match = matchUnitTags[0].match(regex.regexClip)?.groups;
+    if (match != null) {
         const args = match?.clip_args ?? "";
 
         const tag: TagClip = {
@@ -566,21 +598,23 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             drawCommands: args,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fsp)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fsp.length));
+    match = matchUnitTags[0].match(regex.regexFsp)?.groups;
+    if (match != null) {
+        const value = Number(match?.fsp_value ?? "0");
+
         const tag: TagFsp = {
             name: TagName.fsp,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.pos)) {
-        const match = matchUnitTags[0].match(regexPos)?.groups;
+    match = matchUnitTags[0].match(regex.regexPos)?.groups;
+    if (match != null) {
         const x = Number(match?.pos_x ?? "0");
         const y = Number(match?.pos_y ?? "0");
 
@@ -590,11 +624,11 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             y: y,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.org)) {
-        const match = matchUnitTags[0].match(regexOrg)?.groups;
+    match = matchUnitTags[0].match(regex.regexOrg)?.groups;
+    if (match != null) {
         const x = Number(match?.org_x ?? "0");
         const y = Number(match?.org_y ?? "0");
 
@@ -604,11 +638,11 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             y: y,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fad)) {
-        const match = matchUnitTags[0].match(regexFad)?.groups;
+    match = matchUnitTags[0].match(regex.regexFad)?.groups;
+    if (match != null) {
         const fadeIn = Number(match?.in ?? "0");
         const fadeOut = Number(match?.out ?? "0");
 
@@ -618,154 +652,182 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             out: fadeOut,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.frx)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.frx.length));
+    match = matchUnitTags[0].match(regex.regexFrx)?.groups;
+    if (match != null) {
+        const value = Number(match?.frx_value ?? "0");
+
         const tag: TagFrx = {
             name: TagName.frx,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fry)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fry.length));
+    match = matchUnitTags[0].match(regex.regexFry)?.groups;
+    if (match != null) {
+        const value = Number(match?.fry_value ?? "0");
+
         const tag: TagFry = {
             name: TagName.fry,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.frz)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.frz.length));
+    match = matchUnitTags[0].match(regex.regexFrz)?.groups;
+    if (match != null) {
+        const value = Number(match?.frz_value ?? "0");
+
         const tag: TagFrz = {
             name: TagName.frz,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fax)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fax.length));
+    match = matchUnitTags[0].match(regex.regexFax)?.groups;
+    if (match != null) {
+        const value = Number(match?.fax_value ?? "0");
+
         const tag: TagFax = {
             name: TagName.fax,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fay)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fay.length));
+    match = matchUnitTags[0].match(regex.regexFay)?.groups;
+    if (match != null) {
+        const value = Number(match?.fay_value ?? "0");
+
         const tag: TagFay = {
             name: TagName.fay,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.pbo)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.pbo.length));
+    match = matchUnitTags[0].match(regex.regexPbo)?.groups;
+    if (match != null) {
+        const value = Number(match?.pbo_value ?? "0");
+
         const tag: TagPbo = {
             name: TagName.pbo,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fe)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fe.length));
+    match = matchUnitTags[0].match(regex.regexFe)?.groups;
+    if (match != null) {
+        const value = Number(match?.fe_value ?? "0");
+
         const tag: TagFe = {
             name: TagName.fe,
             encodingId: Number(value),
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fn)) {
-        const value = matchUnitTags[0].substring(1 + TagName.fn.length);
+    match = matchUnitTags[0].match(regex.regexFn)?.groups;
+    if (match != null) {
+        const value = match?.fn_value ?? "";
+
         const tag: TagFn = {
             name: TagName.fn,
             font: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.an)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.be.length));
+    match = matchUnitTags[0].match(regex.regexAn)?.groups;
+    if (match != null) {
+        const value = Number(match?.an_value ?? "0");
+
         const tag: TagAn = {
             name: TagName.an,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.be)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.be.length));
+    match = matchUnitTags[0].match(regex.regexBe)?.groups;
+    if (match != null) {
+        const value = Number(match?.be_value ?? "0");
+
         const tag: TagBe = {
             name: TagName.be,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fr)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fr.length));
+    match = matchUnitTags[0].match(regex.regexFr)?.groups;
+    if (match != null) {
+        const value = Number(match?.fr_value ?? "0");
+
         const tag: TagFr = {
             name: TagName.fr,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.fs)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.fs.length));
+    match = matchUnitTags[0].match(regex.regexFs)?.groups;
+    if (match != null) {
+        const value = Number(match?.fs_value ?? "0");
+
         const tag: TagFs = {
             name: TagName.fs,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.ko)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.ko.length));
+    match = matchUnitTags[0].match(regex.regexKo)?.groups;
+    if (match != null) {
+        const value = Number(match?.ko_value ?? "0");
+
         const tag: TagKo = {
             name: TagName.ko,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.kf)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.kf.length));
+    match = matchUnitTags[0].match(regex.regexKf)?.groups;
+    if (match != null) {
+        const value = Number(match?.kf_value ?? "0");
+
         const tag: TagKf = {
             name: TagName.kf,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.color1)) {
-        const groups = matchUnitTags[0].match(regexColor1)?.groups;
-        const blue = Number(hexToNumber(groups?.color1_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color1_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color1_bgr_red ?? "0"));
+    match = matchUnitTags[0].match(regex.regexColor1)?.groups;
+    if (match != null) {
+        const blue = Number(hexToNumber(match?.color1_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(match?.color1_bgr_green ?? "0"));
+        const red = Number(hexToNumber(match?.color1_bgr_red ?? "0"));
 
         const tag: Tag1c = {
             name: TagName.color1,
@@ -774,14 +836,14 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             red: red,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.color2)) {
-        const groups = matchUnitTags[0].match(regexColor2)?.groups;
-        const blue = Number(hexToNumber(groups?.color2_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color2_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color2_bgr_red ?? "0"));
+    match = matchUnitTags[0].match(regex.regexColor2)?.groups;
+    if (match != null) {
+        const blue = Number(hexToNumber(match?.color2_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(match?.color2_bgr_green ?? "0"));
+        const red = Number(hexToNumber(match?.color2_bgr_red ?? "0"));
 
         const tag: Tag2c = {
             name: TagName.color2,
@@ -790,14 +852,14 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             red: red,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.color3)) {
-        const groups = matchUnitTags[0].match(regexColor3)?.groups;
-        const blue = Number(hexToNumber(groups?.color3_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color3_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color3_bgr_red ?? "0"));
+    match = matchUnitTags[0].match(regex.regexColor3)?.groups;
+    if (match != null) {
+        const blue = Number(hexToNumber(match?.color3_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(match?.color3_bgr_green ?? "0"));
+        const red = Number(hexToNumber(match?.color3_bgr_red ?? "0"));
 
         const tag: Tag3c = {
             name: TagName.color3,
@@ -806,14 +868,14 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             red: red,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.color4)) {
-        const groups = matchUnitTags[0].match(regexColor4)?.groups;
-        const blue = Number(hexToNumber(groups?.color4_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color4_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color4_bgr_red ?? "0"));
+    match = matchUnitTags[0].match(regex.regexColor4)?.groups;
+    if (match != null) {
+        const blue = Number(hexToNumber(match?.color4_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(match?.color4_bgr_green ?? "0"));
+        const red = Number(hexToNumber(match?.color4_bgr_red ?? "0"));
 
         const tag: Tag4c = {
             name: TagName.color4,
@@ -822,134 +884,158 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             red: red,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.alpha1)) {
-        const value = matchUnitTags[0].substring(1 + TagName.alpha1.length);
+    match = matchUnitTags[0].match(regex.regexAlpha1)?.groups;
+    if (match != null) {
+        const value = match.alpha1_value ?? "";
+
         const tag: Tag1a = {
             name: TagName.alpha1,
             value: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.alpha2)) {
-        const value = matchUnitTags[0].substring(1 + TagName.alpha2.length);
+    match = matchUnitTags[0].match(regex.regexAlpha2)?.groups;
+    if (match != null) {
+        const value = match.alpha2_value ?? "";
+
         const tag: Tag2a = {
             name: TagName.alpha2,
             value: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.alpha3)) {
-        const value = matchUnitTags[0].substring(1 + TagName.alpha3.length);
+    match = matchUnitTags[0].match(regex.regexAlpha3)?.groups;
+    if (match != null) {
+        const value = match.alpha3_value ?? "";
+
         const tag: Tag3a = {
             name: TagName.alpha3,
             value: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.alpha4)) {
-        const value = matchUnitTags[0].substring(1 + TagName.alpha4.length);
+    match = matchUnitTags[0].match(regex.regexAlpha4)?.groups;
+    if (match != null) {
+        const value = match.alpha4_value ?? "";
+
         const tag: Tag4a = {
             name: TagName.alpha4,
             value: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.kLowerCase)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.kLowerCase.length));
+    match = matchUnitTags[0].match(regex.regexKLowerCase)?.groups;
+    if (match != null) {
+        const value = Number(match?.k_lower_case_value ?? "0");
+
         const tag: TagKLowerCase = {
             name: TagName.kLowerCase,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.kUpperCase)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.kUpperCase.length));
+    match = matchUnitTags[0].match(regex.regexKUpperCase)?.groups;
+    if (match != null) {
+        const value = Number(match?.k_upper_case_value ?? "0");
+
         const tag: TagKUpperCase = {
             name: TagName.kUpperCase,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.q)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.q.length));
+    match = matchUnitTags[0].match(regex.regexQ)?.groups;
+    if (match != null) {
+        const value = Number(match?.q_value ?? "0");
+
         const tag: TagQ = {
             name: TagName.q,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.s)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.s.length));
+    match = matchUnitTags[0].match(regex.regexS)?.groups;
+    if (match != null) {
+        const value = Number(match?.s_value ?? "0");
+
         const tag: TagS = {
             name: TagName.s,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.u)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.u.length));
+    match = matchUnitTags[0].match(regex.regexU)?.groups;
+    if (match != null) {
+        const value = Number(match?.u_value ?? "0");
+
         const tag: TagU = {
             name: TagName.u,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.r)) {
-        const value = matchUnitTags[0].substring(1 + TagName.r.length);
+    match = matchUnitTags[0].match(regex.regexR)?.groups;
+    if (match != null) {
+        const value = match?.r_value ?? "";
+
         const tag: TagR = {
             name: TagName.r,
             style: value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.p)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.p.length));
+    match = matchUnitTags[0].match(regex.regexP)?.groups;
+    if (match != null) {
+        const value = Number(match?.p_value ?? "0");
+
         const tag: TagP = {
             name: TagName.p,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.i)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.i.length));
+    match = matchUnitTags[0].match(regex.regexI)?.groups;
+    if (match != null) {
+        const value = Number(match?.i_value ?? "0");
+
         const tag: TagI = {
             name: TagName.i,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.color)) {
-        const groups = matchUnitTags[0].match(regexColor)?.groups;
-        const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-        const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-        const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
+    match = matchUnitTags[0].match(regex.regexColor)?.groups;
+    if (match != null) {
+        const blue = Number(hexToNumber(match?.color_bgr_blue ?? "0"));
+        const green = Number(hexToNumber(match?.color_bgr_green ?? "0"));
+        const red = Number(hexToNumber(match?.color_bgr_red ?? "0"));
 
         const tag: TagC = {
             name: TagName.color,
@@ -958,50 +1044,45 @@ export function parseTags(text: string, tags: Tags[]): Tags[] {
             red: red,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.b)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.b.length));
+    match = matchUnitTags[0].match(regex.regexB)?.groups;
+    if (match != null) {
+        const value = Number(match?.b_value ?? "0");
+
         const tag: TagB = {
             name: TagName.b,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else if (tagNameSource.startsWith(TagName.a)) {
-        const value = Number(matchUnitTags[0].substring(1 + TagName.a.length));
+    match = matchUnitTags[0].match(regex.regexA)?.groups;
+    if (match != null) {
+        const value = Number(match?.a_value ?? "0");
+
         const tag: TagA = {
             name: TagName.a,
             value: Number.isNaN(value) ? 0 : value,
         };
 
-        tags.push(tag);
+        return parseNextTag(tags, tag, matchUnitTags[0].length);
     }
 
-    else {
-        const value = matchUnitTags[0];
-        const tag: TagUnknown = {
-            name: TagName.unknown,
-            value: value,
-        };
+    const value = matchUnitTags[0];
+    const tag: TagUnknown = {
+        name: TagName.unknown,
+        value: value,
+    };
 
-        tags.push(tag);
-    }
-
-    text = text.substring(matchUnitTags[0].length);
-    if (text.length > 0) {
-        parseTags(text, tags);
-    }
-
-    return tags;
+    return parseNextTag(tags, tag, matchUnitTags[0].length);
 }
 
 function parseTagT(text: string, tags: Tags[], tagNameSource: string, matchTagT: RegExpMatchArray): Tags[] {
     if (tagNameSource.startsWith(TagName.t)) {
-        const match = matchTagT[0].match(regexTagT)?.groups;
+        const match = matchTagT[0].match(regex.regexTagT)?.groups;
         const rawTags = match?.tags ?? "";
         const subtags: Tags[] = [];
         parseTags(rawTags, subtags);
@@ -1055,7 +1136,7 @@ export type ContentItem = ContentEffect | ContentText;
 
 export function parseContent(text: string): ContentItem[] {
     const items: ContentItem[] = [];
-    const result = text.matchAll(regexContent);
+    const result = text.matchAll(regex.regexContent);
 
     for (const match of result) {
         if (match.groups?.fx) {
@@ -2867,7 +2948,7 @@ export type Line = {
 };
 
 export function parseLine(text: string): Line | null {
-    const match = text.match(regexLine);
+    const match = text.match(regex.regexLine);
     if (match == null) {
         return null;
     }
@@ -2931,7 +3012,7 @@ export function calculateLineDurationInSeconds(line: Line): number {
 }
 
 export function parseColorBGR(text: string): ColorBGR | null {
-    const match = text.match(regexColorBGR);
+    const match = text.match(regex.regexColorBGR);
     if (match == null) {
         return null;
     }

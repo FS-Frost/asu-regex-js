@@ -1,9 +1,10 @@
 import { BuildConfig, Target } from "bun";
 import fs from "node:fs/promises";
 
+const buildDir = "./examples/build";
 {
     console.log("Generating declaration file...");
-    const cmdAArgs: string[] = ["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", "build/asu.d.ts", "--no-check"];
+    const cmdAArgs: string[] = ["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", `${buildDir}/asu.d.ts`, "--no-check"];
     console.log(cmdAArgs.join(" "));
     const cmdResult = Bun.spawnSync(cmdAArgs);
     if (!cmdResult.success) {
@@ -13,9 +14,7 @@ import fs from "node:fs/promises";
     }
 }
 
-const dtsContent = await fs.readFile("./build/asu.d.ts");
-
-const buildDir = "./build";
+const dtsContent = await fs.readFile(`${buildDir}/asu.d.ts`);
 if (await fs.exists(buildDir)) {
     await fs.rm(buildDir, {
         recursive: true,
@@ -25,7 +24,7 @@ if (await fs.exists(buildDir)) {
 
 const config: BuildConfig = {
     entrypoints: ["./src/asu.ts"],
-    outdir: "./build",
+    outdir: buildDir,
     sourcemap: "external",
 };
 
@@ -40,30 +39,26 @@ for (const target of targets) {
     config.naming = {
         entry: `asu.${target}.js`,
     };
+
+    let fileName = `asu.${target}.d.ts`;
     await Bun.build(config);
-    await fs.writeFile(`./build/asu.${target}.d.ts`, dtsContent);
+    await fs.writeFile(`${buildDir}/${fileName}`, dtsContent);
 
     config.minify = true;
     config.naming = {
         entry: `asu.${target}.min.js`,
     };
+
+    fileName = `asu.${target}.min.d.ts`;
     await Bun.build(config);
-    await fs.writeFile(`./build/asu.${target}.min.d.ts`, dtsContent);
+    await fs.writeFile(`${buildDir}/${fileName}`, dtsContent);
 }
 
 console.log(`Out directory: ${buildDir}`);
 
 {
-    console.log("Copying browser build to examples...");
-    const cmdArgs: string[] = ["cp", "build/asu.browser.js", "examples/asu.browser.js"];
-    console.log(cmdArgs.join(" "));
-    const cmdResult = Bun.spawnSync(cmdArgs);
-    if (!cmdResult.success) {
-        console.error(`ERROR: failed to copy browser build to examples with exit code ${cmdResult.exitCode}`);
-        console.error(cmdResult.stderr.toString());
-        process.exit(1);
-    }
-
+    const files = await fs.readdir(buildDir);
+    await fs.writeFile(`./examples/bundles/files.json`, JSON.stringify(files, null, 2));
 }
 
 console.log("DONE");

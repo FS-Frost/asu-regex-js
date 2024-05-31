@@ -47,7 +47,9 @@ const reInt = exactly("-").optionally().and(oneOrMore(digit));
 
 const reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 
-const reA = exactly("\\").and("a").and(reFloat);
+const reA = exactly("\\").and("a").and(reFloat.groupedAs("a_value"));
+
+export const regexA = createRegExp(reA) as RegExp;
 
 const reHex = letter.or(digit).times(2);
 
@@ -95,81 +97,157 @@ export const regexColor3 = createRegExp(reColor3) as RegExp;
 
 export const regexColor4 = createRegExp(reColor4) as RegExp;
 
-const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
+const reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")).groupedAs("alpha_value"));
 
-const reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
+export const regexAlpha = createRegExp(reAlpha) as RegExp;
 
-const reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
+const reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha1_value"));
 
-const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
+export const regexAlpha1 = createRegExp(reAlpha1) as RegExp;
 
-const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
+const reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha2_value"));
 
-const reKLowerCase = exactly("\\").and("k").and(reFloat);
+export const regexAlpha2 = createRegExp(reAlpha2) as RegExp;
 
-const reKUpperCase = exactly("\\").and("K").and(reFloat);
+const reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha3_value"));
 
-const reKf = exactly("\\").and("kf").and(reFloat);
+export const regexAlpha3 = createRegExp(reAlpha3) as RegExp;
 
-const reKo = exactly("\\").and("ko").and(reFloat);
+const reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha4_value"));
 
-const reQ = exactly("\\").and("q").and(reFloat);
+export const regexAlpha4 = createRegExp(reAlpha4) as RegExp;
 
-const reS = exactly("\\").and("s").and(reFloat);
+const reKLowerCase = exactly("\\").and("k").and(reFloat.groupedAs("k_lower_case_value"));
 
-const reU = exactly("\\").and("u").and(reFloat);
+export const regexKLowerCase = createRegExp(reKLowerCase) as RegExp;
 
-const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
+const reKUpperCase = exactly("\\").and("K").and(reFloat.groupedAs("k_upper_case_value"));
 
-const reFe = exactly("\\").and("fe").and(reFloat);
+export const regexKUpperCase = createRegExp(reKUpperCase) as RegExp;
 
-const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
+const reKf = exactly("\\").and("kf").and(reFloat.groupedAs("kf_value"));
 
-const reP = exactly("\\").and("p").and(reFloat);
+export const regexKf = createRegExp(reKf) as RegExp;
 
-const rePbo = exactly("\\").and("pbo").and(reFloat);
+const reKo = exactly("\\").and("ko").and(reFloat.groupedAs("ko_value"));
 
-const reAn = exactly("\\").and("an").and(reFloat);
+export const regexKo = createRegExp(reKo) as RegExp;
 
-const reB = exactly("\\").and("b").and(reFloat);
+const reQ = exactly("\\").and("q").and(reFloat.groupedAs("q_value"));
 
-const reBe = exactly("\\").and("be").and(reFloat);
+export const regexQ = createRegExp(reQ) as RegExp;
 
-const reBlur = exactly("\\").and("blur").and(reFloat);
+const reS = exactly("\\").and("s").and(reFloat.groupedAs("s_value"));
 
-const reBord = exactly("\\").and("bord").and(reFloat);
+export const regexS = createRegExp(reS) as RegExp;
 
-const reXbord = exactly("\\").and("xbord").and(reFloat);
+const reU = exactly("\\").and("u").and(reFloat.groupedAs("u_value"));
 
-const reYbord = exactly("\\").and("ybord").and(reFloat);
+export const regexU = createRegExp(reU) as RegExp;
 
-const reShad = exactly("\\").and("shad").and(reFloat);
+const reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")).groupedAs("r_value"));
 
-const reXshad = exactly("\\").and("xshad").and(reFloat);
+export const regexR = createRegExp(reR) as RegExp;
 
-const reYshad = exactly("\\").and("yshad").and(reFloat);
+const reFe = exactly("\\").and("fe").and(reFloat.groupedAs("fe_value"));
 
-const reFax = exactly("\\").and("fax").and(reFloat);
+export const regexFe = createRegExp(reFe) as RegExp;
 
-const reFay = exactly("\\").and("fay").and(reFloat);
+const reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")).groupedAs("fn_value"));
 
-const reFscx = exactly("\\").and("fscx").and(reFloat);
+export const regexFn = createRegExp(reFn) as RegExp;
 
-const reFscy = exactly("\\").and("fscy").and(reFloat);
+const reP = exactly("\\").and("p").and(reFloat.groupedAs("p_value"));
 
-const reFsp = exactly("\\").and("fsp").and(reFloat);
+export const regexP = createRegExp(reP) as RegExp;
 
-const reFr = exactly("\\").and("fr").and(reFloat);
+const rePbo = exactly("\\").and("pbo").and(reFloat.groupedAs("pbo_value"));
 
-const reFrx = exactly("\\").and("frx").and(reFloat);
+export const regexPbo = createRegExp(rePbo) as RegExp;
 
-const reFry = exactly("\\").and("fry").and(reFloat);
+const reAn = exactly("\\").and("an").and(reFloat.groupedAs("an_value"));
 
-const reFrz = exactly("\\").and("frz").and(reFloat);
+export const regexAn = createRegExp(reAn) as RegExp;
 
-const reI = exactly("\\").and("i").and(exactly("1").or("0"));
+const reB = exactly("\\").and("b").and(reFloat.groupedAs("b_value"));
 
-const reFs = exactly("\\").and("fs").and(reFloat);
+export const regexB = createRegExp(reB) as RegExp;
+
+const reBe = exactly("\\").and("be").and(reFloat.groupedAs("be_value"));
+
+export const regexBe = createRegExp(reBe) as RegExp;
+
+const reBlur = exactly("\\").and("blur").and(reFloat.groupedAs("blur_value"));
+
+export const regexBlur = createRegExp(reBlur) as RegExp;
+
+const reBord = exactly("\\").and("bord").and(reFloat.groupedAs("bord_value"));
+
+export const regexBord = createRegExp(reBord) as RegExp;
+
+const reXbord = exactly("\\").and("xbord").and(reFloat.groupedAs("xbord_value"));
+
+export const regexXbord = createRegExp(reXbord) as RegExp;
+
+const reYbord = exactly("\\").and("ybord").and(reFloat.groupedAs("ybord_value"));
+
+export const regexYbord = createRegExp(reYbord) as RegExp;
+
+const reShad = exactly("\\").and("shad").and(reFloat.groupedAs("shad_value"));
+
+export const regexShad = createRegExp(reShad) as RegExp;
+
+const reXshad = exactly("\\").and("xshad").and(reFloat.groupedAs("xshad_value"));
+
+export const regexXshad = createRegExp(reXshad) as RegExp;
+
+const reYshad = exactly("\\").and("yshad").and(reFloat.groupedAs("yshad_value"));
+
+export const regexYshad = createRegExp(reYshad) as RegExp;
+
+const reFax = exactly("\\").and("fax").and(reFloat.groupedAs("fax_value"));
+
+export const regexFax = createRegExp(reFax) as RegExp;
+
+const reFay = exactly("\\").and("fay").and(reFloat.groupedAs("fay_value"));
+
+export const regexFay = createRegExp(reFay) as RegExp;
+
+const reFscx = exactly("\\").and("fscx").and(reFloat.groupedAs("fscx_value"));
+
+export const regexFscx = createRegExp(reFscx) as RegExp;
+
+const reFscy = exactly("\\").and("fscy").and(reFloat.groupedAs("fscy_value"));
+
+export const regexFscy = createRegExp(reFscy) as RegExp;
+
+const reFsp = exactly("\\").and("fsp").and(reFloat.groupedAs("fsp_value"));
+
+export const regexFsp = createRegExp(reFsp) as RegExp;
+
+const reFr = exactly("\\").and("fr").and(reFloat.groupedAs("fr_value"));
+
+export const regexFr = createRegExp(reFr) as RegExp;
+
+const reFrx = exactly("\\").and("frx").and(reFloat.groupedAs("frx_value"));
+
+export const regexFrx = createRegExp(reFrx) as RegExp;
+
+const reFry = exactly("\\").and("fry").and(reFloat.groupedAs("fry_value"));
+
+export const regexFry = createRegExp(reFry) as RegExp;
+
+const reFrz = exactly("\\").and("frz").and(reFloat.groupedAs("frz_value"));
+
+export const regexFrz = createRegExp(reFrz) as RegExp;
+
+const reI = exactly("\\").and("i").and(exactly("1").or("0").groupedAs("i_value"));
+
+export const regexI = createRegExp(reI) as RegExp;
+
+const reFs = exactly("\\").and("fs").and(reFloat.groupedAs("fs_value"));
+
+export const regexFs = createRegExp(reFs) as RegExp;
 
 const rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 
@@ -201,7 +279,7 @@ const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charN
 
 export const regexIclip = createRegExp(reIclip) as RegExp;
 
-const reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")));
+const reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")).groupedAs("unknown_value"));
 
 const unitTags = reBe
     .or(reAlpha)
