@@ -5,4 +5,8 @@
     "typescript.format.semicolons": "insert",
     "liveServer.settings.port": 3000,
     "liveServer.settings.root": "/",
+    "eslint.enable": true,
+    "eslint.validate": [
+        "typescript",
+    ],
 }

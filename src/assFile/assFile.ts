@@ -1,8 +1,8 @@
 import { parseLine } from "../asu";
-import { Alignment, Alignments } from "./alignment";
+import { Alignment } from "./alignment";
 import { AttachedFont } from "./attachedFont";
 import { AttachedGraphic } from "./attachedGraphic";
-import { Encoding, Encodings } from "./encoding";
+import { Encoding } from "./encoding";
 import { SectionEvents, newSectionEvents, sectionEventsToString } from "./sectionEvents";
 import { SectionExtraData, newSectionExtraData, sectionExtraDataToString } from "./sectionExtraData";
 import { SectionFonts, newSectionFonts, sectionFontsToString } from "./sectionFonts";

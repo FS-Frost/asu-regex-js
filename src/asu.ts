@@ -1079,22 +1079,24 @@ export function contentEffectToString(item: ContentEffect): string {
     for (const tag of item.tags) {
         switch (tag.name) {
             case TagName.t:
-                const subeffect: ContentEffect = {
-                    name: "effect",
-                    tags: tag.tags,
-                };
+                {
+                    const subeffect: ContentEffect = {
+                        name: "effect",
+                        tags: tag.tags,
+                    };
 
-                const subcontent = contentEffectToString(subeffect);
-                if (tag.t1 !== null && tag.t2 !== null && tag.accel !== null) {
-                    s += `\\t(${tag.t1},${tag.t2},${tag.accel},${subcontent})`;
-                } else if (tag.t1 !== null && tag.t2 !== null && tag.accel === null) {
-                    s += `\\t(${tag.t1},${tag.t2},${subcontent})`;
-                } else if (tag.accel !== null) {
-                    s += `\\t(${tag.accel},${subcontent})`;
-                } else {
-                    s += `\\t(${subcontent})`;
+                    const subcontent = contentEffectToString(subeffect);
+                    if (tag.t1 !== null && tag.t2 !== null && tag.accel !== null) {
+                        s += `\\t(${tag.t1},${tag.t2},${tag.accel},${subcontent})`;
+                    } else if (tag.t1 !== null && tag.t2 !== null && tag.accel === null) {
+                        s += `\\t(${tag.t1},${tag.t2},${subcontent})`;
+                    } else if (tag.accel !== null) {
+                        s += `\\t(${tag.accel},${subcontent})`;
+                    } else {
+                        s += `\\t(${subcontent})`;
+                    }
+                    break;
                 }
-                break;
 
             case TagName.pos:
             case TagName.org:
@@ -1139,11 +1141,13 @@ export function contentEffectToString(item: ContentEffect): string {
             case TagName.color2:
             case TagName.color3:
             case TagName.color4:
-                const hexBlue = numberToHex(tag.blue);
-                const hexGreen = numberToHex(tag.green);
-                const hexRed = numberToHex(tag.red);
-                s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
-                break;
+                {
+                    const hexBlue = numberToHex(tag.blue);
+                    const hexGreen = numberToHex(tag.green);
+                    const hexRed = numberToHex(tag.red);
+                    s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
+                    break;
+                }
 
             case TagName.text:
             case TagName.unknown:
@@ -1175,7 +1179,7 @@ export function contentsToString(items: ContentItem[]): string {
 }
 
 export function mergeNeighboringEffects(items: ContentItem[]): void {
-    let indexToRemove: number[] = [];
+    const indexToRemove: number[] = [];
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (item.name != "effect") {

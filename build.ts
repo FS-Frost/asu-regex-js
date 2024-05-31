@@ -23,7 +23,7 @@ if (await fs.exists(buildDir)) {
     });
 }
 
-let config: BuildConfig = {
+const config: BuildConfig = {
     entrypoints: ["./src/asu.ts"],
     outdir: "./build",
     sourcemap: "external",

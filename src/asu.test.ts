@@ -2504,7 +2504,7 @@ test("update t(fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
-    let tagT = asu.findT(items);
+    const tagT = asu.findT(items);
     expect(tagT).not.toBeNull();
     if (tagT == null) {
         throw "null tag t";
@@ -2620,7 +2620,7 @@ test("update t(accel,fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
-    let tagT = asu.findT(items);
+    const tagT = asu.findT(items);
     expect(tagT).not.toBeNull();
     if (tagT == null) {
         throw "null tag t";
@@ -2736,7 +2736,7 @@ test("update t(t1,t2,fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(20,120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
-    let tagT = asu.findT(items);
+    const tagT = asu.findT(items);
     expect(tagT).not.toBeNull();
     if (tagT == null) {
         throw "null tag t";
@@ -2861,7 +2861,7 @@ test("update t(t1,t2,accel,fx)", () => {
     const text = "{\\t(\\fs16)}Kirino-san";
     const expectedText = "{\\t(20,420,120,\\fs16\\pos(12,-12.14))}Kirino-san";
     const items = asu.parseContent(text);
-    let tagT = asu.findT(items);
+    const tagT = asu.findT(items);
     expect(tagT).not.toBeNull();
     if (tagT == null) {
         throw "null tag t";

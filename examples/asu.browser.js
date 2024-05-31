@@ -5184,7 +5184,7 @@ function contentEffectToString(item) {
   let s = "";
   for (const tag of item.tags) {
     switch (tag.name) {
-      case TagName.t:
+      case TagName.t: {
         const subeffect = {
           name: "effect",
           tags: tag.tags
@@ -5200,6 +5200,7 @@ function contentEffectToString(item) {
           s += `\\t(${subcontent})`;
         }
         break;
+      }
       case TagName.pos:
       case TagName.org:
         s += `\\${tag.name}(${tag.x},${tag.y})`;
@@ -5234,12 +5235,13 @@ function contentEffectToString(item) {
       case TagName.color1:
       case TagName.color2:
       case TagName.color3:
-      case TagName.color4:
+      case TagName.color4: {
         const hexBlue = numberToHex(tag.blue);
         const hexGreen = numberToHex(tag.green);
         const hexRed = numberToHex(tag.red);
         s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
         break;
+      }
       case TagName.text:
       case TagName.unknown:
         s += tag.value;
@@ -5263,7 +5265,7 @@ function contentsToString(items) {
   return s;
 }
 function mergeNeighboringEffects(items) {
-  let indexToRemove = [];
+  const indexToRemove = [];
   for (let i = 0;i < items.length; i++) {
     const item = items[i];
     if (item.name != "effect") {
@@ -6863,4 +6865,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=8D2124BA7F3BF30F64756e2164756e21
+//# debugId=14770D915F2E061E64756e2164756e21
