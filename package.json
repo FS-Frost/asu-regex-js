@@ -5,7 +5,7 @@
   "scripts": {
     "bundle": "bun run build.ts",
     "test": "bun test",
-    "docs": "bunx typedoc src/asu.ts --out ./examples/docs",
+    "docs": "bunx typedoc",
     "publish": "bun ./node_modules/jsr/dist/bin.js publish",
     "test:publish": "bun ./node_modules/jsr/dist/bin.js publish --dry-run"
   },

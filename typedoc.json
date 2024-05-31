@@ -1,0 +1,14 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/asu.ts",
+    ],
+    "out": "./examples/docs",
+    "titleLink": "https://github.com/FS-Frost/asu-regex-js",
+    "navigationLinks": {
+        "GitHub Repository": "https://github.com/FS-Frost/asu-regex-js",
+        "Documentation": "https://fs-frost.github.io/asu-regex-js/docs",
+        "Playground": "https://fs-frost.github.io/asu-regex-js/",
+        "Bundles": "https://fs-frost.github.io/asu-regex-js/bundles",
+    },
+}
