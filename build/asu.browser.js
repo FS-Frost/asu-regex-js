@@ -124,7 +124,8 @@ var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).a
 var regexLine = createRegExp(reLine);
 var reInt = exactly("-").optionally().and(oneOrMore(digit));
 var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
-var reA = exactly("\\").and("a").and(reFloat);
+var reA = exactly("\\").and("a").and(reFloat.groupedAs("a_value"));
+var regexA = createRegExp(reA);
 var reHex = letter.or(digit).times(2);
 var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&"));
 var reColor = exactly("\\c").and(reColorBGR);
@@ -138,44 +139,82 @@ var regexColor1 = createRegExp(reColor1);
 var regexColor2 = createRegExp(reColor2);
 var regexColor3 = createRegExp(reColor3);
 var regexColor4 = createRegExp(reColor4);
-var reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")));
-var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")));
-var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")));
-var reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")));
-var reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")));
-var reKLowerCase = exactly("\\").and("k").and(reFloat);
-var reKUpperCase = exactly("\\").and("K").and(reFloat);
-var reKf = exactly("\\").and("kf").and(reFloat);
-var reKo = exactly("\\").and("ko").and(reFloat);
-var reQ = exactly("\\").and("q").and(reFloat);
-var reS = exactly("\\").and("s").and(reFloat);
-var reU = exactly("\\").and("u").and(reFloat);
-var reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")));
-var reFe = exactly("\\").and("fe").and(reFloat);
-var reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")));
-var reP = exactly("\\").and("p").and(reFloat);
-var rePbo = exactly("\\").and("pbo").and(reFloat);
-var reAn = exactly("\\").and("an").and(reFloat);
-var reB = exactly("\\").and("b").and(reFloat);
-var reBe = exactly("\\").and("be").and(reFloat);
-var reBlur = exactly("\\").and("blur").and(reFloat);
-var reBord = exactly("\\").and("bord").and(reFloat);
-var reXbord = exactly("\\").and("xbord").and(reFloat);
-var reYbord = exactly("\\").and("ybord").and(reFloat);
-var reShad = exactly("\\").and("shad").and(reFloat);
-var reXshad = exactly("\\").and("xshad").and(reFloat);
-var reYshad = exactly("\\").and("yshad").and(reFloat);
-var reFax = exactly("\\").and("fax").and(reFloat);
-var reFay = exactly("\\").and("fay").and(reFloat);
-var reFscx = exactly("\\").and("fscx").and(reFloat);
-var reFscy = exactly("\\").and("fscy").and(reFloat);
-var reFsp = exactly("\\").and("fsp").and(reFloat);
-var reFr = exactly("\\").and("fr").and(reFloat);
-var reFrx = exactly("\\").and("frx").and(reFloat);
-var reFry = exactly("\\").and("fry").and(reFloat);
-var reFrz = exactly("\\").and("frz").and(reFloat);
-var reI = exactly("\\").and("i").and(exactly("1").or("0"));
-var reFs = exactly("\\").and("fs").and(reFloat);
+var reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")).groupedAs("alpha_value"));
+var regexAlpha = createRegExp(reAlpha);
+var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha1_value"));
+var regexAlpha1 = createRegExp(reAlpha1);
+var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha2_value"));
+var regexAlpha2 = createRegExp(reAlpha2);
+var reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha3_value"));
+var regexAlpha3 = createRegExp(reAlpha3);
+var reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha4_value"));
+var regexAlpha4 = createRegExp(reAlpha4);
+var reKLowerCase = exactly("\\").and("k").and(reFloat.groupedAs("k_lower_case_value"));
+var regexKLowerCase = createRegExp(reKLowerCase);
+var reKUpperCase = exactly("\\").and("K").and(reFloat.groupedAs("k_upper_case_value"));
+var regexKUpperCase = createRegExp(reKUpperCase);
+var reKf = exactly("\\").and("kf").and(reFloat.groupedAs("kf_value"));
+var regexKf = createRegExp(reKf);
+var reKo = exactly("\\").and("ko").and(reFloat.groupedAs("ko_value"));
+var regexKo = createRegExp(reKo);
+var reQ = exactly("\\").and("q").and(reFloat.groupedAs("q_value"));
+var regexQ = createRegExp(reQ);
+var reS = exactly("\\").and("s").and(reFloat.groupedAs("s_value"));
+var regexS = createRegExp(reS);
+var reU = exactly("\\").and("u").and(reFloat.groupedAs("u_value"));
+var regexU = createRegExp(reU);
+var reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")).groupedAs("r_value"));
+var regexR = createRegExp(reR);
+var reFe = exactly("\\").and("fe").and(reFloat.groupedAs("fe_value"));
+var regexFe = createRegExp(reFe);
+var reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")).groupedAs("fn_value"));
+var regexFn = createRegExp(reFn);
+var reP = exactly("\\").and("p").and(reFloat.groupedAs("p_value"));
+var regexP = createRegExp(reP);
+var rePbo = exactly("\\").and("pbo").and(reFloat.groupedAs("pbo_value"));
+var regexPbo = createRegExp(rePbo);
+var reAn = exactly("\\").and("an").and(reFloat.groupedAs("an_value"));
+var regexAn = createRegExp(reAn);
+var reB = exactly("\\").and("b").and(reFloat.groupedAs("b_value"));
+var regexB = createRegExp(reB);
+var reBe = exactly("\\").and("be").and(reFloat.groupedAs("be_value"));
+var regexBe = createRegExp(reBe);
+var reBlur = exactly("\\").and("blur").and(reFloat.groupedAs("blur_value"));
+var regexBlur = createRegExp(reBlur);
+var reBord = exactly("\\").and("bord").and(reFloat.groupedAs("bord_value"));
+var regexBord = createRegExp(reBord);
+var reXbord = exactly("\\").and("xbord").and(reFloat.groupedAs("xbord_value"));
+var regexXbord = createRegExp(reXbord);
+var reYbord = exactly("\\").and("ybord").and(reFloat.groupedAs("ybord_value"));
+var regexYbord = createRegExp(reYbord);
+var reShad = exactly("\\").and("shad").and(reFloat.groupedAs("shad_value"));
+var regexShad = createRegExp(reShad);
+var reXshad = exactly("\\").and("xshad").and(reFloat.groupedAs("xshad_value"));
+var regexXshad = createRegExp(reXshad);
+var reYshad = exactly("\\").and("yshad").and(reFloat.groupedAs("yshad_value"));
+var regexYshad = createRegExp(reYshad);
+var reFax = exactly("\\").and("fax").and(reFloat.groupedAs("fax_value"));
+var regexFax = createRegExp(reFax);
+var reFay = exactly("\\").and("fay").and(reFloat.groupedAs("fay_value"));
+var regexFay = createRegExp(reFay);
+var reFscx = exactly("\\").and("fscx").and(reFloat.groupedAs("fscx_value"));
+var regexFscx = createRegExp(reFscx);
+var reFscy = exactly("\\").and("fscy").and(reFloat.groupedAs("fscy_value"));
+var regexFscy = createRegExp(reFscy);
+var reFsp = exactly("\\").and("fsp").and(reFloat.groupedAs("fsp_value"));
+var regexFsp = createRegExp(reFsp);
+var reFr = exactly("\\").and("fr").and(reFloat.groupedAs("fr_value"));
+var regexFr = createRegExp(reFr);
+var reFrx = exactly("\\").and("frx").and(reFloat.groupedAs("frx_value"));
+var regexFrx = createRegExp(reFrx);
+var reFry = exactly("\\").and("fry").and(reFloat.groupedAs("fry_value"));
+var regexFry = createRegExp(reFry);
+var reFrz = exactly("\\").and("frz").and(reFloat.groupedAs("frz_value"));
+var regexFrz = createRegExp(reFrz);
+var reI = exactly("\\").and("i").and(exactly("1").or("0").groupedAs("i_value"));
+var regexI = createRegExp(reI);
+var reFs = exactly("\\").and("fs").and(reFloat.groupedAs("fs_value"));
+var regexFs = createRegExp(reFs);
 var rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
 var regexPos = createRegExp(rePos);
 var reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
@@ -191,7 +230,7 @@ var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn
 var regexClip = createRegExp(reClip);
 var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
 var regexIclip = createRegExp(reIclip);
-var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")));
+var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")).groupedAs("unknown_value"));
 var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase).or(reUnknown);
 var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
 var regexTags = createRegExp(unitTags);
@@ -4271,6 +4310,20 @@ function sectionProjectGarbageToString(info) {
   }
   return s;
 }
+var ProjectGarbagePropertyAutomationScripts = "Automation Scripts";
+var ProjectGarbagePropertyExportFilters = "Export Filters";
+var ProjectGarbagePropertyExportEncoding = "Export Encoding";
+var ProjectGarbagePropertyLastStyleStorage = "Last Style Storage";
+var ProjectGarbagePropertyAudioFile = "Audio File";
+var ProjectGarbagePropertyVideoFile = "Video File";
+var ProjectGarbagePropertyTimecodesFile = "Timecodes File";
+var ProjectGarbagePropertyKeyframesFile = "Keyframes File";
+var ProjectGarbagePropertyVideoARMode = "Video AR Mode";
+var ProjectGarbagePropertyVideoARValue = "Video AR Value";
+var ProjectGarbagePropertyVideoZoomPercent = "Video Zoom Percent";
+var ProjectGarbagePropertyScrollPosition = "Scroll Position";
+var ProjectGarbagePropertyActiveLine = "Active Line";
+var ProjectGarbagePropertyVideoPosition = "Video Position";
 
 // src/assFile/sectionScriptInfo.ts
 function newScriptInfo() {
@@ -4289,6 +4342,20 @@ function sectionScriptInfoToString(info) {
   }
   return s;
 }
+var ScriptInfoPropertyTitle = "Title";
+var ScriptInfoPropertyScriptType = "ScriptType";
+var ScriptInfoPropertyWrapStyle = "WrapStyle";
+var ScriptInfoPropertyPlayResX = "PlayResX";
+var ScriptInfoPropertyPlayResY = "PlayResY";
+var ScriptInfoPropertyScaledBorderAndShadow = "ScaledBorderAndShadow";
+var ScriptInfoPropertyYCbCrMatrix = "YCbCr Matrix";
+var ScriptInfoPropertyOriginalScript = "Original Script";
+var ScriptInfoPropertyOriginalTranslation = "Original Translation";
+var ScriptInfoPropertyOriginalEditing = "Original Editing";
+var ScriptInfoPropertyOriginalTiming = "Original Timing";
+var ScriptInfoPropertySynchPoint = "Synch Point";
+var ScriptInfoPropertyScriptUpdatedBy = "Script Updated By";
+var ScriptInfoPropertyUpdateDetails = "Update Details";
 
 // src/assFile/style.ts
 function styleToString(style) {
@@ -4327,6 +4394,42 @@ function newSectionStyles() {
   return {
     format: "Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
     styles: []
+  };
+}
+function generateDefaultSectionStyles() {
+  return {
+    format: "Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+    styles: [
+      {
+        name: "Default",
+        fontName: "Arial",
+        fontSize: 20,
+        primaryAlpha: "&H00FFFFFF",
+        primaryColor: "&H000000FF",
+        secondaryAlpha: "&H00000000",
+        secondaryColor: "&H00000000",
+        outlineAlpha: "",
+        outlineColor: "",
+        backAlpha: "",
+        backColor: "",
+        bold: 0,
+        italic: 0,
+        underline: 0,
+        strikeOut: 0,
+        scaleX: 100,
+        scaleY: 100,
+        spacing: 0,
+        angle: 0,
+        borderStyle: 1,
+        outline: 2,
+        shadow: 2,
+        alignment: Alignments.DOWN_CENTER,
+        marginLeft: 10,
+        marginRight: 10,
+        marginVertical: 10,
+        encoding: Encodings.DEFAULT
+      }
+    ]
   };
 }
 function sectionStylesToString(info) {
@@ -4675,12 +4778,12 @@ function parseTags(text, tags) {
   }
   const matchText = text.match(regexText);
   if (matchText && matchText.length > 0) {
-    const value = matchText[0];
+    const value2 = matchText[0];
     tags.push({
       name: TagName.text,
-      value
+      value: value2
     });
-    text = text.substring(value.length);
+    text = text.substring(value2.length);
     if (text.length > 0) {
       parseTags(text, tags);
     }
@@ -4690,15 +4793,23 @@ function parseTags(text, tags) {
   if (!matchUnitTags || matchUnitTags.length == 0) {
     return tags;
   }
-  if (tagNameSource.startsWith(TagName.move)) {
-    const match = matchUnitTags[0].match(regexMove)?.groups;
+  function parseNextTag(tags2, parsedTag, parsedTextLength) {
+    tags2.push(parsedTag);
+    text = text.substring(parsedTextLength);
+    if (text.length > 0) {
+      parseTags(text, tags2);
+    }
+    return tags2;
+  }
+  let match = matchUnitTags[0].match(regexMove)?.groups;
+  if (match != null) {
     const x1 = Number(match?.move_x1 ?? "0");
     const y1 = Number(match?.move_y1 ?? "0");
     const x2 = Number(match?.move_x2 ?? "0");
     const y2 = Number(match?.move_y2 ?? "0");
     const t1 = match?.move_t1 ? Number(match.move_t1) : null;
     const t2 = match?.move_t2 ? Number(match.move_t2) : null;
-    const tag = {
+    const tag2 = {
       name: TagName.move,
       x1,
       y1,
@@ -4707,87 +4818,109 @@ function parseTags(text, tags) {
       t1,
       t2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.alpha)) {
-    const value = matchUnitTags[0].substring(1 + TagName.alpha.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAlpha)?.groups;
+  if (match != null) {
+    const value2 = match?.alpha_value ?? "";
+    const tag2 = {
       name: TagName.alpha,
-      value
+      value: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.xbord)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.xbord.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexXbord)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.xbord_value ?? "0");
+    const tag2 = {
       name: TagName.xbord,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.ybord)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.ybord.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexYbord)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.ybord_value ?? "0");
+    const tag2 = {
       name: TagName.ybord,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.xshad)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.xshad.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexXshad)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.xshad_value ?? "0");
+    const tag2 = {
       name: TagName.xshad,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.yshad)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.yshad.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexYshad)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.yshad_value ?? "0");
+    const tag2 = {
       name: TagName.yshad,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.iclip)) {
-    const match = matchUnitTags[0].match(regexIclip)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexIclip)?.groups;
+  if (match != null) {
     const args = match?.iclip_args ?? "";
-    const tag = {
+    const tag2 = {
       name: TagName.iclip,
       drawCommands: args
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.blur)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.blur.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexBlur)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.blur_value ?? "0");
+    const tag2 = {
       name: TagName.blur,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.bord)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.bord.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexBord)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.bord_value ?? "0");
+    const tag2 = {
       name: TagName.bord,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.shad)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.shad.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexShad)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.shad_value ?? "0");
+    const tag2 = {
       name: TagName.shad,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fscx)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fscx.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFscx)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fscx_value ?? "0");
+    const tag2 = {
       name: TagName.fscx,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fscy)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fscy.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFscy)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fscy_value ?? "0");
+    const tag2 = {
       name: TagName.fscy,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fade)) {
-    const match = matchUnitTags[0].match(regexFade)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFade)?.groups;
+  if (match != null) {
     const alpha1 = Number(match?.fade_alpha1 ?? "0");
     const alpha2 = Number(match?.fade_alpha2 ?? "0");
     const alpha3 = Number(match?.fade_alpha3 ?? "0");
@@ -4795,7 +4928,7 @@ function parseTags(text, tags) {
     const t2 = Number(match?.fade_t2 ?? "0");
     const t3 = Number(match?.fade_t3 ?? "0");
     const t4 = Number(match?.fade_t4 ?? "0");
-    const tag = {
+    const tag2 = {
       name: TagName.fade,
       alpha1,
       alpha2,
@@ -4805,321 +4938,382 @@ function parseTags(text, tags) {
       t3,
       t4
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.clip)) {
-    const match = matchUnitTags[0].match(regexClip)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexClip)?.groups;
+  if (match != null) {
     const args = match?.clip_args ?? "";
-    const tag = {
+    const tag2 = {
       name: TagName.clip,
       drawCommands: args
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fsp)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fsp.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFsp)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fsp_value ?? "0");
+    const tag2 = {
       name: TagName.fsp,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.pos)) {
-    const match = matchUnitTags[0].match(regexPos)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexPos)?.groups;
+  if (match != null) {
     const x = Number(match?.pos_x ?? "0");
     const y = Number(match?.pos_y ?? "0");
-    const tag = {
+    const tag2 = {
       name: TagName.pos,
       x,
       y
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.org)) {
-    const match = matchUnitTags[0].match(regexOrg)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexOrg)?.groups;
+  if (match != null) {
     const x = Number(match?.org_x ?? "0");
     const y = Number(match?.org_y ?? "0");
-    const tag = {
+    const tag2 = {
       name: TagName.org,
       x,
       y
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fad)) {
-    const match = matchUnitTags[0].match(regexFad)?.groups;
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFad)?.groups;
+  if (match != null) {
     const fadeIn = Number(match?.in ?? "0");
     const fadeOut = Number(match?.out ?? "0");
-    const tag = {
+    const tag2 = {
       name: TagName.fad,
       in: fadeIn,
       out: fadeOut
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.frx)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.frx.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFrx)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.frx_value ?? "0");
+    const tag2 = {
       name: TagName.frx,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fry)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fry.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFry)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fry_value ?? "0");
+    const tag2 = {
       name: TagName.fry,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.frz)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.frz.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFrz)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.frz_value ?? "0");
+    const tag2 = {
       name: TagName.frz,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fax)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fax.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFax)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fax_value ?? "0");
+    const tag2 = {
       name: TagName.fax,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fay)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fay.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFay)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fay_value ?? "0");
+    const tag2 = {
       name: TagName.fay,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.pbo)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.pbo.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexPbo)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.pbo_value ?? "0");
+    const tag2 = {
       name: TagName.pbo,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fe)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fe.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFe)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fe_value ?? "0");
+    const tag2 = {
       name: TagName.fe,
-      encodingId: Number(value)
+      encodingId: Number(value2)
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fn)) {
-    const value = matchUnitTags[0].substring(1 + TagName.fn.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFn)?.groups;
+  if (match != null) {
+    const value2 = match?.fn_value ?? "";
+    const tag2 = {
       name: TagName.fn,
-      font: value
+      font: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.an)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.be.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAn)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.an_value ?? "0");
+    const tag2 = {
       name: TagName.an,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.be)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.be.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexBe)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.be_value ?? "0");
+    const tag2 = {
       name: TagName.be,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fr)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fr.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFr)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fr_value ?? "0");
+    const tag2 = {
       name: TagName.fr,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.fs)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.fs.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexFs)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.fs_value ?? "0");
+    const tag2 = {
       name: TagName.fs,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.ko)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.ko.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexKo)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.ko_value ?? "0");
+    const tag2 = {
       name: TagName.ko,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.kf)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.kf.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexKf)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.kf_value ?? "0");
+    const tag2 = {
       name: TagName.kf,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.color1)) {
-    const groups = matchUnitTags[0].match(regexColor1)?.groups;
-    const blue = Number(hexToNumber(groups?.color1_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color1_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color1_bgr_red ?? "0"));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexColor1)?.groups;
+  if (match != null) {
+    const blue = Number(hexToNumber(match?.color1_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(match?.color1_bgr_green ?? "0"));
+    const red = Number(hexToNumber(match?.color1_bgr_red ?? "0"));
+    const tag2 = {
       name: TagName.color1,
       blue,
       green,
       red
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.color2)) {
-    const groups = matchUnitTags[0].match(regexColor2)?.groups;
-    const blue = Number(hexToNumber(groups?.color2_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color2_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color2_bgr_red ?? "0"));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexColor2)?.groups;
+  if (match != null) {
+    const blue = Number(hexToNumber(match?.color2_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(match?.color2_bgr_green ?? "0"));
+    const red = Number(hexToNumber(match?.color2_bgr_red ?? "0"));
+    const tag2 = {
       name: TagName.color2,
       blue,
       green,
       red
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.color3)) {
-    const groups = matchUnitTags[0].match(regexColor3)?.groups;
-    const blue = Number(hexToNumber(groups?.color3_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color3_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color3_bgr_red ?? "0"));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexColor3)?.groups;
+  if (match != null) {
+    const blue = Number(hexToNumber(match?.color3_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(match?.color3_bgr_green ?? "0"));
+    const red = Number(hexToNumber(match?.color3_bgr_red ?? "0"));
+    const tag2 = {
       name: TagName.color3,
       blue,
       green,
       red
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.color4)) {
-    const groups = matchUnitTags[0].match(regexColor4)?.groups;
-    const blue = Number(hexToNumber(groups?.color4_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color4_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color4_bgr_red ?? "0"));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexColor4)?.groups;
+  if (match != null) {
+    const blue = Number(hexToNumber(match?.color4_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(match?.color4_bgr_green ?? "0"));
+    const red = Number(hexToNumber(match?.color4_bgr_red ?? "0"));
+    const tag2 = {
       name: TagName.color4,
       blue,
       green,
       red
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.alpha1)) {
-    const value = matchUnitTags[0].substring(1 + TagName.alpha1.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAlpha1)?.groups;
+  if (match != null) {
+    const value2 = match.alpha1_value ?? "";
+    const tag2 = {
       name: TagName.alpha1,
-      value
+      value: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.alpha2)) {
-    const value = matchUnitTags[0].substring(1 + TagName.alpha2.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAlpha2)?.groups;
+  if (match != null) {
+    const value2 = match.alpha2_value ?? "";
+    const tag2 = {
       name: TagName.alpha2,
-      value
+      value: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.alpha3)) {
-    const value = matchUnitTags[0].substring(1 + TagName.alpha3.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAlpha3)?.groups;
+  if (match != null) {
+    const value2 = match.alpha3_value ?? "";
+    const tag2 = {
       name: TagName.alpha3,
-      value
+      value: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.alpha4)) {
-    const value = matchUnitTags[0].substring(1 + TagName.alpha4.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexAlpha4)?.groups;
+  if (match != null) {
+    const value2 = match.alpha4_value ?? "";
+    const tag2 = {
       name: TagName.alpha4,
-      value
+      value: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.kLowerCase)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.kLowerCase.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexKLowerCase)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.k_lower_case_value ?? "0");
+    const tag2 = {
       name: TagName.kLowerCase,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.kUpperCase)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.kUpperCase.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexKUpperCase)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.k_upper_case_value ?? "0");
+    const tag2 = {
       name: TagName.kUpperCase,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.q)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.q.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexQ)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.q_value ?? "0");
+    const tag2 = {
       name: TagName.q,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.s)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.s.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexS)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.s_value ?? "0");
+    const tag2 = {
       name: TagName.s,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.u)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.u.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexU)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.u_value ?? "0");
+    const tag2 = {
       name: TagName.u,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.r)) {
-    const value = matchUnitTags[0].substring(1 + TagName.r.length);
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexR)?.groups;
+  if (match != null) {
+    const value2 = match?.r_value ?? "";
+    const tag2 = {
       name: TagName.r,
-      style: value
+      style: value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.p)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.p.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexP)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.p_value ?? "0");
+    const tag2 = {
       name: TagName.p,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.i)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.i.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexI)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.i_value ?? "0");
+    const tag2 = {
       name: TagName.i,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.color)) {
-    const groups = matchUnitTags[0].match(regexColor)?.groups;
-    const blue = Number(hexToNumber(groups?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(groups?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(groups?.color_bgr_red ?? "0"));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexColor)?.groups;
+  if (match != null) {
+    const blue = Number(hexToNumber(match?.color_bgr_blue ?? "0"));
+    const green = Number(hexToNumber(match?.color_bgr_green ?? "0"));
+    const red = Number(hexToNumber(match?.color_bgr_red ?? "0"));
+    const tag2 = {
       name: TagName.color,
       blue,
       green,
       red
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.b)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.b.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexB)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.b_value ?? "0");
+    const tag2 = {
       name: TagName.b,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else if (tagNameSource.startsWith(TagName.a)) {
-    const value = Number(matchUnitTags[0].substring(1 + TagName.a.length));
-    const tag = {
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  }
+  match = matchUnitTags[0].match(regexA)?.groups;
+  if (match != null) {
+    const value2 = Number(match?.a_value ?? "0");
+    const tag2 = {
       name: TagName.a,
-      value: Number.isNaN(value) ? 0 : value
+      value: Number.isNaN(value2) ? 0 : value2
     };
-    tags.push(tag);
-  } else {
-    const value = matchUnitTags[0];
-    const tag = {
-      name: TagName.unknown,
-      value
-    };
-    tags.push(tag);
+    return parseNextTag(tags, tag2, matchUnitTags[0].length);
   }
-  text = text.substring(matchUnitTags[0].length);
-  if (text.length > 0) {
-    parseTags(text, tags);
-  }
-  return tags;
+  const value = matchUnitTags[0];
+  const tag = {
+    name: TagName.unknown,
+    value
+  };
+  return parseNextTag(tags, tag, matchUnitTags[0].length);
 }
 var parseTagT = function(text, tags, tagNameSource, matchTagT) {
   if (tagNameSource.startsWith(TagName.t)) {
@@ -6403,14 +6597,14 @@ function setI(items, newValue) {
   }
   return tag;
 }
-function setR(items, style2) {
+function setR(items, style3) {
   const defaultTag = {
     name: TagName.r,
-    style: style2
+    style: style3
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.style = style2;
+    tag.style = style3;
   }
   return tag;
 }
@@ -6736,6 +6930,7 @@ export {
   tagsToItems,
   sumTimes,
   subtractTimes,
+  styleToString,
   splitSyllabes,
   setYshad,
   setYbord,
@@ -6789,6 +6984,13 @@ export {
   setAlpha1,
   setAlpha,
   setA,
+  sectionStylesToString,
+  sectionScriptInfoToString,
+  sectionProjectGarbageToString,
+  sectionGraphicsToString,
+  sectionFontsToString,
+  sectionExtraDataToString,
+  sectionEventsToString,
   secondsToTime,
   removeTag,
   parseTime,
@@ -6798,12 +7000,20 @@ export {
   parseColorBGR,
   parseASSFile,
   numberToHex,
+  newSectionStyles,
+  newSectionGraphics,
+  newSectionFonts,
+  newSectionExtraData,
+  newSectionEvents,
+  newScriptInfo,
+  newProjectGarbage,
   mergeNeighboringEffects,
   lineToString,
   itemsToTags,
   isRomajiWord,
   interpolate,
   hexToNumber,
+  generateDefaultSectionStyles,
   generateDefaultLine,
   findYshad,
   findYbord,
@@ -6862,7 +7072,41 @@ export {
   calculateLineDurationInSeconds,
   adjustTimeOverplus,
   TagName,
+  ScriptInfoPropertyYCbCrMatrix,
+  ScriptInfoPropertyWrapStyle,
+  ScriptInfoPropertyUpdateDetails,
+  ScriptInfoPropertyTitle,
+  ScriptInfoPropertySynchPoint,
+  ScriptInfoPropertyScriptUpdatedBy,
+  ScriptInfoPropertyScriptType,
+  ScriptInfoPropertyScaledBorderAndShadow,
+  ScriptInfoPropertyPlayResY,
+  ScriptInfoPropertyPlayResX,
+  ScriptInfoPropertyOriginalTranslation,
+  ScriptInfoPropertyOriginalTiming,
+  ScriptInfoPropertyOriginalScript,
+  ScriptInfoPropertyOriginalEditing,
+  ProjectGarbagePropertyVideoZoomPercent,
+  ProjectGarbagePropertyVideoPosition,
+  ProjectGarbagePropertyVideoFile,
+  ProjectGarbagePropertyVideoARValue,
+  ProjectGarbagePropertyVideoARMode,
+  ProjectGarbagePropertyTimecodesFile,
+  ProjectGarbagePropertyScrollPosition,
+  ProjectGarbagePropertyLastStyleStorage,
+  ProjectGarbagePropertyKeyframesFile,
+  ProjectGarbagePropertyExportFilters,
+  ProjectGarbagePropertyExportEncoding,
+  ProjectGarbagePropertyAutomationScripts,
+  ProjectGarbagePropertyAudioFile,
+  ProjectGarbagePropertyActiveLine,
+  Encodings,
+  Encoding,
+  AttachedGraphicToString,
+  AttachedFontToString,
+  Alignments,
+  Alignment,
   ASSFileToString
 };
 
-//# debugId=14770D915F2E061E64756e2164756e21
+//# debugId=CC3CD45C3D186FBD64756e2164756e21
