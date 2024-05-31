@@ -39,6 +39,15 @@ function processText(raw) {
 
     const items = asu.parseContent(line.content);
     inputItems.value = JSON.stringify(items, null, 2);
+
+    let tagsCount = 0;
+    for (const item of items) {
+        if (item.name == "effect") {
+            tagsCount += item.tags.length;
+        }
+    }
+
+    updateItemsCount(items.length, tagsCount);
 }
 
 function updateText(selector, text) {
@@ -49,6 +58,17 @@ function updateText(selector, text) {
     }
 
     input.textContent = text;
+}
+
+function updateItemsCount(itemsCount, tagsCount) {
+    const labelItemsCount = document.querySelector("label.items-count");
+    if (labelItemsCount == null) {
+        console.error("failed to show error, labelItemsCount not found");
+        return;
+    }
+
+
+    labelItemsCount.textContent = `Content items: ${itemsCount}, tags: ${tagsCount}`;
 }
 
 function showError(msg) {
@@ -70,6 +90,7 @@ function showError(msg) {
         return;
     }
 
+    updateItemsCount(0, 0);
     inputItems.value = "";
 
     const container = document.querySelector("p.error");
