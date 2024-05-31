@@ -22,7 +22,7 @@ jobs:
 
             - name: Linter
               run: |
-                  bunx eslint
+                  bunx eslint && echo "OK"
 
             - name: Test
               run: |
