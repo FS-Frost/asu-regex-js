@@ -1,0 +1,31 @@
+main {
+    padding: 1rem;
+}
+
+input {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    min-height: 12rem;
+}
+
+textarea.items {
+    min-height: 30rem !important;
+}
+
+p.error {
+    display: none;
+    color: red;
+    width: 100%;
+}
+
+button.show-example {
+    width: 100%;
+    margin-bottom: .5rem;
+}
