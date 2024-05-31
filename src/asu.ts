@@ -3,11 +3,20 @@ import { regexClip, regexColor, regexColor1, regexColor2, regexColor3, regexColo
 import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
 export * from "./assFile/assFile";
-
+export * from "./assFile/sectionScriptInfo";
+export * from "./assFile/sectionProjectGarbage";
+export * from "./assFile/sectionStyles";
+export * from "./assFile/style";
+export * from "./assFile/alignment";
+export * from "./assFile/encoding";
+export * from "./assFile/sectionFonts";
+export * from "./assFile/attachedFont";
+export * from "./assFile/attachedGraphic";
+export * from "./assFile/sectionGraphics";
+export * from "./assFile/sectionEvents";
+export * from "./assFile/sectionExtraData";
 export * from "./karaoke";
-
 export * from "./mat";
-
 export * from "./time";
 
 export enum TagName {
