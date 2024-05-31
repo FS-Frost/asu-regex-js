@@ -13,34 +13,23 @@
     <main>
         <h1 class="title is-3 has-text-centered mt-2">Bundles</h1>
 
-        <p class="error"></p>
-
-        <div class="files-container">
-            <div class="files">
-            </div>
+        <div class="files">
+            <a href="https://jsr.io/@fs-frost/asu" target="_blank">
+                <button class="button is-primary is-fullwidth">Recommended: https://jsr.io/@fs-frost/asu</button>
+            </a>
         </div>
     </main>
 </body>
 
 <script>
-    function showError(msg) {
-        const selector = "p.error";
-        const pError = document.querySelector(selector);
-        if (pError == null) {
-            console.error(`${selector} not found`, { msg });
-            alert(msg);
-            return;
-        }
-
-        pError.textContent = msg;
-    }
-
     const textNoFiles = "No bundle files available.";
     async function main() {
         try {
             const response = await fetch("files.json");
             if (!response.ok) {
-                showError(textNoFiles);
+                console.error("failed to fetch files", {
+                    status: response.status,
+                });
                 return;
             }
 
@@ -49,27 +38,31 @@
             const divFiles = document.querySelector(selector);
             if (divFiles == null) {
                 console.error(`${selector} not found`);
-                showError(textNoFiles);
                 return;
             }
 
             if (!Array.isArray(files)) {
                 console.error("files is not an array", { files });
-                showError(textNoFiles);
                 return;
             }
 
+            divFiles.innerHTML += `
+                <p class="title is-5 has-text-centered mb-2">Download individual bundles:</p>
+            `;
+
+            files.sort();
             let html = "";
             for (const file of files) {
                 html += `
-                    <a href="../build/${file}" target="_blank">${file}</a>
+                    <a href="../build/${file}" target="_blank">
+                        <button class="button is-link is-fullwidth">${file}</button>
+                    </a>
                 `;
             }
 
-            divFiles.innerHTML = html;
+            divFiles.innerHTML += html;
         } catch (error) {
             console.error("main error", error);
-            showError(textNoFiles)
         }
     }
 
@@ -88,23 +81,13 @@
         color: red;
     }
 
-    .files-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
     .files {
-        width: 50%;
+        width: 100%;
         display: flex;
         flex-direction: column;
     }
 
-    .files a {
-        font-size: large;
-    }
-
-    .files a:hover {
-        font-weight: bold;
+    .files button {
+        margin-bottom: .5rem;
     }
 </style>
