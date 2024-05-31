@@ -30,8 +30,7 @@ jobs:
 
             - name: Bundle
               run: |
-                  bun bundle && \
-                  mv ./build ./examples/build
+                  bun bundle
 
             - name: Generate docs
               run: |
