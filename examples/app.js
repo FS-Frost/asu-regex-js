@@ -52,7 +52,6 @@ function processText(raw) {
 
 function updateText(selector, text) {
     const input = document.querySelector(selector);
-    console.log(selector, input);
     if (input == null) {
         return;
     }
