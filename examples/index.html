@@ -1,21 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example</title>
+    <title>Asu Playground</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+
     <script type="module">
         import * as asu from "./asu.browser.js";
         window.asu = asu;
     </script>
+
+    <link rel="stylesheet" href="app.css">
     <script src="app.js" defer></script>
 </head>
 
 <body>
-    <h1>Example</h1>
+    <main>
+        <h1 class="title is-3 has-text-centered mt-2">Asu Playground</h1>
 
-    <p>Open dev tools :)</p>
+        <div class="buttons">
+            <a href="https://github.com/FS-Frost/asu-regex-js" target="_blank">
+                <button class="button is-link">GitHub Repo</button>
+            </a>
+
+            <a href="https://github.com/FS-Frost/asu-regex-js/docs" target="_blank">
+                <button class="button is-secondary">Documentation</button>
+            </a>
+        </div>
+
+        <button class="button is-link show-example">Show example</button>
+
+        <label class="label" for="">Input</label>
+
+        <textarea class="textarea text"></textarea>
+
+        <p class="error mt-2"></p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Layer</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Style</th>
+                    <th>Actor</th>
+                    <th>Right Margin</th>
+                    <th>Left Margin</th>
+                    <th>Vertical Margin</th>
+                    <th>Effect</th>
+                    <th>Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="line-layer"></td>
+                    <td class="line-start"></td>
+                    <td class="line-end"></td>
+                    <td class="line-style"></td>
+                    <td class="line-actor"></td>
+                    <td class="line-margin-right"></td>
+                    <td class="line-margin-left"></td>
+                    <td class="line-margin-vertical"></td>
+                    <td class="line-effect"></td>
+                    <td class="line-content"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <label class="label" for="">Content items</label>
+
+        <textarea class="textarea items"></textarea>
+    </main>
 </body>
 
 </html>

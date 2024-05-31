@@ -30,17 +30,13 @@ jobs:
 
             - name: Generate docs
               run: |
-                  bunx typedoc src/asu.ts
-
-            - name: Generate .nojekyll
-              run: |
-                  echo "" >> docs/.nojekyll
+                  bunx typedoc src/asu.ts --out ./examples/docs
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@4.1.7
               with:
                   branch: gh-pages
-                  folder: docs
+                  folder: examples
     publish:
         runs-on: ubuntu-latest
         needs: test-build-deploy
