@@ -3,9 +3,13 @@
 ![jsr](https://jsr.io/badges/@fs-frost/asu)
 ![main](https://github.com/FS-Frost/asu-regex-js/actions/workflows/main.yml/badge.svg)
 
-Library to work with SubStation Alpha Subtitles (SSA/ASS).
+Parser to work with SubStation Alpha Subtitles (SSA/ASS) in TypeScript and JavaScript.
 
-## Install
+[Read the documentation](https://fs-frost.github.io/asu-regex-js/docs)
+
+[Try the interactive playground](https://fs-frost.github.io/asu-regex-js)
+
+## Installation
 
 ### JSR (JavaScript Registry)
 
@@ -19,13 +23,9 @@ For npm, yarn, etc., check out https://jsr.io/@fs-frost/asu.
 
 Bundled files for bun, node and browser are available on [\build](https://github.com/FS-Frost/asu-regex-js/tree/main/build).
 
-## Docs
+## Examples
 
-https://fs-frost.github.io/asu-regex-js/
-
-## How to use
-
-Check out the [tests](https://github.com/FS-Frost/asu-regex-js/blob/main/src/asu.test.ts) for more examples.
+Check out the [tests](https://github.com/FS-Frost/asu-regex-js/blob/main/src/asu.test.ts) or the [playground](https://fs-frost.github.io/asu-regex-js) for more examples.
 
 ### Parse a dialogue
 
@@ -115,18 +115,13 @@ bun test --coverage
 bun bundle
 ```
 
-## Generate docs
-
-```sh
-bunx typedoc src/asu.ts
-```
-
 ## Publish to JSR
 
 ```sh
 bun run publish
 ```
 
-# Asu Web Application
+# Applications using Asu
 
-[Asu for SyncRajo Fansub](https://github.com/FS-Frost/asu-web)
+- [Asu for SyncRajo Fansub](https://github.com/FS-Frost/asu-web)
+- [Asu Playground](https://fs-frost.github.io/asu-regex-js)
