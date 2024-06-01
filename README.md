@@ -11,17 +11,17 @@ Parser to work with SubStation Alpha Subtitles (SSA/ASS) in TypeScript and JavaS
 
 ## Installation
 
-### JSR (JavaScript Registry)
+### Install using JSR (JavaScript Registry)
 
 ```sh
 bunx jsr add @fs-frost/asu
 ```
 
-For npm, yarn, etc., check out https://jsr.io/@fs-frost/asu.
+For NPM, Yarn, etc., check out https://jsr.io/@fs-frost/asu.
 
-### Manually
+### Install nightly bundles
 
-Bundled files for bun, node and browser are available on [Bundles](https://fs-frost.github.io/asu-regex-js/bundles/).
+Nightly bundles for Bun, Node and browser are available on [Bundles](https://fs-frost.github.io/asu-regex-js/bundles/).
 
 ## Examples
 
@@ -94,31 +94,21 @@ console.log(asu.contentsToString(items));
 // {\be2\fs32\pos(-20,67.9)}Kirino-san
 ```
 
-## Dev requeriments
+## Development
+
+### Requirements
 
 - [Bun (JavaScript runtime)](https://bun.sh/)
 
-To install JS dependencies:
+### Install JS dependencies
 ```sh
 bun install
 ```
 
-## Run tests
+### Run tests
 
 ```sh
 bun test --coverage
-```
-
-## Bundle
-
-```sh
-bun bundle
-```
-
-## Publish to JSR
-
-```sh
-bun run publish
 ```
 
 # Applications using Asu
