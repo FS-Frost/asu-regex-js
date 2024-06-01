@@ -21,7 +21,7 @@ For npm, yarn, etc., check out https://jsr.io/@fs-frost/asu.
 
 ### Manually
 
-Bundled files for bun, node and browser are available on [\build](https://github.com/FS-Frost/asu-regex-js/tree/main/build).
+Bundled files for bun, node and browser are available on [Bundles](https://fs-frost.github.io/asu-regex-js/bundles/).
 
 ## Examples
 
