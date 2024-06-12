@@ -1,4 +1,4 @@
-import { hexToNumber, numberToHex } from "./mat";
+import { hexToNumber, numberToHex, truncate } from "./mat";
 import * as regex from "./regex";
 import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
@@ -1292,6 +1292,104 @@ export function mergeNeighboringEffects(items: ContentItem[]): void {
 
     for (const index of indexToRemove) {
         items.splice(index, 1);
+    }
+}
+
+export function truncateNumberTags(items: ContentItem[], decimals: number): void {
+    forEachTag(items, (tag) => {
+        switch (tag.name) {
+            case TagName.t:
+                {
+                    if (tag.accel != null) {
+                        tag.accel = truncate(tag.accel, decimals);
+                    }
+
+                    if (tag.t1 != null) {
+                        tag.t1 = truncate(tag.t1, decimals);
+                    }
+
+                    if (tag.t2 != null) {
+                        tag.t2 = truncate(tag.t2, decimals);
+                    }
+                    break;
+                }
+
+            case TagName.pos:
+            case TagName.org:
+                tag.x = truncate(tag.x, decimals);
+                tag.y = truncate(tag.y, decimals);
+                break;
+
+            case TagName.move:
+                tag.x1 = truncate(tag.x1, decimals);
+                tag.y1 = truncate(tag.y1, decimals);
+                tag.x2 = truncate(tag.x2, decimals);
+                tag.y2 = truncate(tag.y2, decimals);
+
+                if (tag.t1 != null) {
+                    tag.t1 = truncate(tag.t1, decimals);
+                }
+
+                if (tag.t2 != null) {
+                    tag.t2 = truncate(tag.t2, decimals);
+                }
+                break;
+
+            case TagName.fad:
+                tag.in = truncate(tag.in, decimals);
+                tag.out = truncate(tag.out, decimals);
+                break;
+
+            case TagName.fade:
+                tag.t1 = truncate(tag.t1, decimals);
+                tag.t2 = truncate(tag.t2, decimals);
+                tag.t3 = truncate(tag.t3, decimals);
+                tag.t4 = truncate(tag.t4, decimals);
+                tag.alpha1 = truncate(tag.alpha1, decimals);
+                tag.alpha2 = truncate(tag.alpha2, decimals);
+                tag.alpha3 = truncate(tag.alpha3, decimals);
+                break;
+
+            case TagName.fe:
+                tag.encodingId = Math.floor(tag.encodingId);
+                break;
+
+            case TagName.color:
+            case TagName.color1:
+            case TagName.color2:
+            case TagName.color3:
+            case TagName.color4:
+                tag.blue = Math.floor(tag.blue);
+                tag.green = Math.floor(tag.green);
+                tag.red = Math.floor(tag.red);
+                break;
+
+            case TagName.clip:
+            case TagName.iclip:
+            case TagName.fn:
+            case TagName.r:
+            case TagName.text:
+            case TagName.unknown:
+                break;
+
+            default:
+                if (typeof tag.value === "number") {
+                    tag.value = truncate(tag.value, decimals);
+                }
+                break;
+        }
+    });
+}
+
+export function forEachTag(items: ContentItem[], predicate: (tag: Tags) => void): void {
+    for (const item of items) {
+        if (item.name != "effect") {
+            continue;
+        }
+
+        for (const tag of item.tags) {
+            predicate(tag);
+        }
     }
 }
 
@@ -2984,7 +3082,7 @@ export function parseLine(text: string): Line | null {
 export function lineToString(line: Line): string {
     let s = line.type;
     s += ": ";
-    s += line.layer;
+    s += Math.floor(line.layer);
     s += ",";
     s += timeToString(line.start);
     s += ",";
@@ -2994,11 +3092,11 @@ export function lineToString(line: Line): string {
     s += ",";
     s += line.actor;
     s += ",";
-    s += line.marginLeft;
+    s += Math.floor(line.marginLeft);
     s += ",";
-    s += line.marginRight;
+    s += Math.floor(line.marginRight);
     s += ",";
-    s += line.marginVertical;
+    s += Math.floor(line.marginVertical);
     s += ",";
     s += line.effect;
     s += ",";

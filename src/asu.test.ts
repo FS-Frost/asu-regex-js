@@ -3076,6 +3076,21 @@ test("parse tags with bad args", () => {
     }
 });
 
+test("line to string", () => {
+    const text = "Dialogue: 0,0:00:00.00,0:00:00.00,Default,a,0,0,0,b,{\\pos(182.123489123918322193,421.847593450834985)\\be2.1234}LINE 1";
+    const expectedText = "Dialogue: 0,0:00:00.00,0:00:00.00,Default,a,0,0,0,b,{\\pos(182.123,421.847)\\be2.123}LINE 1";
+    const line = asu.parseLine(text);
+    expect(line).not.toBeNull();
+    if (line == null) {
+        throw "null line";
+    }
+
+    const items = asu.parseContent(line.content);
+    asu.truncateNumberTags(items, 3);
+    line.content = asu.contentsToString(items);
+    expect(asu.lineToString(line)).toEqual(expectedText);
+});
+
 // others
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
