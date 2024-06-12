@@ -5480,6 +5480,88 @@ function mergeNeighboringEffects(items) {
     items.splice(index, 1);
   }
 }
+function truncateNumberTags(items, decimals) {
+  forEachTag(items, (tag) => {
+    switch (tag.name) {
+      case TagName.t: {
+        if (tag.accel != null) {
+          tag.accel = truncate(tag.accel, decimals);
+        }
+        if (tag.t1 != null) {
+          tag.t1 = truncate(tag.t1, decimals);
+        }
+        if (tag.t2 != null) {
+          tag.t2 = truncate(tag.t2, decimals);
+        }
+        break;
+      }
+      case TagName.pos:
+      case TagName.org:
+        tag.x = truncate(tag.x, decimals);
+        tag.y = truncate(tag.y, decimals);
+        break;
+      case TagName.move:
+        tag.x1 = truncate(tag.x1, decimals);
+        tag.y1 = truncate(tag.y1, decimals);
+        tag.x2 = truncate(tag.x2, decimals);
+        tag.y2 = truncate(tag.y2, decimals);
+        if (tag.t1 != null) {
+          tag.t1 = truncate(tag.t1, decimals);
+        }
+        if (tag.t2 != null) {
+          tag.t2 = truncate(tag.t2, decimals);
+        }
+        break;
+      case TagName.fad:
+        tag.in = truncate(tag.in, decimals);
+        tag.out = truncate(tag.out, decimals);
+        break;
+      case TagName.fade:
+        tag.t1 = truncate(tag.t1, decimals);
+        tag.t2 = truncate(tag.t2, decimals);
+        tag.t3 = truncate(tag.t3, decimals);
+        tag.t4 = truncate(tag.t4, decimals);
+        tag.alpha1 = truncate(tag.alpha1, decimals);
+        tag.alpha2 = truncate(tag.alpha2, decimals);
+        tag.alpha3 = truncate(tag.alpha3, decimals);
+        break;
+      case TagName.fe:
+        tag.encodingId = Math.floor(tag.encodingId);
+        break;
+      case TagName.color:
+      case TagName.color1:
+      case TagName.color2:
+      case TagName.color3:
+      case TagName.color4:
+        tag.blue = Math.floor(tag.blue);
+        tag.green = Math.floor(tag.green);
+        tag.red = Math.floor(tag.red);
+        break;
+      case TagName.clip:
+      case TagName.iclip:
+      case TagName.fn:
+      case TagName.r:
+      case TagName.text:
+      case TagName.unknown:
+        break;
+      default:
+        if (typeof tag.value === "number") {
+          tag.value = truncate(tag.value, decimals);
+        }
+        break;
+    }
+  });
+}
+function forEachTag(items, predicate) {
+  for (const item of items) {
+    if (item.name != "effect") {
+      continue;
+    }
+    for (const tag of item.tags) {
+      predicate(tag);
+    }
+  }
+}
 function findA(items) {
   const fx = items.find((item) => item.name == "effect");
   if (fx?.name != "effect") {
@@ -6805,7 +6887,7 @@ function parseLine(text) {
 function lineToString(line) {
   let s = line.type;
   s += ": ";
-  s += line.layer;
+  s += Math.floor(line.layer);
   s += ",";
   s += timeToString(line.start);
   s += ",";
@@ -6815,11 +6897,11 @@ function lineToString(line) {
   s += ",";
   s += line.actor;
   s += ",";
-  s += line.marginLeft;
+  s += Math.floor(line.marginLeft);
   s += ",";
-  s += line.marginRight;
+  s += Math.floor(line.marginRight);
   s += ",";
-  s += line.marginVertical;
+  s += Math.floor(line.marginVertical);
   s += ",";
   s += line.effect;
   s += ",";
@@ -6924,6 +7006,7 @@ var TagName;
   TagName2["yshad"] = "yshad";
 })(TagName || (TagName = {}));
 export {
+  truncateNumberTags,
   truncate,
   timeToString,
   timeToSeconds,
@@ -7015,6 +7098,7 @@ export {
   hexToNumber,
   generateDefaultSectionStyles,
   generateDefaultLine,
+  forEachTag,
   findYshad,
   findYbord,
   findXshad,
@@ -7109,4 +7193,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=CC3CD45C3D186FBD64756e2164756e21
+//# debugId=848E5F50E15EA6AD64756e2164756e21

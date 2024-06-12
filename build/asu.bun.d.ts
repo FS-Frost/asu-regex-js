@@ -483,6 +483,8 @@ export declare function parseContent(text: string): ContentItem[];
 export declare function contentEffectToString(item: ContentEffect): string;
 export declare function contentsToString(items: ContentItem[]): string;
 export declare function mergeNeighboringEffects(items: ContentItem[]): void;
+export declare function truncateNumberTags(items: ContentItem[], decimals: number): void;
+export declare function forEachTag(items: ContentItem[], predicate: (tag: Tags) => void): void;
 export declare function findA(items: ContentItem[]): TagA | null;
 export declare function findB(items: ContentItem[]): TagB | null;
 export declare function findColor(items: ContentItem[]): TagC | null;
