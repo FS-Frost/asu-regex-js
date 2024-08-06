@@ -1,12 +1,8 @@
 import { expect, test } from "bun:test";
-import fs from "fs/promises";
 import { parseASSFile } from "./assFile";
 
 test("assFile: parse ass file", async () => {
-    const text = await fs.readFile("test/parseFile.ass", {
-        encoding: "utf-8",
-    });
-
+    const text = await Bun.file("test/parseFile.ass").text();
     const assFile = parseASSFile(text);
     expect(assFile).not.toBeNull();
     if (assFile == null) {
@@ -30,10 +26,7 @@ test("assFile: parse ass file", async () => {
 });
 
 test("assFile: parse karaoke file", async () => {
-    const text = await fs.readFile("test/karaoke.ass", {
-        encoding: "utf-8",
-    });
-
+    const text = await Bun.file("test/karaoke.ass").text();
     const assFile = parseASSFile(text);
     expect(assFile).not.toBeNull();
     if (assFile == null) {
@@ -54,10 +47,7 @@ test("assFile: parse karaoke file", async () => {
 });
 
 test("assFile: parse mix file", async () => {
-    const text = await fs.readFile("test/mix.ass", {
-        encoding: "utf-8",
-    });
-
+    const text = await Bun.file("test/mix.ass").text();
     const assFile = parseASSFile(text);
     expect(assFile).not.toBeNull();
     if (assFile == null) {

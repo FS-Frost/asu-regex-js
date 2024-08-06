@@ -14,7 +14,7 @@ const buildDir = "./examples/build";
     }
 }
 
-const dtsContent = await fs.readFile(`${buildDir}/asu.d.ts`);
+const dtsContent = await Bun.file(`${buildDir}/asu.d.ts`).text();
 if (await fs.exists(buildDir)) {
     await fs.rm(buildDir, {
         recursive: true,

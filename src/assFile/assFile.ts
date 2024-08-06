@@ -68,6 +68,7 @@ export function parseASSFile(text: string): ASSFile | null {
 
     const linesToParse: string[] = text.split("\n");
     for (let i = 0; i < linesToParse.length; i++) {
+        const lineNumber = i + 1;
         const line = removeUtf8Boom(linesToParse[i]);
         if (line.length === 0) {
             continue;
@@ -121,11 +122,12 @@ export function parseASSFile(text: string): ASSFile | null {
                 processExtraDataLine(assFile, line);
                 break;
             default:
+                console.error(`failed to parse line ${lineNumber}`);
                 break;
         }
 
         if (err.length > 0) {
-            console.error(`failed to parse ass file at line ${i + 1}: ${err}\nLine:\n${line}`);
+            console.error(`failed to parse ass file at line ${lineNumber}: ${err}\nLine:\n${line}`);
             return null;
         }
     }
@@ -134,7 +136,13 @@ export function parseASSFile(text: string): ASSFile | null {
 }
 
 function removeUtf8Boom(s: string): string {
-    return s.replaceAll("\\uFEFF", "");
+    // remove boom
+    s = s.replaceAll("\\uFEFF", "");
+
+    // remove windows end of line
+    s = s.replaceAll("\r", "");
+
+    return s;
 }
 
 
