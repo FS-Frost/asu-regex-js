@@ -306,13 +306,13 @@ function subtractTimes(minuend, subtracting) {
 }
 
 // node_modules/zod/lib/index.mjs
-var setErrorMap = function(map) {
+function setErrorMap(map) {
   overrideErrorMap = map;
-};
-var getErrorMap = function() {
+}
+function getErrorMap() {
   return overrideErrorMap;
-};
-var addIssueToContext = function(ctx, issueData) {
+}
+function addIssueToContext(ctx, issueData) {
   const overrideMap = getErrorMap();
   const issue = makeIssue({
     issueData,
@@ -326,15 +326,15 @@ var addIssueToContext = function(ctx, issueData) {
     ].filter((x) => !!x)
   });
   ctx.common.issues.push(issue);
-};
-var __classPrivateFieldGet = function(receiver, state, kind, f) {
+}
+function __classPrivateFieldGet(receiver, state, kind, f) {
   if (kind === "a" && !f)
     throw new TypeError("Private accessor was defined without a getter");
   if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
     throw new TypeError("Cannot read private member from an object whose class did not declare it");
   return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var __classPrivateFieldSet = function(receiver, state, value, kind, f) {
+}
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
   if (kind === "m")
     throw new TypeError("Private method is not writable");
   if (kind === "a" && !f)
@@ -342,8 +342,8 @@ var __classPrivateFieldSet = function(receiver, state, value, kind, f) {
   if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
     throw new TypeError("Cannot write private member to an object whose class did not declare it");
   return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
-};
-var processCreateParams = function(params) {
+}
+function processCreateParams(params) {
   if (!params)
     return {};
   const { errorMap, invalid_type_error, required_error, description } = params;
@@ -366,8 +366,8 @@ var processCreateParams = function(params) {
     return { message: (_b = message !== null && message !== undefined ? message : invalid_type_error) !== null && _b !== undefined ? _b : ctx.defaultError };
   };
   return { errorMap: customMap, description };
-};
-var timeRegexSource = function(args) {
+}
+function timeRegexSource(args) {
   let regex = `([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d`;
   if (args.precision) {
     regex = `${regex}\\.\\d{${args.precision}}`;
@@ -375,11 +375,11 @@ var timeRegexSource = function(args) {
     regex = `${regex}(\\.\\d+)?`;
   }
   return regex;
-};
-var timeRegex = function(args) {
+}
+function timeRegex(args) {
   return new RegExp(`^${timeRegexSource(args)}\$`);
-};
-var datetimeRegex = function(args) {
+}
+function datetimeRegex(args) {
   let regex = `${dateRegexSource}T${timeRegexSource(args)}`;
   const opts = [];
   opts.push(args.local ? `Z?` : `Z`);
@@ -387,8 +387,8 @@ var datetimeRegex = function(args) {
     opts.push(`([+-]\\d{2}:?\\d{2})`);
   regex = `${regex}(${opts.join("|")})`;
   return new RegExp(`^${regex}\$`);
-};
-var isValidIP = function(ip, version) {
+}
+function isValidIP(ip, version) {
   if ((version === "v4" || !version) && ipv4Regex.test(ip)) {
     return true;
   }
@@ -396,16 +396,16 @@ var isValidIP = function(ip, version) {
     return true;
   }
   return false;
-};
-var floatSafeRemainder = function(val, step) {
+}
+function floatSafeRemainder(val, step) {
   const valDecCount = (val.toString().split(".")[1] || "").length;
   const stepDecCount = (step.toString().split(".")[1] || "").length;
   const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
   const valInt = parseInt(val.toFixed(decCount).replace(".", ""));
   const stepInt = parseInt(step.toFixed(decCount).replace(".", ""));
   return valInt % stepInt / Math.pow(10, decCount);
-};
-var deepPartialify = function(schema) {
+}
+function deepPartialify(schema) {
   if (schema instanceof ZodObject) {
     const newShape = {};
     for (const key in schema.shape) {
@@ -430,8 +430,8 @@ var deepPartialify = function(schema) {
   } else {
     return schema;
   }
-};
-var mergeValues = function(a, b) {
+}
+function mergeValues(a, b) {
   const aType = getParsedType(a);
   const bType = getParsedType(b);
   if (a === b) {
@@ -468,15 +468,15 @@ var mergeValues = function(a, b) {
   } else {
     return { valid: false };
   }
-};
-var createZodEnum = function(values, params) {
+}
+function createZodEnum(values, params) {
   return new ZodEnum({
     values,
     typeName: ZodFirstPartyTypeKind.ZodEnum,
     ...processCreateParams(params)
   });
-};
-var custom = function(check, params = {}, fatal) {
+}
+function custom(check, params = {}, fatal) {
   if (check)
     return ZodAny.create().superRefine((data, ctx) => {
       var _a, _b;
@@ -488,7 +488,7 @@ var custom = function(check, params = {}, fatal) {
       }
     });
   return ZodAny.create();
-};
+}
 var util;
 (function(util2) {
   util2.assertEqual = (val) => val;
@@ -4169,7 +4169,7 @@ var z = Object.freeze({
 
 // src/assFile/alignment.ts
 var Alignments;
-(function(Alignments2) {
+((Alignments2) => {
   Alignments2[Alignments2["DOWN_LEFT"] = 1] = "DOWN_LEFT";
   Alignments2[Alignments2["DOWN_CENTER"] = 2] = "DOWN_CENTER";
   Alignments2[Alignments2["DOWN_RIGHT"] = 3] = "DOWN_RIGHT";
@@ -4179,12 +4179,12 @@ var Alignments;
   Alignments2[Alignments2["UP_LEFT"] = 7] = "UP_LEFT";
   Alignments2[Alignments2["UP_CENTER"] = 8] = "UP_CENTER";
   Alignments2[Alignments2["UP_RIGHT"] = 9] = "UP_RIGHT";
-})(Alignments || (Alignments = {}));
+})(Alignments ||= {});
 var Alignment = z.nativeEnum(Alignments);
 
 // src/assFile/encoding.ts
 var Encodings;
-(function(Encodings2) {
+((Encodings2) => {
   Encodings2[Encodings2["ANSI"] = 0] = "ANSI";
   Encodings2[Encodings2["DEFAULT"] = 1] = "DEFAULT";
   Encodings2[Encodings2["SYMBOL"] = 2] = "SYMBOL";
@@ -4204,7 +4204,7 @@ var Encodings;
   Encodings2[Encodings2["THAI"] = 222] = "THAI";
   Encodings2[Encodings2["EASTERN_EUROPE"] = 238] = "EASTERN_EUROPE";
   Encodings2[Encodings2["OEM"] = 255] = "OEM";
-})(Encodings || (Encodings = {}));
+})(Encodings ||= {});
 var Encoding = z.nativeEnum(Encodings);
 
 // src/assFile/sectionEvents.ts
@@ -4424,11 +4424,11 @@ function generateDefaultSectionStyles() {
         borderStyle: 1,
         outline: 2,
         shadow: 2,
-        alignment: Alignments.DOWN_CENTER,
+        alignment: 2 /* DOWN_CENTER */,
         marginLeft: 10,
         marginRight: 10,
         marginVertical: 10,
-        encoding: Encodings.DEFAULT
+        encoding: 1 /* DEFAULT */
       }
     ]
   };
@@ -4476,6 +4476,7 @@ function parseASSFile(text) {
   let lastAttachedFile = "";
   const linesToParse = text.split("\n");
   for (let i = 0;i < linesToParse.length; i++) {
+    const lineNumber = i + 1;
     const line = removeUtf8Boom(linesToParse[i]);
     if (line.length === 0) {
       continue;
@@ -4527,19 +4528,22 @@ function parseASSFile(text) {
         processExtraDataLine(assFile, line);
         break;
       default:
+        console.error(`failed to parse line ${lineNumber}`);
         break;
     }
     if (err.length > 0) {
-      console.error(`failed to parse ass file at line ${i + 1}: ${err}\nLine:\n${line}`);
+      console.error(`failed to parse ass file at line ${lineNumber}: ${err}\nLine:\n${line}`);
       return null;
     }
   }
   return assFile;
 }
-var removeUtf8Boom = function(s) {
-  return s.replaceAll("\\uFEFF", "");
-};
-var parseKeyValue = function(text) {
+function removeUtf8Boom(s) {
+  s = s.replaceAll("\\uFEFF", "");
+  s = s.replaceAll("\r", "");
+  return s;
+}
+function parseKeyValue(text) {
   const regexLine2 = /(?<key>.+):\s+(?<value>.*)\s*/;
   const kv = {
     key: "",
@@ -4552,8 +4556,8 @@ var parseKeyValue = function(text) {
   kv.key = match.groups?.key ?? "";
   kv.value = match.groups?.value ?? "";
   return [kv, ""];
-};
-var processScriptInfoLine = function(assFile, line) {
+}
+function processScriptInfoLine(assFile, line) {
   if (line.startsWith(_CommentStart)) {
     const comment = line.substring(_CommentStart.length);
     assFile.scriptInfo.comments.push(comment);
@@ -4565,8 +4569,8 @@ var processScriptInfoLine = function(assFile, line) {
   }
   assFile.scriptInfo.properties.set(kv.key, kv.value);
   return "";
-};
-var processProjectGarbageLine = function(assFile, line) {
+}
+function processProjectGarbageLine(assFile, line) {
   if (line.startsWith(_CommentStart)) {
     const comment = line.substring(_CommentStart.length);
     assFile.aegisubProjectGarbage.comments.push(comment);
@@ -4578,8 +4582,8 @@ var processProjectGarbageLine = function(assFile, line) {
   }
   assFile.aegisubProjectGarbage.properties.set(kv.key, kv.value);
   return "";
-};
-var processStylesLine = function(assFile, line) {
+}
+function processStylesLine(assFile, line) {
   const regexStyle = /(?<name>.*)\s*,\s*(?<fontName>.*)\s*,\s*(?<fontSize>\d+(?:\.\d+)?)\s*,\s*&H(?<alpha1>[A-Fa-f0-9]{2})(?<color1>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha2>[A-Fa-f0-9]{2})(?<color2>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha3>[A-Fa-f0-9]{2})(?<color3>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha4>[A-Fa-f0-9]{2})(?<color4>[A-Fa-f0-9]{6})\s*,\s*(?<bold>0|-1)\s*,\s*(?<italic>0|-1)\s*,\s*(?<underline>0|-1)\s*,\s*(?<strikeout>0|-1)\s*,\s*(?<scaleX>\d+(?:\.\d+)?)\s*,\s*(?<scaleY>\d+(?:\.\d+)?)\s*,\s*(?<spacing>\d+(?:\.\d+)?)\s*,\s*(?<angle>-?\d+(?:\.\d+)?)\s*,\s*(?<borderStyle>\d+)\s*,\s*(?<outline>\d+(?:\.\d+)?)\s*,\s*(?<shadow>\d+(?:\.\d+)?)\s*,\s*(?<alignment>[1-9])\s*,\s*(?<marginLeft>\d+)\s*,\s*(?<marginRight>\d+)\s*,\s*(?<marginVertical>\d+)\s*,\s*(?<encoding>\d+)/;
   if (!line.startsWith("Style: ")) {
     return "";
@@ -4629,8 +4633,8 @@ var processStylesLine = function(assFile, line) {
   };
   assFile.styles.styles.push(style2);
   return "";
-};
-var processFontsLine = function(assFile, line, currentAttachedFile) {
+}
+function processFontsLine(assFile, line, currentAttachedFile) {
   const [kv, errorParseKeyValue] = parseKeyValue(line);
   if (errorParseKeyValue.length === 0 && kv.key == "fontname") {
     const fileName = kv.value;
@@ -4653,8 +4657,8 @@ var processFontsLine = function(assFile, line, currentAttachedFile) {
   const attachedFile = assFile.fonts.files[index];
   attachedFile.data.push(line);
   return currentAttachedFile;
-};
-var processGraphicsLine = function(assFile, line, currentAttachedFile) {
+}
+function processGraphicsLine(assFile, line, currentAttachedFile) {
   const [kv, errorParseKeyValue] = parseKeyValue(line);
   if (errorParseKeyValue.length === 0 && kv.key == "filename") {
     const fileName = kv.value;
@@ -4677,8 +4681,8 @@ var processGraphicsLine = function(assFile, line, currentAttachedFile) {
   const attachedFile = assFile.graphics.files[index];
   attachedFile.data.push(line);
   return currentAttachedFile;
-};
-var processEventsLine = function(assFile, text) {
+}
+function processEventsLine(assFile, text) {
   if (text.startsWith("Format:")) {
     assFile.events.format = text;
     return "";
@@ -4689,14 +4693,14 @@ var processEventsLine = function(assFile, text) {
   }
   assFile.events.lines.push(line);
   return "";
-};
-var processExtraDataLine = function(assFile, line) {
+}
+function processExtraDataLine(assFile, line) {
   if (!line.startsWith(_DataStart)) {
     return;
   }
   const datum = line.substring(_DataStart.length);
   assFile.extraData.data.push(datum);
-};
+}
 var _scriptInfo = "[Script Info]";
 var _projectGarbage = "[Aegisub Project Garbage]";
 var _styles = "[V4+ Styles]";
@@ -4748,7 +4752,7 @@ function splitSyllabes(line) {
       name: "effect",
       tags: [
         {
-          name: TagName.kf,
+          name: "kf" /* kf */,
           value: syl.durationInMs
         }
       ]
@@ -4781,7 +4785,7 @@ function parseTags(text, tags) {
   if (matchText && matchText.length > 0) {
     const value2 = matchText[0];
     tags.push({
-      name: TagName.text,
+      name: "text" /* text */,
       value: value2
     });
     text = text.substring(value2.length);
@@ -4811,7 +4815,7 @@ function parseTags(text, tags) {
     const t1 = match?.move_t1 ? Number(match.move_t1) : null;
     const t2 = match?.move_t2 ? Number(match.move_t2) : null;
     const tag2 = {
-      name: TagName.move,
+      name: "move" /* move */,
       x1,
       y1,
       x2,
@@ -4825,7 +4829,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match?.alpha_value ?? "";
     const tag2 = {
-      name: TagName.alpha,
+      name: "alpha" /* alpha */,
       value: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4834,7 +4838,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.xbord_value ?? "0");
     const tag2 = {
-      name: TagName.xbord,
+      name: "xbord" /* xbord */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4843,7 +4847,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.ybord_value ?? "0");
     const tag2 = {
-      name: TagName.ybord,
+      name: "ybord" /* ybord */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4852,7 +4856,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.xshad_value ?? "0");
     const tag2 = {
-      name: TagName.xshad,
+      name: "xshad" /* xshad */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4861,7 +4865,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.yshad_value ?? "0");
     const tag2 = {
-      name: TagName.yshad,
+      name: "yshad" /* yshad */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4870,7 +4874,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const args = match?.iclip_args ?? "";
     const tag2 = {
-      name: TagName.iclip,
+      name: "iclip" /* iclip */,
       drawCommands: args
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4879,7 +4883,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.blur_value ?? "0");
     const tag2 = {
-      name: TagName.blur,
+      name: "blur" /* blur */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4888,7 +4892,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.bord_value ?? "0");
     const tag2 = {
-      name: TagName.bord,
+      name: "bord" /* bord */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4897,7 +4901,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.shad_value ?? "0");
     const tag2 = {
-      name: TagName.shad,
+      name: "shad" /* shad */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4906,7 +4910,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fscx_value ?? "0");
     const tag2 = {
-      name: TagName.fscx,
+      name: "fscx" /* fscx */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4915,7 +4919,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fscy_value ?? "0");
     const tag2 = {
-      name: TagName.fscy,
+      name: "fscy" /* fscy */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4930,7 +4934,7 @@ function parseTags(text, tags) {
     const t3 = Number(match?.fade_t3 ?? "0");
     const t4 = Number(match?.fade_t4 ?? "0");
     const tag2 = {
-      name: TagName.fade,
+      name: "fade" /* fade */,
       alpha1,
       alpha2,
       alpha3,
@@ -4945,7 +4949,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const args = match?.clip_args ?? "";
     const tag2 = {
-      name: TagName.clip,
+      name: "clip" /* clip */,
       drawCommands: args
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4954,7 +4958,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fsp_value ?? "0");
     const tag2 = {
-      name: TagName.fsp,
+      name: "fsp" /* fsp */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -4964,7 +4968,7 @@ function parseTags(text, tags) {
     const x = Number(match?.pos_x ?? "0");
     const y = Number(match?.pos_y ?? "0");
     const tag2 = {
-      name: TagName.pos,
+      name: "pos" /* pos */,
       x,
       y
     };
@@ -4975,7 +4979,7 @@ function parseTags(text, tags) {
     const x = Number(match?.org_x ?? "0");
     const y = Number(match?.org_y ?? "0");
     const tag2 = {
-      name: TagName.org,
+      name: "org" /* org */,
       x,
       y
     };
@@ -4986,7 +4990,7 @@ function parseTags(text, tags) {
     const fadeIn = Number(match?.in ?? "0");
     const fadeOut = Number(match?.out ?? "0");
     const tag2 = {
-      name: TagName.fad,
+      name: "fad" /* fad */,
       in: fadeIn,
       out: fadeOut
     };
@@ -4996,7 +5000,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.frx_value ?? "0");
     const tag2 = {
-      name: TagName.frx,
+      name: "frx" /* frx */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5005,7 +5009,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fry_value ?? "0");
     const tag2 = {
-      name: TagName.fry,
+      name: "fry" /* fry */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5014,7 +5018,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.frz_value ?? "0");
     const tag2 = {
-      name: TagName.frz,
+      name: "frz" /* frz */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5023,7 +5027,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fax_value ?? "0");
     const tag2 = {
-      name: TagName.fax,
+      name: "fax" /* fax */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5032,7 +5036,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fay_value ?? "0");
     const tag2 = {
-      name: TagName.fay,
+      name: "fay" /* fay */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5041,7 +5045,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.pbo_value ?? "0");
     const tag2 = {
-      name: TagName.pbo,
+      name: "pbo" /* pbo */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5050,7 +5054,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fe_value ?? "0");
     const tag2 = {
-      name: TagName.fe,
+      name: "fe" /* fe */,
       encodingId: Number(value2)
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5059,7 +5063,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match?.fn_value ?? "";
     const tag2 = {
-      name: TagName.fn,
+      name: "fn" /* fn */,
       font: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5068,7 +5072,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.an_value ?? "0");
     const tag2 = {
-      name: TagName.an,
+      name: "an" /* an */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5077,7 +5081,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.be_value ?? "0");
     const tag2 = {
-      name: TagName.be,
+      name: "be" /* be */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5086,7 +5090,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fr_value ?? "0");
     const tag2 = {
-      name: TagName.fr,
+      name: "fr" /* fr */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5095,7 +5099,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.fs_value ?? "0");
     const tag2 = {
-      name: TagName.fs,
+      name: "fs" /* fs */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5104,7 +5108,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.ko_value ?? "0");
     const tag2 = {
-      name: TagName.ko,
+      name: "ko" /* ko */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5113,7 +5117,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.kf_value ?? "0");
     const tag2 = {
-      name: TagName.kf,
+      name: "kf" /* kf */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5124,7 +5128,7 @@ function parseTags(text, tags) {
     const green = Number(hexToNumber(match?.color1_bgr_green ?? "0"));
     const red = Number(hexToNumber(match?.color1_bgr_red ?? "0"));
     const tag2 = {
-      name: TagName.color1,
+      name: "1c" /* color1 */,
       blue,
       green,
       red
@@ -5137,7 +5141,7 @@ function parseTags(text, tags) {
     const green = Number(hexToNumber(match?.color2_bgr_green ?? "0"));
     const red = Number(hexToNumber(match?.color2_bgr_red ?? "0"));
     const tag2 = {
-      name: TagName.color2,
+      name: "2c" /* color2 */,
       blue,
       green,
       red
@@ -5150,7 +5154,7 @@ function parseTags(text, tags) {
     const green = Number(hexToNumber(match?.color3_bgr_green ?? "0"));
     const red = Number(hexToNumber(match?.color3_bgr_red ?? "0"));
     const tag2 = {
-      name: TagName.color3,
+      name: "3c" /* color3 */,
       blue,
       green,
       red
@@ -5163,7 +5167,7 @@ function parseTags(text, tags) {
     const green = Number(hexToNumber(match?.color4_bgr_green ?? "0"));
     const red = Number(hexToNumber(match?.color4_bgr_red ?? "0"));
     const tag2 = {
-      name: TagName.color4,
+      name: "4c" /* color4 */,
       blue,
       green,
       red
@@ -5174,7 +5178,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match.alpha1_value ?? "";
     const tag2 = {
-      name: TagName.alpha1,
+      name: "1a" /* alpha1 */,
       value: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5183,7 +5187,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match.alpha2_value ?? "";
     const tag2 = {
-      name: TagName.alpha2,
+      name: "2a" /* alpha2 */,
       value: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5192,7 +5196,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match.alpha3_value ?? "";
     const tag2 = {
-      name: TagName.alpha3,
+      name: "3a" /* alpha3 */,
       value: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5201,7 +5205,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match.alpha4_value ?? "";
     const tag2 = {
-      name: TagName.alpha4,
+      name: "4a" /* alpha4 */,
       value: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5210,7 +5214,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.k_lower_case_value ?? "0");
     const tag2 = {
-      name: TagName.kLowerCase,
+      name: "k" /* kLowerCase */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5219,7 +5223,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.k_upper_case_value ?? "0");
     const tag2 = {
-      name: TagName.kUpperCase,
+      name: "K" /* kUpperCase */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5228,7 +5232,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.q_value ?? "0");
     const tag2 = {
-      name: TagName.q,
+      name: "q" /* q */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5237,7 +5241,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.s_value ?? "0");
     const tag2 = {
-      name: TagName.s,
+      name: "s" /* s */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5246,7 +5250,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.u_value ?? "0");
     const tag2 = {
-      name: TagName.u,
+      name: "u" /* u */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5255,7 +5259,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = match?.r_value ?? "";
     const tag2 = {
-      name: TagName.r,
+      name: "r" /* r */,
       style: value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5264,7 +5268,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.p_value ?? "0");
     const tag2 = {
-      name: TagName.p,
+      name: "p" /* p */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5273,7 +5277,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.i_value ?? "0");
     const tag2 = {
-      name: TagName.i,
+      name: "i" /* i */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5284,7 +5288,7 @@ function parseTags(text, tags) {
     const green = Number(hexToNumber(match?.color_bgr_green ?? "0"));
     const red = Number(hexToNumber(match?.color_bgr_red ?? "0"));
     const tag2 = {
-      name: TagName.color,
+      name: "c" /* color */,
       blue,
       green,
       red
@@ -5295,7 +5299,7 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.b_value ?? "0");
     const tag2 = {
-      name: TagName.b,
+      name: "b" /* b */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
@@ -5304,20 +5308,20 @@ function parseTags(text, tags) {
   if (match != null) {
     const value2 = Number(match?.a_value ?? "0");
     const tag2 = {
-      name: TagName.a,
+      name: "a" /* a */,
       value: Number.isNaN(value2) ? 0 : value2
     };
     return parseNextTag(tags, tag2, matchUnitTags[0].length);
   }
   const value = matchUnitTags[0];
   const tag = {
-    name: TagName.unknown,
+    name: "unknown" /* unknown */,
     value
   };
   return parseNextTag(tags, tag, matchUnitTags[0].length);
 }
-var parseTagT = function(text, tags, tagNameSource, matchTagT) {
-  if (tagNameSource.startsWith(TagName.t)) {
+function parseTagT(text, tags, tagNameSource, matchTagT) {
+  if (tagNameSource.startsWith("t" /* t */)) {
     const match = matchTagT[0].match(regexTagT)?.groups;
     const rawTags = match?.tags ?? "";
     const subtags = [];
@@ -5326,7 +5330,7 @@ var parseTagT = function(text, tags, tagNameSource, matchTagT) {
     const arg2 = match?.arg2 ? Number(match.arg2) : null;
     const arg3 = match?.arg3 ? Number(match.arg3) : null;
     const tag = {
-      name: TagName.t,
+      name: "t" /* t */,
       accel: null,
       t1: null,
       t2: null,
@@ -5350,7 +5354,7 @@ var parseTagT = function(text, tags, tagNameSource, matchTagT) {
     parseTags(text, tags);
   }
   return tags;
-};
+}
 function parseContent(text) {
   const items = [];
   const result = text.matchAll(regexContent);
@@ -5379,7 +5383,7 @@ function contentEffectToString(item) {
   let s = "";
   for (const tag of item.tags) {
     switch (tag.name) {
-      case TagName.t: {
+      case "t" /* t */: {
         const subeffect = {
           name: "effect",
           tags: tag.tags
@@ -5396,49 +5400,49 @@ function contentEffectToString(item) {
         }
         break;
       }
-      case TagName.pos:
-      case TagName.org:
+      case "pos" /* pos */:
+      case "org" /* org */:
         s += `\\${tag.name}(${tag.x},${tag.y})`;
         break;
-      case TagName.move:
+      case "move" /* move */:
         s += `\\move(${tag.x1},${tag.y1},${tag.x2},${tag.y2}`;
         if (tag.t1 != null && tag.t2 != null) {
           s += `,${tag.t1},${tag.t2}`;
         }
         s += ")";
         break;
-      case TagName.clip:
-      case TagName.iclip:
+      case "clip" /* clip */:
+      case "iclip" /* iclip */:
         s += `\\${tag.name}(${tag.drawCommands})`;
         break;
-      case TagName.fad:
+      case "fad" /* fad */:
         s += `\\fad(${tag.in},${tag.out})`;
         break;
-      case TagName.fade:
+      case "fade" /* fade */:
         s += `\\fade(${tag.alpha1},${tag.alpha2},${tag.alpha3},${tag.t1},${tag.t2},${tag.t3},${tag.t4})`;
         break;
-      case TagName.fe:
+      case "fe" /* fe */:
         s += `\\fe${tag.encodingId}`;
         break;
-      case TagName.fn:
+      case "fn" /* fn */:
         s += `\\fn${tag.font}`;
         break;
-      case TagName.r:
+      case "r" /* r */:
         s += `\\r${tag.style}`;
         break;
-      case TagName.color:
-      case TagName.color1:
-      case TagName.color2:
-      case TagName.color3:
-      case TagName.color4: {
+      case "c" /* color */:
+      case "1c" /* color1 */:
+      case "2c" /* color2 */:
+      case "3c" /* color3 */:
+      case "4c" /* color4 */: {
         const hexBlue = numberToHex(tag.blue);
         const hexGreen = numberToHex(tag.green);
         const hexRed = numberToHex(tag.red);
         s += `\\${tag.name}&H${hexBlue}${hexGreen}${hexRed}&`;
         break;
       }
-      case TagName.text:
-      case TagName.unknown:
+      case "text" /* text */:
+      case "unknown" /* unknown */:
         s += tag.value;
         break;
       default:
@@ -5484,7 +5488,7 @@ function mergeNeighboringEffects(items) {
 function truncateNumberTags(items, decimals) {
   forEachTag(items, (tag) => {
     switch (tag.name) {
-      case TagName.t: {
+      case "t" /* t */: {
         if (tag.accel != null) {
           tag.accel = truncate(tag.accel, decimals);
         }
@@ -5496,12 +5500,12 @@ function truncateNumberTags(items, decimals) {
         }
         break;
       }
-      case TagName.pos:
-      case TagName.org:
+      case "pos" /* pos */:
+      case "org" /* org */:
         tag.x = truncate(tag.x, decimals);
         tag.y = truncate(tag.y, decimals);
         break;
-      case TagName.move:
+      case "move" /* move */:
         tag.x1 = truncate(tag.x1, decimals);
         tag.y1 = truncate(tag.y1, decimals);
         tag.x2 = truncate(tag.x2, decimals);
@@ -5513,11 +5517,11 @@ function truncateNumberTags(items, decimals) {
           tag.t2 = truncate(tag.t2, decimals);
         }
         break;
-      case TagName.fad:
+      case "fad" /* fad */:
         tag.in = truncate(tag.in, decimals);
         tag.out = truncate(tag.out, decimals);
         break;
-      case TagName.fade:
+      case "fade" /* fade */:
         tag.t1 = truncate(tag.t1, decimals);
         tag.t2 = truncate(tag.t2, decimals);
         tag.t3 = truncate(tag.t3, decimals);
@@ -5526,24 +5530,24 @@ function truncateNumberTags(items, decimals) {
         tag.alpha2 = truncate(tag.alpha2, decimals);
         tag.alpha3 = truncate(tag.alpha3, decimals);
         break;
-      case TagName.fe:
+      case "fe" /* fe */:
         tag.encodingId = Math.floor(tag.encodingId);
         break;
-      case TagName.color:
-      case TagName.color1:
-      case TagName.color2:
-      case TagName.color3:
-      case TagName.color4:
+      case "c" /* color */:
+      case "1c" /* color1 */:
+      case "2c" /* color2 */:
+      case "3c" /* color3 */:
+      case "4c" /* color4 */:
         tag.blue = Math.floor(tag.blue);
         tag.green = Math.floor(tag.green);
         tag.red = Math.floor(tag.red);
         break;
-      case TagName.clip:
-      case TagName.iclip:
-      case TagName.fn:
-      case TagName.r:
-      case TagName.text:
-      case TagName.unknown:
+      case "clip" /* clip */:
+      case "iclip" /* iclip */:
+      case "fn" /* fn */:
+      case "r" /* r */:
+      case "text" /* text */:
+      case "unknown" /* unknown */:
         break;
       default:
         if (typeof tag.value === "number") {
@@ -5568,7 +5572,7 @@ function findA(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.a;
+  const tagName = "a" /* a */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5580,7 +5584,7 @@ function findB(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.b;
+  const tagName = "b" /* b */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5592,7 +5596,7 @@ function findColor(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.color;
+  const tagName = "c" /* color */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5604,7 +5608,7 @@ function findColor1(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.color1;
+  const tagName = "1c" /* color1 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5616,7 +5620,7 @@ function findColor2(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.color2;
+  const tagName = "2c" /* color2 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5628,7 +5632,7 @@ function findColor3(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.color3;
+  const tagName = "3c" /* color3 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5640,7 +5644,7 @@ function findColor4(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.color4;
+  const tagName = "4c" /* color4 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5652,7 +5656,7 @@ function findAlpha(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.alpha;
+  const tagName = "alpha" /* alpha */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5664,7 +5668,7 @@ function findAlpha1(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.alpha1;
+  const tagName = "1a" /* alpha1 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5676,7 +5680,7 @@ function findAlpha2(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.alpha2;
+  const tagName = "2a" /* alpha2 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5688,7 +5692,7 @@ function findAlpha3(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.alpha3;
+  const tagName = "3a" /* alpha3 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5700,7 +5704,7 @@ function findAlpha4(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.alpha4;
+  const tagName = "4a" /* alpha4 */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5712,7 +5716,7 @@ function findAn(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.an;
+  const tagName = "an" /* an */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5724,7 +5728,7 @@ function findBe(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.be;
+  const tagName = "be" /* be */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5736,7 +5740,7 @@ function findBlur(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.blur;
+  const tagName = "blur" /* blur */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5748,7 +5752,7 @@ function findBord(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.bord;
+  const tagName = "bord" /* bord */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5760,7 +5764,7 @@ function findXbord(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.xbord;
+  const tagName = "xbord" /* xbord */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5772,7 +5776,7 @@ function findYbord(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.ybord;
+  const tagName = "ybord" /* ybord */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5784,7 +5788,7 @@ function findShad(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.shad;
+  const tagName = "shad" /* shad */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5796,7 +5800,7 @@ function findXshad(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.xshad;
+  const tagName = "xshad" /* xshad */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5808,7 +5812,7 @@ function findYshad(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.yshad;
+  const tagName = "yshad" /* yshad */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5820,7 +5824,7 @@ function findFr(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fr;
+  const tagName = "fr" /* fr */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5832,7 +5836,7 @@ function findFrx(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.frx;
+  const tagName = "frx" /* frx */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5844,7 +5848,7 @@ function findFry(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fry;
+  const tagName = "fry" /* fry */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5856,7 +5860,7 @@ function findFrz(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.frz;
+  const tagName = "frz" /* frz */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5868,7 +5872,7 @@ function findFax(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fax;
+  const tagName = "fax" /* fax */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5880,7 +5884,7 @@ function findFay(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fay;
+  const tagName = "fay" /* fay */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5892,7 +5896,7 @@ function findP(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.p;
+  const tagName = "p" /* p */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5904,7 +5908,7 @@ function findPbo(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.pbo;
+  const tagName = "pbo" /* pbo */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5916,7 +5920,7 @@ function findQ(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.q;
+  const tagName = "q" /* q */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5928,7 +5932,7 @@ function findS(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.s;
+  const tagName = "s" /* s */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5940,7 +5944,7 @@ function findU(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.u;
+  const tagName = "u" /* u */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5952,7 +5956,7 @@ function findR(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.r;
+  const tagName = "r" /* r */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5964,7 +5968,7 @@ function findFe(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fe;
+  const tagName = "fe" /* fe */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5976,7 +5980,7 @@ function findFn(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fn;
+  const tagName = "fn" /* fn */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -5988,7 +5992,7 @@ function findFscx(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fscx;
+  const tagName = "fscx" /* fscx */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6000,7 +6004,7 @@ function findFscy(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fscy;
+  const tagName = "fscy" /* fscy */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6012,7 +6016,7 @@ function findFsp(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fsp;
+  const tagName = "fsp" /* fsp */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6024,7 +6028,7 @@ function findKLowerCase(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.kLowerCase;
+  const tagName = "k" /* kLowerCase */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6036,7 +6040,7 @@ function findKUpperCase(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.kUpperCase;
+  const tagName = "K" /* kUpperCase */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6048,7 +6052,7 @@ function findKo(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.ko;
+  const tagName = "ko" /* ko */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6060,7 +6064,7 @@ function findKf(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.kf;
+  const tagName = "kf" /* kf */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6072,7 +6076,7 @@ function findI(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.i;
+  const tagName = "i" /* i */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6084,7 +6088,7 @@ function findFs(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fs;
+  const tagName = "fs" /* fs */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6096,7 +6100,7 @@ function findPos(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.pos;
+  const tagName = "pos" /* pos */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6108,7 +6112,7 @@ function findOrg(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.org;
+  const tagName = "org" /* org */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6120,7 +6124,7 @@ function findFad(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fad;
+  const tagName = "fad" /* fad */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6132,7 +6136,7 @@ function findFade(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.fade;
+  const tagName = "fade" /* fade */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6144,7 +6148,7 @@ function findClip(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.clip;
+  const tagName = "clip" /* clip */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6156,7 +6160,7 @@ function findIclip(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.iclip;
+  const tagName = "iclip" /* iclip */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6168,7 +6172,7 @@ function findMove(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.move;
+  const tagName = "move" /* move */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6180,7 +6184,7 @@ function findT(items) {
   if (fx?.name != "effect") {
     return null;
   }
-  const tagName = TagName.t;
+  const tagName = "t" /* t */;
   const tag = fx.tags.find((tag2) => tag2.name == tagName);
   if (tag?.name != tagName) {
     return null;
@@ -6189,7 +6193,7 @@ function findT(items) {
 }
 function setA(items, newValue) {
   const defaultTag = {
-    name: TagName.a,
+    name: "a" /* a */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6200,7 +6204,7 @@ function setA(items, newValue) {
 }
 function setAn(items, newValue) {
   const defaultTag = {
-    name: TagName.an,
+    name: "an" /* an */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6211,7 +6215,7 @@ function setAn(items, newValue) {
 }
 function setB(items, newValue) {
   const defaultTag = {
-    name: TagName.b,
+    name: "b" /* b */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6222,7 +6226,7 @@ function setB(items, newValue) {
 }
 function setColor(items, blue, green, red) {
   const defaultTag = {
-    name: TagName.color,
+    name: "c" /* color */,
     blue,
     green,
     red
@@ -6237,7 +6241,7 @@ function setColor(items, blue, green, red) {
 }
 function setColor1(items, blue, green, red) {
   const defaultTag = {
-    name: TagName.color1,
+    name: "1c" /* color1 */,
     blue,
     green,
     red
@@ -6252,7 +6256,7 @@ function setColor1(items, blue, green, red) {
 }
 function setColor2(items, blue, green, red) {
   const defaultTag = {
-    name: TagName.color2,
+    name: "2c" /* color2 */,
     blue,
     green,
     red
@@ -6267,7 +6271,7 @@ function setColor2(items, blue, green, red) {
 }
 function setColor3(items, blue, green, red) {
   const defaultTag = {
-    name: TagName.color3,
+    name: "3c" /* color3 */,
     blue,
     green,
     red
@@ -6282,7 +6286,7 @@ function setColor3(items, blue, green, red) {
 }
 function setColor4(items, blue, green, red) {
   const defaultTag = {
-    name: TagName.color4,
+    name: "4c" /* color4 */,
     blue,
     green,
     red
@@ -6297,7 +6301,7 @@ function setColor4(items, blue, green, red) {
 }
 function setAlpha(items, newValue) {
   const defaultTag = {
-    name: TagName.alpha,
+    name: "alpha" /* alpha */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6308,7 +6312,7 @@ function setAlpha(items, newValue) {
 }
 function setAlpha1(items, newValue) {
   const defaultTag = {
-    name: TagName.alpha1,
+    name: "1a" /* alpha1 */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6319,7 +6323,7 @@ function setAlpha1(items, newValue) {
 }
 function setAlpha2(items, newValue) {
   const defaultTag = {
-    name: TagName.alpha2,
+    name: "2a" /* alpha2 */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6330,7 +6334,7 @@ function setAlpha2(items, newValue) {
 }
 function setAlpha3(items, newValue) {
   const defaultTag = {
-    name: TagName.alpha3,
+    name: "3a" /* alpha3 */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6341,7 +6345,7 @@ function setAlpha3(items, newValue) {
 }
 function setAlpha4(items, newValue) {
   const defaultTag = {
-    name: TagName.alpha4,
+    name: "4a" /* alpha4 */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6352,7 +6356,7 @@ function setAlpha4(items, newValue) {
 }
 function setBlur(items, newValue) {
   const defaultTag = {
-    name: TagName.blur,
+    name: "blur" /* blur */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6363,7 +6367,7 @@ function setBlur(items, newValue) {
 }
 function setBord(items, newValue) {
   const defaultTag = {
-    name: TagName.bord,
+    name: "bord" /* bord */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6374,7 +6378,7 @@ function setBord(items, newValue) {
 }
 function setXbord(items, newValue) {
   const defaultTag = {
-    name: TagName.xbord,
+    name: "xbord" /* xbord */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6385,7 +6389,7 @@ function setXbord(items, newValue) {
 }
 function setYbord(items, newValue) {
   const defaultTag = {
-    name: TagName.ybord,
+    name: "ybord" /* ybord */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6396,7 +6400,7 @@ function setYbord(items, newValue) {
 }
 function setFax(items, newValue) {
   const defaultTag = {
-    name: TagName.fax,
+    name: "fax" /* fax */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6407,7 +6411,7 @@ function setFax(items, newValue) {
 }
 function setFay(items, newValue) {
   const defaultTag = {
-    name: TagName.fay,
+    name: "fay" /* fay */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6418,7 +6422,7 @@ function setFay(items, newValue) {
 }
 function setFscx(items, newValue) {
   const defaultTag = {
-    name: TagName.fscx,
+    name: "fscx" /* fscx */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6429,7 +6433,7 @@ function setFscx(items, newValue) {
 }
 function setFscy(items, newValue) {
   const defaultTag = {
-    name: TagName.fscy,
+    name: "fscy" /* fscy */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6440,7 +6444,7 @@ function setFscy(items, newValue) {
 }
 function setFsp(items, newValue) {
   const defaultTag = {
-    name: TagName.fsp,
+    name: "fsp" /* fsp */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6451,7 +6455,7 @@ function setFsp(items, newValue) {
 }
 function setFe(items, encodingId) {
   const defaultTag = {
-    name: TagName.fe,
+    name: "fe" /* fe */,
     encodingId
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6462,7 +6466,7 @@ function setFe(items, encodingId) {
 }
 function setFn(items, font) {
   const defaultTag = {
-    name: TagName.fn,
+    name: "fn" /* fn */,
     font
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6473,7 +6477,7 @@ function setFn(items, font) {
 }
 function setKLowerCase(items, newValue) {
   const defaultTag = {
-    name: TagName.kLowerCase,
+    name: "k" /* kLowerCase */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6484,7 +6488,7 @@ function setKLowerCase(items, newValue) {
 }
 function setKUpperCase(items, newValue) {
   const defaultTag = {
-    name: TagName.kUpperCase,
+    name: "K" /* kUpperCase */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6495,7 +6499,7 @@ function setKUpperCase(items, newValue) {
 }
 function setKf(items, newValue) {
   const defaultTag = {
-    name: TagName.kf,
+    name: "kf" /* kf */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6506,7 +6510,7 @@ function setKf(items, newValue) {
 }
 function setKo(items, newValue) {
   const defaultTag = {
-    name: TagName.ko,
+    name: "ko" /* ko */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6517,7 +6521,7 @@ function setKo(items, newValue) {
 }
 function setP(items, newValue) {
   const defaultTag = {
-    name: TagName.p,
+    name: "p" /* p */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6528,7 +6532,7 @@ function setP(items, newValue) {
 }
 function setPbo(items, newValue) {
   const defaultTag = {
-    name: TagName.pbo,
+    name: "pbo" /* pbo */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6539,7 +6543,7 @@ function setPbo(items, newValue) {
 }
 function setQ(items, newValue) {
   const defaultTag = {
-    name: TagName.q,
+    name: "q" /* q */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6550,7 +6554,7 @@ function setQ(items, newValue) {
 }
 function setS(items, newValue) {
   const defaultTag = {
-    name: TagName.s,
+    name: "s" /* s */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6561,7 +6565,7 @@ function setS(items, newValue) {
 }
 function setShad(items, newValue) {
   const defaultTag = {
-    name: TagName.shad,
+    name: "shad" /* shad */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6572,7 +6576,7 @@ function setShad(items, newValue) {
 }
 function setXshad(items, newValue) {
   const defaultTag = {
-    name: TagName.xshad,
+    name: "xshad" /* xshad */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6583,7 +6587,7 @@ function setXshad(items, newValue) {
 }
 function setYshad(items, newValue) {
   const defaultTag = {
-    name: TagName.yshad,
+    name: "yshad" /* yshad */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6594,7 +6598,7 @@ function setYshad(items, newValue) {
 }
 function setU(items, newValue) {
   const defaultTag = {
-    name: TagName.u,
+    name: "u" /* u */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6605,7 +6609,7 @@ function setU(items, newValue) {
 }
 function setBe(items, newValue) {
   const defaultTag = {
-    name: TagName.be,
+    name: "be" /* be */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6616,7 +6620,7 @@ function setBe(items, newValue) {
 }
 function setFs(items, newValue) {
   const defaultTag = {
-    name: TagName.fs,
+    name: "fs" /* fs */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6627,7 +6631,7 @@ function setFs(items, newValue) {
 }
 function setFr(items, newValue) {
   const defaultTag = {
-    name: TagName.fr,
+    name: "fr" /* fr */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6638,7 +6642,7 @@ function setFr(items, newValue) {
 }
 function setFrx(items, newValue) {
   const defaultTag = {
-    name: TagName.frx,
+    name: "frx" /* frx */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6649,7 +6653,7 @@ function setFrx(items, newValue) {
 }
 function setFry(items, newValue) {
   const defaultTag = {
-    name: TagName.fry,
+    name: "fry" /* fry */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6660,7 +6664,7 @@ function setFry(items, newValue) {
 }
 function setFrz(items, newValue) {
   const defaultTag = {
-    name: TagName.frz,
+    name: "frz" /* frz */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6671,7 +6675,7 @@ function setFrz(items, newValue) {
 }
 function setI(items, newValue) {
   const defaultTag = {
-    name: TagName.i,
+    name: "i" /* i */,
     value: newValue
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6682,7 +6686,7 @@ function setI(items, newValue) {
 }
 function setR(items, style3) {
   const defaultTag = {
-    name: TagName.r,
+    name: "r" /* r */,
     style: style3
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6693,7 +6697,7 @@ function setR(items, style3) {
 }
 function setPos(items, x, y) {
   const defaultTag = {
-    name: TagName.pos,
+    name: "pos" /* pos */,
     x,
     y
   };
@@ -6706,7 +6710,7 @@ function setPos(items, x, y) {
 }
 function setOrg(items, x, y) {
   const defaultTag = {
-    name: TagName.org,
+    name: "org" /* org */,
     x,
     y
   };
@@ -6719,7 +6723,7 @@ function setOrg(items, x, y) {
 }
 function setFad(items, fadeIn, fadeOut) {
   const defaultTag = {
-    name: TagName.fad,
+    name: "fad" /* fad */,
     in: fadeIn,
     out: fadeOut
   };
@@ -6732,7 +6736,7 @@ function setFad(items, fadeIn, fadeOut) {
 }
 function setFade(items, alpha1, alpha2, alpha3, t1, t2, t3, t4) {
   const defaultTag = {
-    name: TagName.fade,
+    name: "fade" /* fade */,
     alpha1,
     alpha2,
     alpha3,
@@ -6755,7 +6759,7 @@ function setFade(items, alpha1, alpha2, alpha3, t1, t2, t3, t4) {
 }
 function setClip(items, drawCommands) {
   const defaultTag = {
-    name: TagName.clip,
+    name: "clip" /* clip */,
     drawCommands
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6766,7 +6770,7 @@ function setClip(items, drawCommands) {
 }
 function setIclip(items, drawCommands) {
   const defaultTag = {
-    name: TagName.iclip,
+    name: "iclip" /* iclip */,
     drawCommands
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
@@ -6777,7 +6781,7 @@ function setIclip(items, drawCommands) {
 }
 function setMove(items, x1, y1, x2, y2, t1 = null, t2 = null) {
   const defaultTag = {
-    name: TagName.move,
+    name: "move" /* move */,
     x1,
     y1,
     x2,
@@ -6798,7 +6802,7 @@ function setMove(items, x1, y1, x2, y2, t1 = null, t2 = null) {
 }
 function setT(items, tags, accel = null, t1 = null, t2 = null) {
   const defaultTag = {
-    name: TagName.t,
+    name: "t" /* t */,
     t1,
     t2,
     accel,
@@ -6829,7 +6833,7 @@ function itemsToTags(items) {
   }
   return fx.tags;
 }
-var setTag = function(items, tagName, defaultTag) {
+function setTag(items, tagName, defaultTag) {
   const fx = items.find((item) => item.name == "effect");
   if (fx?.name != "effect") {
     items.unshift({
@@ -6844,7 +6848,7 @@ var setTag = function(items, tagName, defaultTag) {
     return [true, defaultTag];
   }
   return [false, tag];
-};
+}
 function removeTag(items, tagName) {
   const fx = items.find((item) => item.name == "effect");
   if (fx?.name != "effect") {
@@ -6950,7 +6954,7 @@ function generateDefaultLine() {
   };
 }
 var TagName;
-(function(TagName2) {
+((TagName2) => {
   TagName2["a"] = "a";
   TagName2["alpha"] = "alpha";
   TagName2["alpha1"] = "1a";
@@ -7005,7 +7009,7 @@ var TagName;
   TagName2["xshad"] = "xshad";
   TagName2["ybord"] = "ybord";
   TagName2["yshad"] = "yshad";
-})(TagName || (TagName = {}));
+})(TagName ||= {});
 export {
   truncateNumberTags,
   truncate,
@@ -7194,4 +7198,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=BB14155300C3F04764756e2164756e21
+//# debugId=9531BF646C824B5F64756E2164756E21
