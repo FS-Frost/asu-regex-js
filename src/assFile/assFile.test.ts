@@ -1,5 +1,7 @@
 import { expect, test } from "bun:test";
 import { parseASSFile } from "./assFile";
+import { Alignments } from "./alignment";
+import { Encodings } from "./encoding";
 
 test("assFile: parse ass file", async () => {
     const text = await Bun.file("test/parseFile.ass").text();
@@ -19,6 +21,37 @@ test("assFile: parse ass file", async () => {
     expect(assFile.aegisubProjectGarbage.properties.size).toEqual(6);
 
     expect(assFile.styles.styles.length).toEqual(1);
+
+    expect(assFile.styles.styles[0]).toEqual({
+        name: "Default",
+        fontName: "Arial",
+        fontSize: 20,
+        primaryAlpha: "00",
+        primaryColor: "FFFFFF",
+        secondaryAlpha: "00",
+        secondaryColor: "0000FF",
+        outlineAlpha: "00",
+        outlineColor: "000000",
+        backAlpha: "00",
+        backColor: "000000",
+        bold: 0,
+        italic: 0,
+        underline: 0,
+        strikeOut: 0,
+        scaleX: 100,
+        scaleY: 100,
+        spacing: 0,
+        angle: 0,
+        borderStyle: 1,
+        outline: 2,
+        shadow: 2,
+        alignment: Alignments.DOWN_CENTER,
+        marginLeft: 10,
+        marginRight: 10,
+        marginVertical: 10,
+        encoding: Encodings.DEFAULT,
+    });
+
     expect(assFile.fonts.files.length).toEqual(3);
     expect(assFile.graphics.files.length).toEqual(2);
     expect(assFile.events.lines.length).toEqual(5);
