@@ -72,7 +72,7 @@ var createInput = (s) => {
     grouped: () => createInput(`${s}`.replace(GROUPED_REPLACE_RE, "($1$3)$2")),
     at: {
       lineStart: () => createInput(`^${s}`),
-      lineEnd: () => createInput(`${s}\$`)
+      lineEnd: () => createInput(`${s}$`)
     }
   };
 };
@@ -305,189 +305,6 @@ function subtractTimes(minuend, subtracting) {
 }
 
 // node_modules/zod/lib/index.mjs
-function setErrorMap(map) {
-  overrideErrorMap = map;
-}
-function getErrorMap() {
-  return overrideErrorMap;
-}
-function addIssueToContext(ctx, issueData) {
-  const overrideMap = getErrorMap();
-  const issue = makeIssue({
-    issueData,
-    data: ctx.data,
-    path: ctx.path,
-    errorMaps: [
-      ctx.common.contextualErrorMap,
-      ctx.schemaErrorMap,
-      overrideMap,
-      overrideMap === errorMap ? undefined : errorMap
-    ].filter((x) => !!x)
-  });
-  ctx.common.issues.push(issue);
-}
-function __classPrivateFieldGet(receiver, state, kind, f) {
-  if (kind === "a" && !f)
-    throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
-    throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-}
-function __classPrivateFieldSet(receiver, state, value, kind, f) {
-  if (kind === "m")
-    throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f)
-    throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
-    throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
-}
-function processCreateParams(params) {
-  if (!params)
-    return {};
-  const { errorMap, invalid_type_error, required_error, description } = params;
-  if (errorMap && (invalid_type_error || required_error)) {
-    throw new Error(`Can't use "invalid_type_error" or "required_error" in conjunction with custom error map.`);
-  }
-  if (errorMap)
-    return { errorMap, description };
-  const customMap = (iss, ctx) => {
-    var _a, _b;
-    const { message } = params;
-    if (iss.code === "invalid_enum_value") {
-      return { message: message !== null && message !== undefined ? message : ctx.defaultError };
-    }
-    if (typeof ctx.data === "undefined") {
-      return { message: (_a = message !== null && message !== undefined ? message : required_error) !== null && _a !== undefined ? _a : ctx.defaultError };
-    }
-    if (iss.code !== "invalid_type")
-      return { message: ctx.defaultError };
-    return { message: (_b = message !== null && message !== undefined ? message : invalid_type_error) !== null && _b !== undefined ? _b : ctx.defaultError };
-  };
-  return { errorMap: customMap, description };
-}
-function timeRegexSource(args) {
-  let regex = `([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d`;
-  if (args.precision) {
-    regex = `${regex}\\.\\d{${args.precision}}`;
-  } else if (args.precision == null) {
-    regex = `${regex}(\\.\\d+)?`;
-  }
-  return regex;
-}
-function timeRegex(args) {
-  return new RegExp(`^${timeRegexSource(args)}\$`);
-}
-function datetimeRegex(args) {
-  let regex = `${dateRegexSource}T${timeRegexSource(args)}`;
-  const opts = [];
-  opts.push(args.local ? `Z?` : `Z`);
-  if (args.offset)
-    opts.push(`([+-]\\d{2}:?\\d{2})`);
-  regex = `${regex}(${opts.join("|")})`;
-  return new RegExp(`^${regex}\$`);
-}
-function isValidIP(ip, version) {
-  if ((version === "v4" || !version) && ipv4Regex.test(ip)) {
-    return true;
-  }
-  if ((version === "v6" || !version) && ipv6Regex.test(ip)) {
-    return true;
-  }
-  return false;
-}
-function floatSafeRemainder(val, step) {
-  const valDecCount = (val.toString().split(".")[1] || "").length;
-  const stepDecCount = (step.toString().split(".")[1] || "").length;
-  const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
-  const valInt = parseInt(val.toFixed(decCount).replace(".", ""));
-  const stepInt = parseInt(step.toFixed(decCount).replace(".", ""));
-  return valInt % stepInt / Math.pow(10, decCount);
-}
-function deepPartialify(schema) {
-  if (schema instanceof ZodObject) {
-    const newShape = {};
-    for (const key in schema.shape) {
-      const fieldSchema = schema.shape[key];
-      newShape[key] = ZodOptional.create(deepPartialify(fieldSchema));
-    }
-    return new ZodObject({
-      ...schema._def,
-      shape: () => newShape
-    });
-  } else if (schema instanceof ZodArray) {
-    return new ZodArray({
-      ...schema._def,
-      type: deepPartialify(schema.element)
-    });
-  } else if (schema instanceof ZodOptional) {
-    return ZodOptional.create(deepPartialify(schema.unwrap()));
-  } else if (schema instanceof ZodNullable) {
-    return ZodNullable.create(deepPartialify(schema.unwrap()));
-  } else if (schema instanceof ZodTuple) {
-    return ZodTuple.create(schema.items.map((item) => deepPartialify(item)));
-  } else {
-    return schema;
-  }
-}
-function mergeValues(a, b) {
-  const aType = getParsedType(a);
-  const bType = getParsedType(b);
-  if (a === b) {
-    return { valid: true, data: a };
-  } else if (aType === ZodParsedType.object && bType === ZodParsedType.object) {
-    const bKeys = util.objectKeys(b);
-    const sharedKeys = util.objectKeys(a).filter((key) => bKeys.indexOf(key) !== -1);
-    const newObj = { ...a, ...b };
-    for (const key of sharedKeys) {
-      const sharedValue = mergeValues(a[key], b[key]);
-      if (!sharedValue.valid) {
-        return { valid: false };
-      }
-      newObj[key] = sharedValue.data;
-    }
-    return { valid: true, data: newObj };
-  } else if (aType === ZodParsedType.array && bType === ZodParsedType.array) {
-    if (a.length !== b.length) {
-      return { valid: false };
-    }
-    const newArray = [];
-    for (let index = 0;index < a.length; index++) {
-      const itemA = a[index];
-      const itemB = b[index];
-      const sharedValue = mergeValues(itemA, itemB);
-      if (!sharedValue.valid) {
-        return { valid: false };
-      }
-      newArray.push(sharedValue.data);
-    }
-    return { valid: true, data: newArray };
-  } else if (aType === ZodParsedType.date && bType === ZodParsedType.date && +a === +b) {
-    return { valid: true, data: a };
-  } else {
-    return { valid: false };
-  }
-}
-function createZodEnum(values, params) {
-  return new ZodEnum({
-    values,
-    typeName: ZodFirstPartyTypeKind.ZodEnum,
-    ...processCreateParams(params)
-  });
-}
-function custom(check, params = {}, fatal) {
-  if (check)
-    return ZodAny.create().superRefine((data, ctx) => {
-      var _a, _b;
-      if (!check(data)) {
-        const p = typeof params === "function" ? params(data) : typeof params === "string" ? { message: params } : params;
-        const _fatal = (_b = (_a = p.fatal) !== null && _a !== undefined ? _a : fatal) !== null && _b !== undefined ? _b : true;
-        const p2 = typeof p === "string" ? { message: p } : p;
-        ctx.addIssue({ code: "custom", ...p2, fatal: _fatal });
-      }
-    });
-  return ZodAny.create();
-}
 var util;
 (function(util2) {
   util2.assertEqual = (val) => val;
@@ -833,6 +650,12 @@ var errorMap = (issue, _ctx) => {
   return { message };
 };
 var overrideErrorMap = errorMap;
+function setErrorMap(map) {
+  overrideErrorMap = map;
+}
+function getErrorMap() {
+  return overrideErrorMap;
+}
 var makeIssue = (params) => {
   const { data, path, errorMaps, issueData } = params;
   const fullPath = [...path, ...issueData.path || []];
@@ -859,6 +682,21 @@ var makeIssue = (params) => {
   };
 };
 var EMPTY_PATH = [];
+function addIssueToContext(ctx, issueData) {
+  const overrideMap = getErrorMap();
+  const issue = makeIssue({
+    issueData,
+    data: ctx.data,
+    path: ctx.path,
+    errorMaps: [
+      ctx.common.contextualErrorMap,
+      ctx.schemaErrorMap,
+      overrideMap,
+      overrideMap === errorMap ? undefined : errorMap
+    ].filter((x) => !!x)
+  });
+  ctx.common.issues.push(issue);
+}
 
 class ParseStatus {
   constructor() {
@@ -923,6 +761,22 @@ var isAborted = (x) => x.status === "aborted";
 var isDirty = (x) => x.status === "dirty";
 var isValid = (x) => x.status === "valid";
 var isAsync = (x) => typeof Promise !== "undefined" && x instanceof Promise;
+function __classPrivateFieldGet(receiver, state, kind, f) {
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+  if (kind === "m")
+    throw new TypeError("Private method is not writable");
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
+}
 var errorUtil;
 (function(errorUtil2) {
   errorUtil2.errToObj = (message) => typeof message === "string" ? { message } : message || {};
@@ -969,6 +823,30 @@ var handleResult = (ctx, result) => {
     };
   }
 };
+function processCreateParams(params) {
+  if (!params)
+    return {};
+  const { errorMap: errorMap2, invalid_type_error, required_error, description } = params;
+  if (errorMap2 && (invalid_type_error || required_error)) {
+    throw new Error(`Can't use "invalid_type_error" or "required_error" in conjunction with custom error map.`);
+  }
+  if (errorMap2)
+    return { errorMap: errorMap2, description };
+  const customMap = (iss, ctx) => {
+    var _a, _b;
+    const { message } = params;
+    if (iss.code === "invalid_enum_value") {
+      return { message: message !== null && message !== undefined ? message : ctx.defaultError };
+    }
+    if (typeof ctx.data === "undefined") {
+      return { message: (_a = message !== null && message !== undefined ? message : required_error) !== null && _a !== undefined ? _a : ctx.defaultError };
+    }
+    if (iss.code !== "invalid_type")
+      return { message: ctx.defaultError };
+    return { message: (_b = message !== null && message !== undefined ? message : invalid_type_error) !== null && _b !== undefined ? _b : ctx.defaultError };
+  };
+  return { errorMap: customMap, description };
+}
 
 class ZodType {
   constructor(def) {
@@ -1220,13 +1098,43 @@ var uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]
 var nanoidRegex = /^[a-z0-9_-]{21}$/i;
 var durationRegex = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/;
 var emailRegex = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i;
-var _emojiRegex = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+\$`;
+var _emojiRegex = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$`;
 var emojiRegex;
 var ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
 var ipv6Regex = /^(([a-f0-9]{1,4}:){7}|::([a-f0-9]{1,4}:){0,6}|([a-f0-9]{1,4}:){1}:([a-f0-9]{1,4}:){0,5}|([a-f0-9]{1,4}:){2}:([a-f0-9]{1,4}:){0,4}|([a-f0-9]{1,4}:){3}:([a-f0-9]{1,4}:){0,3}|([a-f0-9]{1,4}:){4}:([a-f0-9]{1,4}:){0,2}|([a-f0-9]{1,4}:){5}:([a-f0-9]{1,4}:){0,1})([a-f0-9]{1,4}|(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2}))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([0-9]{1,2})))$/;
 var base64Regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 var dateRegexSource = `((\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-((0[13578]|1[02])-(0[1-9]|[12]\\d|3[01])|(0[469]|11)-(0[1-9]|[12]\\d|30)|(02)-(0[1-9]|1\\d|2[0-8])))`;
-var dateRegex = new RegExp(`^${dateRegexSource}\$`);
+var dateRegex = new RegExp(`^${dateRegexSource}$`);
+function timeRegexSource(args) {
+  let regex = `([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d`;
+  if (args.precision) {
+    regex = `${regex}\\.\\d{${args.precision}}`;
+  } else if (args.precision == null) {
+    regex = `${regex}(\\.\\d+)?`;
+  }
+  return regex;
+}
+function timeRegex(args) {
+  return new RegExp(`^${timeRegexSource(args)}$`);
+}
+function datetimeRegex(args) {
+  let regex = `${dateRegexSource}T${timeRegexSource(args)}`;
+  const opts = [];
+  opts.push(args.local ? `Z?` : `Z`);
+  if (args.offset)
+    opts.push(`([+-]\\d{2}:?\\d{2})`);
+  regex = `${regex}(${opts.join("|")})`;
+  return new RegExp(`^${regex}$`);
+}
+function isValidIP(ip, version) {
+  if ((version === "v4" || !version) && ipv4Regex.test(ip)) {
+    return true;
+  }
+  if ((version === "v6" || !version) && ipv6Regex.test(ip)) {
+    return true;
+  }
+  return false;
+}
 
 class ZodString extends ZodType {
   _parse(input) {
@@ -1725,6 +1633,14 @@ ZodString.create = (params) => {
     ...processCreateParams(params)
   });
 };
+function floatSafeRemainder(val, step) {
+  const valDecCount = (val.toString().split(".")[1] || "").length;
+  const stepDecCount = (step.toString().split(".")[1] || "").length;
+  const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
+  const valInt = parseInt(val.toFixed(decCount).replace(".", ""));
+  const stepInt = parseInt(step.toFixed(decCount).replace(".", ""));
+  return valInt % stepInt / Math.pow(10, decCount);
+}
 
 class ZodNumber extends ZodType {
   constructor() {
@@ -2500,6 +2416,32 @@ ZodArray.create = (schema, params) => {
     ...processCreateParams(params)
   });
 };
+function deepPartialify(schema) {
+  if (schema instanceof ZodObject) {
+    const newShape = {};
+    for (const key in schema.shape) {
+      const fieldSchema = schema.shape[key];
+      newShape[key] = ZodOptional.create(deepPartialify(fieldSchema));
+    }
+    return new ZodObject({
+      ...schema._def,
+      shape: () => newShape
+    });
+  } else if (schema instanceof ZodArray) {
+    return new ZodArray({
+      ...schema._def,
+      type: deepPartialify(schema.element)
+    });
+  } else if (schema instanceof ZodOptional) {
+    return ZodOptional.create(deepPartialify(schema.unwrap()));
+  } else if (schema instanceof ZodNullable) {
+    return ZodNullable.create(deepPartialify(schema.unwrap()));
+  } else if (schema instanceof ZodTuple) {
+    return ZodTuple.create(schema.items.map((item) => deepPartialify(item)));
+  } else {
+    return schema;
+  }
+}
 
 class ZodObject extends ZodType {
   constructor() {
@@ -2946,6 +2888,44 @@ class ZodDiscriminatedUnion extends ZodType {
       optionsMap,
       ...processCreateParams(params)
     });
+  }
+}
+function mergeValues(a, b) {
+  const aType = getParsedType(a);
+  const bType = getParsedType(b);
+  if (a === b) {
+    return { valid: true, data: a };
+  } else if (aType === ZodParsedType.object && bType === ZodParsedType.object) {
+    const bKeys = util.objectKeys(b);
+    const sharedKeys = util.objectKeys(a).filter((key) => bKeys.indexOf(key) !== -1);
+    const newObj = { ...a, ...b };
+    for (const key of sharedKeys) {
+      const sharedValue = mergeValues(a[key], b[key]);
+      if (!sharedValue.valid) {
+        return { valid: false };
+      }
+      newObj[key] = sharedValue.data;
+    }
+    return { valid: true, data: newObj };
+  } else if (aType === ZodParsedType.array && bType === ZodParsedType.array) {
+    if (a.length !== b.length) {
+      return { valid: false };
+    }
+    const newArray = [];
+    for (let index = 0;index < a.length; index++) {
+      const itemA = a[index];
+      const itemB = b[index];
+      const sharedValue = mergeValues(itemA, itemB);
+      if (!sharedValue.valid) {
+        return { valid: false };
+      }
+      newArray.push(sharedValue.data);
+    }
+    return { valid: true, data: newArray };
+  } else if (aType === ZodParsedType.date && bType === ZodParsedType.date && +a === +b) {
+    return { valid: true, data: a };
+  } else {
+    return { valid: false };
   }
 }
 
@@ -3436,6 +3416,13 @@ ZodLiteral.create = (value, params) => {
     ...processCreateParams(params)
   });
 };
+function createZodEnum(values, params) {
+  return new ZodEnum({
+    values,
+    typeName: ZodFirstPartyTypeKind.ZodEnum,
+    ...processCreateParams(params)
+  });
+}
 
 class ZodEnum extends ZodType {
   constructor() {
@@ -3956,6 +3943,19 @@ ZodReadonly.create = (type, params) => {
     ...processCreateParams(params)
   });
 };
+function custom(check, params = {}, fatal) {
+  if (check)
+    return ZodAny.create().superRefine((data, ctx) => {
+      var _a, _b;
+      if (!check(data)) {
+        const p = typeof params === "function" ? params(data) : typeof params === "string" ? { message: params } : params;
+        const _fatal = (_b = (_a = p.fatal) !== null && _a !== undefined ? _a : fatal) !== null && _b !== undefined ? _b : true;
+        const p2 = typeof p === "string" ? { message: p } : p;
+        ctx.addIssue({ code: "custom", ...p2, fatal: _fatal });
+      }
+    });
+  return ZodAny.create();
+}
 var late = {
   object: ZodObject.lazycreate
 };
@@ -4049,7 +4049,7 @@ var coerce = {
   date: (arg) => ZodDate.create({ ...arg, coerce: true })
 };
 var NEVER = INVALID;
-var z = Object.freeze({
+var z = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   defaultErrorMap: errorMap,
   setErrorMap,
@@ -4215,9 +4215,11 @@ function newSectionEvents() {
 }
 function sectionEventsToString(info) {
   let s = "[Events]";
-  s += `\nFormat: ${info.format}`;
+  s += `
+Format: ${info.format}`;
   for (const line of info.lines) {
-    s += `\n${lineToString(line)}`;
+    s += `
+${lineToString(line)}`;
   }
   return s;
 }
@@ -4231,7 +4233,8 @@ function newSectionExtraData() {
 function sectionExtraDataToString(info) {
   let s = "[Aegisub Extradata]";
   for (const datum of info.data) {
-    s += `\nData: ${datum}`;
+    s += `
+Data: ${datum}`;
   }
   return s;
 }
@@ -4240,7 +4243,8 @@ function sectionExtraDataToString(info) {
 function AttachedFontToString(file) {
   let s = `fontname: ${file.name}`;
   for (const datum of file.data) {
-    s += `\n${datum}`;
+    s += `
+${datum}`;
   }
   return s;
 }
@@ -4252,16 +4256,20 @@ function newSectionFonts() {
   };
 }
 function sectionFontsToString(info) {
-  let s = "[Fonts]\n";
+  let s = `[Fonts]
+`;
   let i = 0;
   for (const font of info.files) {
     if (i > 0) {
-      s += "\n\n";
+      s += `
+
+`;
     }
     s += AttachedFontToString(font);
     i++;
   }
-  s += "\n";
+  s += `
+`;
   return s;
 }
 
@@ -4269,7 +4277,8 @@ function sectionFontsToString(info) {
 function AttachedGraphicToString(file) {
   let s = `filename: ${file.name}`;
   for (const datum of file.data) {
-    s += `\n${datum}`;
+    s += `
+${datum}`;
   }
   return s;
 }
@@ -4281,11 +4290,14 @@ function newSectionGraphics() {
   };
 }
 function sectionGraphicsToString(info) {
-  let s = "[Graphics]\n";
+  let s = `[Graphics]
+`;
   let i = 0;
   for (const graphic of info.files) {
     if (i > 0) {
-      s += "\n\n";
+      s += `
+
+`;
     }
     s += AttachedGraphicToString(graphic);
     i++;
@@ -4294,22 +4306,6 @@ function sectionGraphicsToString(info) {
 }
 
 // src/assFile/sectionProjectGarbage.ts
-function newProjectGarbage() {
-  return {
-    comments: [],
-    properties: new Map
-  };
-}
-function sectionProjectGarbageToString(info) {
-  let s = "[Aegisub Project Garbage]";
-  for (const comment of info.comments) {
-    s += `\n; ${comment}`;
-  }
-  for (const [key, value] of info.properties) {
-    s += `\n${key}: ${value}`;
-  }
-  return s;
-}
 var ProjectGarbagePropertyAutomationScripts = "Automation Scripts";
 var ProjectGarbagePropertyExportFilters = "Export Filters";
 var ProjectGarbagePropertyExportEncoding = "Export Encoding";
@@ -4324,24 +4320,26 @@ var ProjectGarbagePropertyVideoZoomPercent = "Video Zoom Percent";
 var ProjectGarbagePropertyScrollPosition = "Scroll Position";
 var ProjectGarbagePropertyActiveLine = "Active Line";
 var ProjectGarbagePropertyVideoPosition = "Video Position";
-
-// src/assFile/sectionScriptInfo.ts
-function newScriptInfo() {
+function newProjectGarbage() {
   return {
     comments: [],
     properties: new Map
   };
 }
-function sectionScriptInfoToString(info) {
-  let s = "[Script Info]";
+function sectionProjectGarbageToString(info) {
+  let s = "[Aegisub Project Garbage]";
   for (const comment of info.comments) {
-    s += `\n; ${comment}`;
+    s += `
+; ${comment}`;
   }
   for (const [key, value] of info.properties) {
-    s += `\n${key}: ${value}`;
+    s += `
+${key}: ${value}`;
   }
   return s;
 }
+
+// src/assFile/sectionScriptInfo.ts
 var ScriptInfoPropertyTitle = "Title";
 var ScriptInfoPropertyScriptType = "ScriptType";
 var ScriptInfoPropertyWrapStyle = "WrapStyle";
@@ -4356,6 +4354,24 @@ var ScriptInfoPropertyOriginalTiming = "Original Timing";
 var ScriptInfoPropertySynchPoint = "Synch Point";
 var ScriptInfoPropertyScriptUpdatedBy = "Script Updated By";
 var ScriptInfoPropertyUpdateDetails = "Update Details";
+function newScriptInfo() {
+  return {
+    comments: [],
+    properties: new Map
+  };
+}
+function sectionScriptInfoToString(info) {
+  let s = "[Script Info]";
+  for (const comment of info.comments) {
+    s += `
+; ${comment}`;
+  }
+  for (const [key, value] of info.properties) {
+    s += `
+${key}: ${value}`;
+  }
+  return s;
+}
 
 // src/assFile/style.ts
 function styleToString(style) {
@@ -4434,24 +4450,48 @@ function generateDefaultSectionStyles() {
 }
 function sectionStylesToString(info) {
   let s = "[V4+ Styles]";
-  s += `\nFormat: ${info.format}`;
-  for (const style2 of info.styles) {
-    s += `\n${styleToString(style2)}`;
+  s += `
+Format: ${info.format}`;
+  for (const style of info.styles) {
+    s += `
+${styleToString(style)}`;
   }
   return s;
 }
 
 // src/assFile/assFile.ts
+var _scriptInfo = "[Script Info]";
+var _projectGarbage = "[Aegisub Project Garbage]";
+var _styles = "[V4+ Styles]";
+var _graphics = "[Graphics]";
+var _fonts = "[Fonts]";
+var _events = "[Events]";
+var _extraData = "[Aegisub Extradata]";
+var _CommentStart = "; ";
+var _DataStart = "Data: ";
 function ASSFileToString(file) {
   let s = "";
   s += sectionScriptInfoToString(file.scriptInfo);
-  s += "\n\n" + sectionProjectGarbageToString(file.aegisubProjectGarbage);
-  s += "\n\n" + sectionStylesToString(file.styles);
-  s += "\n\n" + sectionFontsToString(file.fonts);
-  s += "\n\n" + sectionGraphicsToString(file.graphics);
-  s += "\n\n" + sectionEventsToString(file.events);
-  s += "\n\n" + sectionExtraDataToString(file.extraData);
-  s += "\n";
+  s += `
+
+` + sectionProjectGarbageToString(file.aegisubProjectGarbage);
+  s += `
+
+` + sectionStylesToString(file.styles);
+  s += `
+
+` + sectionFontsToString(file.fonts);
+  s += `
+
+` + sectionGraphicsToString(file.graphics);
+  s += `
+
+` + sectionEventsToString(file.events);
+  s += `
+
+` + sectionExtraDataToString(file.extraData);
+  s += `
+`;
   return s;
 }
 function parseASSFile(text) {
@@ -4473,7 +4513,8 @@ function parseASSFile(text) {
   const modeExtraData = "extraData";
   let mode = "";
   let lastAttachedFile = "";
-  const linesToParse = text.split("\n");
+  const linesToParse = text.split(`
+`);
   for (let i = 0;i < linesToParse.length; i++) {
     const lineNumber = i + 1;
     const line = removeUtf8Boom(linesToParse[i]);
@@ -4531,7 +4572,9 @@ function parseASSFile(text) {
         break;
     }
     if (err.length > 0) {
-      console.error(`failed to parse ass file at line ${lineNumber}: ${err}\nLine:\n${line}`);
+      console.error(`failed to parse ass file at line ${lineNumber}: ${err}
+Line:
+${line}`);
       return null;
     }
   }
@@ -4583,7 +4626,7 @@ function processProjectGarbageLine(assFile, line) {
   return "";
 }
 function processStylesLine(assFile, line) {
-  const regexStyle = /(?<name>.*)\s*,\s*(?<fontName>.*)\s*,\s*(?<fontSize>\d+(?:\.\d+)?)\s*,\s*&H(?<alpha1>[A-Fa-f0-9]{2})(?<color1>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha2>[A-Fa-f0-9]{2})(?<color2>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha3>[A-Fa-f0-9]{2})(?<color3>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha4>[A-Fa-f0-9]{2})(?<color4>[A-Fa-f0-9]{6})\s*,\s*(?<bold>0|-1)\s*,\s*(?<italic>0|-1)\s*,\s*(?<underline>0|-1)\s*,\s*(?<strikeout>0|-1)\s*,\s*(?<scaleX>\d+(?:\.\d+)?)\s*,\s*(?<scaleY>\d+(?:\.\d+)?)\s*,\s*(?<spacing>\d+(?:\.\d+)?)\s*,\s*(?<angle>-?\d+(?:\.\d+)?)\s*,\s*(?<borderStyle>\d+)\s*,\s*(?<outline>\d+(?:\.\d+)?)\s*,\s*(?<shadow>\d+(?:\.\d+)?)\s*,\s*(?<alignment>[1-9])\s*,\s*(?<marginLeft>\d+)\s*,\s*(?<marginRight>\d+)\s*,\s*(?<marginVertical>\d+)\s*,\s*(?<encoding>\d+)/;
+  const regexStyle = /Style: (?<name>.*)\s*,\s*(?<fontName>.*)\s*,\s*(?<fontSize>\d+(?:\.\d+)?)\s*,\s*&H(?<alpha1>[A-Fa-f0-9]{2})(?<color1>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha2>[A-Fa-f0-9]{2})(?<color2>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha3>[A-Fa-f0-9]{2})(?<color3>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha4>[A-Fa-f0-9]{2})(?<color4>[A-Fa-f0-9]{6})\s*,\s*(?<bold>0|-1)\s*,\s*(?<italic>0|-1)\s*,\s*(?<underline>0|-1)\s*,\s*(?<strikeout>0|-1)\s*,\s*(?<scaleX>\d+(?:\.\d+)?)\s*,\s*(?<scaleY>\d+(?:\.\d+)?)\s*,\s*(?<spacing>\d+(?:\.\d+)?)\s*,\s*(?<angle>-?\d+(?:\.\d+)?)\s*,\s*(?<borderStyle>\d+)\s*,\s*(?<outline>\d+(?:\.\d+)?)\s*,\s*(?<shadow>\d+(?:\.\d+)?)\s*,\s*(?<alignment>[1-9])\s*,\s*(?<marginLeft>\d+)\s*,\s*(?<marginRight>\d+)\s*,\s*(?<marginVertical>\d+)\s*,\s*(?<encoding>\d+)/;
   if (!line.startsWith("Style: ")) {
     return "";
   }
@@ -4595,13 +4638,13 @@ function processStylesLine(assFile, line) {
   if (!alignmentParseResult.success) {
     return `failed to parse style: invalid alignment: ${line}`;
   }
-  const alignment3 = alignmentParseResult.data;
+  const alignment = alignmentParseResult.data;
   const encodingParseResult = Encoding.safeParse(Number(match.groups.encoding));
   if (!encodingParseResult.success) {
     return `failed to parse style: invalid encoding: ${match.groups.encoding}`;
   }
-  const encoding3 = encodingParseResult.data;
-  const style2 = {
+  const encoding = encodingParseResult.data;
+  const style = {
     name: match.groups.name ?? "",
     fontName: match.groups.fontName ?? "",
     fontSize: Number(match.groups.fontSize ?? "0"),
@@ -4624,13 +4667,13 @@ function processStylesLine(assFile, line) {
     borderStyle: Number(match.groups.borderStyle),
     outline: Number(match.groups.outline),
     shadow: Number(match.groups.shadow),
-    alignment: alignment3,
+    alignment,
     marginLeft: Number(match.groups.marginLeft),
     marginRight: Number(match.groups.marginRight),
     marginVertical: Number(match.groups.marginVertical),
-    encoding: encoding3
+    encoding
   };
-  assFile.styles.styles.push(style2);
+  assFile.styles.styles.push(style);
   return "";
 }
 function processFontsLine(assFile, line, currentAttachedFile) {
@@ -4700,15 +4743,6 @@ function processExtraDataLine(assFile, line) {
   const datum = line.substring(_DataStart.length);
   assFile.extraData.data.push(datum);
 }
-var _scriptInfo = "[Script Info]";
-var _projectGarbage = "[Aegisub Project Garbage]";
-var _styles = "[V4+ Styles]";
-var _graphics = "[Graphics]";
-var _fonts = "[Fonts]";
-var _events = "[Events]";
-var _extraData = "[Aegisub Extradata]";
-var _CommentStart = "; ";
-var _DataStart = "Data: ";
 // src/karaoke.ts
 function splitSyllabes(line) {
   const syls = [];
@@ -4774,6 +4808,63 @@ function isRomajiWord(word2) {
 }
 
 // src/asu.ts
+var TagName;
+((TagName2) => {
+  TagName2["a"] = "a";
+  TagName2["alpha"] = "alpha";
+  TagName2["alpha1"] = "1a";
+  TagName2["alpha2"] = "2a";
+  TagName2["alpha3"] = "3a";
+  TagName2["alpha4"] = "4a";
+  TagName2["an"] = "an";
+  TagName2["b"] = "b";
+  TagName2["be"] = "be";
+  TagName2["blur"] = "blur";
+  TagName2["bord"] = "bord";
+  TagName2["clip"] = "clip";
+  TagName2["color"] = "c";
+  TagName2["color1"] = "1c";
+  TagName2["color2"] = "2c";
+  TagName2["color3"] = "3c";
+  TagName2["color4"] = "4c";
+  TagName2["fad"] = "fad";
+  TagName2["fade"] = "fade";
+  TagName2["fax"] = "fax";
+  TagName2["fay"] = "fay";
+  TagName2["fe"] = "fe";
+  TagName2["fn"] = "fn";
+  TagName2["fr"] = "fr";
+  TagName2["frx"] = "frx";
+  TagName2["fry"] = "fry";
+  TagName2["frz"] = "frz";
+  TagName2["fs"] = "fs";
+  TagName2["fscx"] = "fscx";
+  TagName2["fscy"] = "fscy";
+  TagName2["fsp"] = "fsp";
+  TagName2["i"] = "i";
+  TagName2["iclip"] = "iclip";
+  TagName2["kLowerCase"] = "k";
+  TagName2["kUpperCase"] = "K";
+  TagName2["kf"] = "kf";
+  TagName2["ko"] = "ko";
+  TagName2["move"] = "move";
+  TagName2["org"] = "org";
+  TagName2["p"] = "p";
+  TagName2["pbo"] = "pbo";
+  TagName2["pos"] = "pos";
+  TagName2["q"] = "q";
+  TagName2["r"] = "r";
+  TagName2["s"] = "s";
+  TagName2["shad"] = "shad";
+  TagName2["t"] = "t";
+  TagName2["text"] = "text";
+  TagName2["u"] = "u";
+  TagName2["unknown"] = "unknown";
+  TagName2["xbord"] = "xbord";
+  TagName2["xshad"] = "xshad";
+  TagName2["ybord"] = "ybord";
+  TagName2["yshad"] = "yshad";
+})(TagName ||= {});
 function parseTags(text, tags) {
   const tagNameSource = text.substring(1);
   const matchTagT = text.match(regexTagT);
@@ -6683,14 +6774,14 @@ function setI(items, newValue) {
   }
   return tag;
 }
-function setR(items, style3) {
+function setR(items, style2) {
   const defaultTag = {
     name: "r" /* r */,
-    style: style3
+    style: style2
   };
   const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
   if (!updated) {
-    tag.style = style3;
+    tag.style = style2;
   }
   return tag;
 }
@@ -6952,63 +7043,6 @@ function generateDefaultLine() {
     content: ""
   };
 }
-var TagName;
-((TagName2) => {
-  TagName2["a"] = "a";
-  TagName2["alpha"] = "alpha";
-  TagName2["alpha1"] = "1a";
-  TagName2["alpha2"] = "2a";
-  TagName2["alpha3"] = "3a";
-  TagName2["alpha4"] = "4a";
-  TagName2["an"] = "an";
-  TagName2["b"] = "b";
-  TagName2["be"] = "be";
-  TagName2["blur"] = "blur";
-  TagName2["bord"] = "bord";
-  TagName2["clip"] = "clip";
-  TagName2["color"] = "c";
-  TagName2["color1"] = "1c";
-  TagName2["color2"] = "2c";
-  TagName2["color3"] = "3c";
-  TagName2["color4"] = "4c";
-  TagName2["fad"] = "fad";
-  TagName2["fade"] = "fade";
-  TagName2["fax"] = "fax";
-  TagName2["fay"] = "fay";
-  TagName2["fe"] = "fe";
-  TagName2["fn"] = "fn";
-  TagName2["fr"] = "fr";
-  TagName2["frx"] = "frx";
-  TagName2["fry"] = "fry";
-  TagName2["frz"] = "frz";
-  TagName2["fs"] = "fs";
-  TagName2["fscx"] = "fscx";
-  TagName2["fscy"] = "fscy";
-  TagName2["fsp"] = "fsp";
-  TagName2["i"] = "i";
-  TagName2["iclip"] = "iclip";
-  TagName2["kLowerCase"] = "k";
-  TagName2["kUpperCase"] = "K";
-  TagName2["kf"] = "kf";
-  TagName2["ko"] = "ko";
-  TagName2["move"] = "move";
-  TagName2["org"] = "org";
-  TagName2["p"] = "p";
-  TagName2["pbo"] = "pbo";
-  TagName2["pos"] = "pos";
-  TagName2["q"] = "q";
-  TagName2["r"] = "r";
-  TagName2["s"] = "s";
-  TagName2["shad"] = "shad";
-  TagName2["t"] = "t";
-  TagName2["text"] = "text";
-  TagName2["u"] = "u";
-  TagName2["unknown"] = "unknown";
-  TagName2["xbord"] = "xbord";
-  TagName2["xshad"] = "xshad";
-  TagName2["ybord"] = "ybord";
-  TagName2["yshad"] = "yshad";
-})(TagName ||= {});
 export {
   truncateNumberTags,
   truncate,
@@ -7197,4 +7231,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=629609759480C5A164756E2164756E21
+//# debugId=24A64D49FE6A01A164756E2164756E21
