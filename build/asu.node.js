@@ -6950,6 +6950,8 @@ function removeTag(items, tagName) {
   }
   fx.tags.splice(index, 1);
 }
+var LINE_TYPE_DIALOGUE = "Dialogue";
+var LINE_TYPE_COMMENT = "Comment";
 function parseLine(text) {
   const match = text.match(regexLine);
   if (match == null) {
@@ -6965,7 +6967,7 @@ function parseLine(text) {
     return null;
   }
   const line = {
-    type: groups?.type ?? "",
+    type: groups?.type === LINE_TYPE_COMMENT ? LINE_TYPE_COMMENT : LINE_TYPE_DIALOGUE,
     layer: Number(groups?.layer ?? "0"),
     start,
     end,
@@ -7222,6 +7224,8 @@ export {
   ProjectGarbagePropertyAutomationScripts,
   ProjectGarbagePropertyAudioFile,
   ProjectGarbagePropertyActiveLine,
+  LINE_TYPE_DIALOGUE,
+  LINE_TYPE_COMMENT,
   Encodings,
   Encoding,
   AttachedGraphicToString,
@@ -7231,4 +7235,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=782E488CA359E72264756E2164756E21
+//# debugId=5942D2714F97DAF364756E2164756E21

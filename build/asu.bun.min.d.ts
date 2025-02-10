@@ -592,8 +592,11 @@ export declare function setT(items: ContentItem[], tags: Tags[], accel?: number 
 export declare function tagsToItems(tags: Tags[]): ContentItem[];
 export declare function itemsToTags(items: ContentItem[]): Tags[];
 export declare function removeTag(items: ContentItem[], tagName: TagName): void;
+export declare const LINE_TYPE_DIALOGUE = "Dialogue";
+export declare const LINE_TYPE_COMMENT = "Comment";
+export type LineType = typeof LINE_TYPE_DIALOGUE | typeof LINE_TYPE_COMMENT;
 export type Line = {
-	type: string;
+	type: LineType;
 	layer: number;
 	start: Time;
 	end: Time;
