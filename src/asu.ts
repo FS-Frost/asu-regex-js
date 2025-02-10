@@ -3031,8 +3031,13 @@ export function removeTag(items: ContentItem[], tagName: TagName): void {
     fx.tags.splice(index, 1);
 }
 
+export const LINE_TYPE_DIALOGUE = "Dialogue";
+export const LINE_TYPE_COMMENT = "Comment";
+
+export type LineType = typeof LINE_TYPE_DIALOGUE | typeof LINE_TYPE_COMMENT;
+
 export type Line = {
-    type: string;
+    type: LineType;
     layer: number;
     start: Time;
     end: Time;
@@ -3063,7 +3068,7 @@ export function parseLine(text: string): Line | null {
     }
 
     const line: Line = {
-        type: groups?.type ?? "",
+        type: groups?.type === LINE_TYPE_COMMENT ? LINE_TYPE_COMMENT : LINE_TYPE_DIALOGUE,
         layer: Number(groups?.layer ?? "0"),
         start: start,
         end: end,
