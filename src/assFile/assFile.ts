@@ -9,7 +9,7 @@ import { SectionFonts, newSectionFonts, sectionFontsToString } from "./sectionFo
 import { SectionGraphics, newSectionGraphics, sectionGraphicsToString } from "./sectionGraphics";
 import { SectionProjectGarbage, newProjectGarbage, sectionProjectGarbageToString } from "./sectionProjectGarbage";
 import { SectionScriptInfo, newScriptInfo, sectionScriptInfoToString } from "./sectionScriptInfo";
-import { SectionStyles, generateDefaultStyle, newSectionStyles, sectionStylesToString } from "./sectionStyles";
+import { SectionStyles, newSectionStyles, sectionStylesToString } from "./sectionStyles";
 import { Style } from "./style";
 
 const _scriptInfo: string = "[Script Info]";
