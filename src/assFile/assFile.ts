@@ -9,7 +9,7 @@ import { SectionFonts, newSectionFonts, sectionFontsToString } from "./sectionFo
 import { SectionGraphics, newSectionGraphics, sectionGraphicsToString } from "./sectionGraphics";
 import { SectionProjectGarbage, newProjectGarbage, sectionProjectGarbageToString } from "./sectionProjectGarbage";
 import { SectionScriptInfo, newScriptInfo, sectionScriptInfoToString } from "./sectionScriptInfo";
-import { SectionStyles, newSectionStyles, sectionStylesToString } from "./sectionStyles";
+import { SectionStyles, generateDefaultStyle, newSectionStyles, sectionStylesToString } from "./sectionStyles";
 import { Style } from "./style";
 
 const _scriptInfo: string = "[Script Info]";
@@ -135,6 +135,65 @@ export function parseASSFile(text: string): ASSFile | null {
     return assFile;
 }
 
+export function parseStyle(text: string): [Style | undefined, string] {
+    const regexStyle = /Style: (?<name>.*)\s*,\s*(?<fontName>.*)\s*,\s*(?<fontSize>\d+(?:\.\d+)?)\s*,\s*&H(?<alpha1>[A-Fa-f0-9]{2})(?<color1>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha2>[A-Fa-f0-9]{2})(?<color2>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha3>[A-Fa-f0-9]{2})(?<color3>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha4>[A-Fa-f0-9]{2})(?<color4>[A-Fa-f0-9]{6})\s*,\s*(?<bold>0|-1)\s*,\s*(?<italic>0|-1)\s*,\s*(?<underline>0|-1)\s*,\s*(?<strikeout>0|-1)\s*,\s*(?<scaleX>\d+(?:\.\d+)?)\s*,\s*(?<scaleY>\d+(?:\.\d+)?)\s*,\s*(?<spacing>\d+(?:\.\d+)?)\s*,\s*(?<angle>-?\d+(?:\.\d+)?)\s*,\s*(?<borderStyle>\d+)\s*,\s*(?<outline>\d+(?:\.\d+)?)\s*,\s*(?<shadow>\d+(?:\.\d+)?)\s*,\s*(?<alignment>[1-9])\s*,\s*(?<marginLeft>\d+)\s*,\s*(?<marginRight>\d+)\s*,\s*(?<marginVertical>\d+)\s*,\s*(?<encoding>\d+)/;
+
+    if (!text.startsWith("Style: ")) {
+        return [undefined, ""];
+    }
+
+    const match = text.match(regexStyle);
+    if (!match || match.length === 0 || !match.groups) {
+        return [undefined, `failed to parse style: not a style: ${text}`];
+    }
+
+    const alignmentParseResult = Alignment.safeParse(Number(match.groups.alignment));
+    if (!alignmentParseResult.success) {
+        return [undefined, `failed to parse style: invalid alignment: ${text}`];
+    }
+
+    const alignment: Alignment = alignmentParseResult.data;
+
+    const encodingParseResult = Encoding.safeParse(Number(match.groups.encoding));
+    if (!encodingParseResult.success) {
+        return [undefined, `failed to parse style: invalid encoding: ${match.groups.encoding}`];
+    }
+
+    const encoding: Encoding = encodingParseResult.data;
+
+    const style: Style = {
+        name: match.groups.name ?? "",
+        fontName: match.groups.fontName ?? "",
+        fontSize: Number(match.groups.fontSize ?? "0"),
+        primaryAlpha: match.groups.alpha1,
+        primaryColor: match.groups.color1,
+        secondaryAlpha: match.groups.alpha2,
+        secondaryColor: match.groups.color2,
+        outlineAlpha: match.groups.alpha3,
+        outlineColor: match.groups.color3,
+        backAlpha: match.groups.alpha4,
+        backColor: match.groups.color4,
+        bold: Number(match.groups.bold),
+        italic: Number(match.groups.italic),
+        underline: Number(match.groups.underline),
+        strikeOut: Number(match.groups.strikeout),
+        scaleX: Number(match.groups.scaleX),
+        scaleY: Number(match.groups.scaleY),
+        spacing: Number(match.groups.spacing),
+        angle: Number(match.groups.angle),
+        borderStyle: Number(match.groups.borderStyle),
+        outline: Number(match.groups.outline),
+        shadow: Number(match.groups.shadow),
+        alignment: alignment,
+        marginLeft: Number(match.groups.marginLeft),
+        marginRight: Number(match.groups.marginRight),
+        marginVertical: Number(match.groups.marginVertical),
+        encoding: encoding,
+    };
+
+    return [style, ""];
+}
+
 function removeUtf8Boom(s: string): string {
     // remove boom
     s = s.replaceAll("\\uFEFF", "");
@@ -144,7 +203,6 @@ function removeUtf8Boom(s: string): string {
 
     return s;
 }
-
 
 type KeyValue = {
     key: string;
@@ -201,63 +259,12 @@ function processProjectGarbageLine(assFile: ASSFile, line: string): string {
 }
 
 function processStylesLine(assFile: ASSFile, line: string): string {
-    const regexStyle = /Style: (?<name>.*)\s*,\s*(?<fontName>.*)\s*,\s*(?<fontSize>\d+(?:\.\d+)?)\s*,\s*&H(?<alpha1>[A-Fa-f0-9]{2})(?<color1>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha2>[A-Fa-f0-9]{2})(?<color2>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha3>[A-Fa-f0-9]{2})(?<color3>[A-Fa-f0-9]{6})\s*,\s*&H(?<alpha4>[A-Fa-f0-9]{2})(?<color4>[A-Fa-f0-9]{6})\s*,\s*(?<bold>0|-1)\s*,\s*(?<italic>0|-1)\s*,\s*(?<underline>0|-1)\s*,\s*(?<strikeout>0|-1)\s*,\s*(?<scaleX>\d+(?:\.\d+)?)\s*,\s*(?<scaleY>\d+(?:\.\d+)?)\s*,\s*(?<spacing>\d+(?:\.\d+)?)\s*,\s*(?<angle>-?\d+(?:\.\d+)?)\s*,\s*(?<borderStyle>\d+)\s*,\s*(?<outline>\d+(?:\.\d+)?)\s*,\s*(?<shadow>\d+(?:\.\d+)?)\s*,\s*(?<alignment>[1-9])\s*,\s*(?<marginLeft>\d+)\s*,\s*(?<marginRight>\d+)\s*,\s*(?<marginVertical>\d+)\s*,\s*(?<encoding>\d+)/;
-
-    if (!line.startsWith("Style: ")) {
-        return "";
+    const [style, error] = parseStyle(line);
+    if (error === "" && style != null) {
+        assFile.styles.styles.push(style);
     }
 
-    const match = line.match(regexStyle);
-    if (!match || match.length === 0 || !match.groups) {
-        return `failed to parse style: not a style: ${line}`;
-    }
-
-    const alignmentParseResult = Alignment.safeParse(Number(match.groups.alignment));
-    if (!alignmentParseResult.success) {
-        return `failed to parse style: invalid alignment: ${line}`;
-    }
-
-    const alignment: Alignment = alignmentParseResult.data;
-
-    const encodingParseResult = Encoding.safeParse(Number(match.groups.encoding));
-    if (!encodingParseResult.success) {
-        return `failed to parse style: invalid encoding: ${match.groups.encoding}`;
-    }
-
-    const encoding: Encoding = encodingParseResult.data;
-
-    const style: Style = {
-        name: match.groups.name ?? "",
-        fontName: match.groups.fontName ?? "",
-        fontSize: Number(match.groups.fontSize ?? "0"),
-        primaryAlpha: match.groups.alpha1,
-        primaryColor: match.groups.color1,
-        secondaryAlpha: match.groups.alpha2,
-        secondaryColor: match.groups.color2,
-        outlineAlpha: match.groups.alpha3,
-        outlineColor: match.groups.color3,
-        backAlpha: match.groups.alpha4,
-        backColor: match.groups.color4,
-        bold: Number(match.groups.bold),
-        italic: Number(match.groups.italic),
-        underline: Number(match.groups.underline),
-        strikeOut: Number(match.groups.strikeout),
-        scaleX: Number(match.groups.scaleX),
-        scaleY: Number(match.groups.scaleY),
-        spacing: Number(match.groups.spacing),
-        angle: Number(match.groups.angle),
-        borderStyle: Number(match.groups.borderStyle),
-        outline: Number(match.groups.outline),
-        shadow: Number(match.groups.shadow),
-        alignment: alignment,
-        marginLeft: Number(match.groups.marginLeft),
-        marginRight: Number(match.groups.marginRight),
-        marginVertical: Number(match.groups.marginVertical),
-        encoding: encoding,
-    };
-
-    assFile.styles.styles.push(style);
-    return "";
+    return error;
 }
 
 function processFontsLine(assFile: ASSFile, line: string, currentAttachedFile: string): string {
