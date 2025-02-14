@@ -158,6 +158,7 @@ export type SectionStyles = {
 export declare function newSectionStyles(): SectionStyles;
 export declare function generateDefaultSectionStyles(): SectionStyles;
 export declare function sectionStylesToString(info: SectionStyles): string;
+export declare function generateDefaultStyle(): Style;
 export type ASSFile = {
 	scriptInfo: SectionScriptInfo;
 	aegisubProjectGarbage: SectionProjectGarbage;
@@ -169,6 +170,10 @@ export type ASSFile = {
 };
 export declare function ASSFileToString(file: ASSFile): string;
 export declare function parseASSFile(text: string): ASSFile | null;
+export declare function parseStyle(text: string): [
+	Style | undefined,
+	string
+];
 export declare function splitSyllabes(line: Line): void;
 export declare function isRomajiWord(word: string): boolean;
 export declare function hexToNumber(s: string): number;
@@ -592,8 +597,11 @@ export declare function setT(items: ContentItem[], tags: Tags[], accel?: number 
 export declare function tagsToItems(tags: Tags[]): ContentItem[];
 export declare function itemsToTags(items: ContentItem[]): Tags[];
 export declare function removeTag(items: ContentItem[], tagName: TagName): void;
+export declare const LINE_TYPE_DIALOGUE = "Dialogue";
+export declare const LINE_TYPE_COMMENT = "Comment";
+export type LineType = typeof LINE_TYPE_DIALOGUE | typeof LINE_TYPE_COMMENT;
 export type Line = {
-	type: string;
+	type: LineType;
 	layer: number;
 	start: Time;
 	end: Time;
