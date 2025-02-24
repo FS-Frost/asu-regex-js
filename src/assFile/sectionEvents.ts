@@ -1,4 +1,4 @@
-import { Line, lineToString } from "../asu";
+import { generateDefaultLine, Line, lineToString } from "../asu";
 
 export type SectionEvents = {
     format: string;
@@ -9,6 +9,15 @@ export function newSectionEvents(): SectionEvents {
     return {
         format: "Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
         lines: [],
+    };
+}
+
+export function generateDefaultSectionEvents(): SectionEvents {
+    return {
+        format: "Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+        lines: [
+            generateDefaultLine(),
+        ],
     };
 }
 

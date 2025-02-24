@@ -25,6 +25,19 @@ export function newScriptInfo(): SectionScriptInfo {
     };
 }
 
+export function generateDefaultSectionScriptInfo(): SectionScriptInfo {
+    return {
+        comments: [],
+        properties: new Map([
+            ["Title", "Default Aegisub file"],
+            ["ScriptType", "v4.00+"],
+            ["WrapStyle", "0"],
+            ["ScaledBorderAndShadow", "yes"],
+            ["YCbCr Matrix", "None"],
+        ]),
+    };
+}
+
 export function sectionScriptInfoToString(info: SectionScriptInfo): string {
     let s = "[Script Info]";
 

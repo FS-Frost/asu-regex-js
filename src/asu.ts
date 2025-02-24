@@ -1253,6 +1253,13 @@ export function contentEffectToString(item: ContentEffect): string {
     return s;
 }
 
+export function tagToString(tag: Tags): string {
+    return contentEffectToString({
+        name: "effect",
+        tags: [tag],
+    });
+}
+
 export function contentsToString(items: ContentItem[]): string {
     let s = "";
 

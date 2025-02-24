@@ -3,13 +3,13 @@ import { Alignment } from "./alignment";
 import { AttachedFont } from "./attachedFont";
 import { AttachedGraphic } from "./attachedGraphic";
 import { Encoding } from "./encoding";
-import { SectionEvents, newSectionEvents, sectionEventsToString } from "./sectionEvents";
+import { SectionEvents, generateDefaultSectionEvents, newSectionEvents, sectionEventsToString } from "./sectionEvents";
 import { SectionExtraData, newSectionExtraData, sectionExtraDataToString } from "./sectionExtraData";
 import { SectionFonts, newSectionFonts, sectionFontsToString } from "./sectionFonts";
 import { SectionGraphics, newSectionGraphics, sectionGraphicsToString } from "./sectionGraphics";
 import { SectionProjectGarbage, newProjectGarbage, sectionProjectGarbageToString } from "./sectionProjectGarbage";
-import { SectionScriptInfo, newScriptInfo, sectionScriptInfoToString } from "./sectionScriptInfo";
-import { SectionStyles, newSectionStyles, sectionStylesToString } from "./sectionStyles";
+import { SectionScriptInfo, generateDefaultSectionScriptInfo, newScriptInfo, sectionScriptInfoToString } from "./sectionScriptInfo";
+import { SectionStyles, generateDefaultSectionStyles, newSectionStyles, sectionStylesToString } from "./sectionStyles";
 import { Style } from "./style";
 
 const _scriptInfo: string = "[Script Info]";
@@ -192,6 +192,18 @@ export function parseStyle(text: string): [Style | undefined, string] {
     };
 
     return [style, ""];
+}
+
+export function generateDefaultASSFile(): ASSFile {
+    return {
+        scriptInfo: generateDefaultSectionScriptInfo(),
+        aegisubProjectGarbage: newProjectGarbage(),
+        styles: generateDefaultSectionStyles(),
+        fonts: newSectionFonts(),
+        graphics: newSectionGraphics(),
+        events: generateDefaultSectionEvents(),
+        extraData: newSectionExtraData(),
+    };
 }
 
 function removeUtf8Boom(s: string): string {
