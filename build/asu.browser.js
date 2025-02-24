@@ -4357,6 +4357,14 @@ function newSectionEvents() {
     lines: []
   };
 }
+function generateDefaultSectionEvents() {
+  return {
+    format: "Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+    lines: [
+      generateDefaultLine()
+    ]
+  };
+}
 function sectionEventsToString(info) {
   let s = "[Events]";
   s += `
@@ -4502,6 +4510,18 @@ function newScriptInfo() {
   return {
     comments: [],
     properties: new Map
+  };
+}
+function generateDefaultSectionScriptInfo() {
+  return {
+    comments: [],
+    properties: new Map([
+      ["Title", "Default Aegisub file"],
+      ["ScriptType", "v4.00+"],
+      ["WrapStyle", "0"],
+      ["ScaledBorderAndShadow", "yes"],
+      ["YCbCr Matrix", "None"]
+    ])
   };
 }
 function sectionScriptInfoToString(info) {
@@ -4776,6 +4796,17 @@ function parseStyle(text) {
     encoding
   };
   return [style, ""];
+}
+function generateDefaultASSFile() {
+  return {
+    scriptInfo: generateDefaultSectionScriptInfo(),
+    aegisubProjectGarbage: newProjectGarbage(),
+    styles: generateDefaultSectionStyles(),
+    fonts: newSectionFonts(),
+    graphics: newSectionGraphics(),
+    events: generateDefaultSectionEvents(),
+    extraData: newSectionExtraData()
+  };
 }
 function removeUtf8Boom(s) {
   s = s.replaceAll("\\uFEFF", "");
@@ -5694,6 +5725,12 @@ function contentEffectToString(item) {
     }
   }
   return s;
+}
+function tagToString(tag) {
+  return contentEffectToString({
+    name: "effect",
+    tags: [tag]
+  });
 }
 function contentsToString(items) {
   let s = "";
@@ -7204,6 +7241,7 @@ export {
   timeToString,
   timeToSeconds,
   tagsToItems,
+  tagToString,
   sumTimes,
   subtractTimes,
   styleToString,
@@ -7292,7 +7330,10 @@ export {
   hexToNumber,
   generateDefaultStyle,
   generateDefaultSectionStyles,
+  generateDefaultSectionScriptInfo,
+  generateDefaultSectionEvents,
   generateDefaultLine,
+  generateDefaultASSFile,
   forEachTag,
   findYshad,
   findYbord,
@@ -7390,4 +7431,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=C8FA674B490A61BC64756E2164756E21
+//# debugId=E1B44CF9792080B464756E2164756E21

@@ -19,6 +19,7 @@ export type SectionEvents = {
 	lines: Line[];
 };
 export declare function newSectionEvents(): SectionEvents;
+export declare function generateDefaultSectionEvents(): SectionEvents;
 export declare function sectionEventsToString(info: SectionEvents): string;
 export type SectionExtraData = {
 	data: string[];
@@ -84,6 +85,7 @@ export type SectionScriptInfo = {
 	properties: Map<string, string>;
 };
 export declare function newScriptInfo(): SectionScriptInfo;
+export declare function generateDefaultSectionScriptInfo(): SectionScriptInfo;
 export declare function sectionScriptInfoToString(info: SectionScriptInfo): string;
 export declare enum Alignments {
 	DOWN_LEFT = 1,
@@ -174,6 +176,7 @@ export declare function parseStyle(text: string): [
 	Style | undefined,
 	string
 ];
+export declare function generateDefaultASSFile(): ASSFile;
 export declare function splitSyllabes(line: Line): void;
 export declare function isRomajiWord(word: string): boolean;
 export declare function hexToNumber(s: string): number;
@@ -486,6 +489,7 @@ export type ContentText = {
 export type ContentItem = ContentEffect | ContentText;
 export declare function parseContent(text: string): ContentItem[];
 export declare function contentEffectToString(item: ContentEffect): string;
+export declare function tagToString(tag: Tags): string;
 export declare function contentsToString(items: ContentItem[]): string;
 export declare function mergeNeighboringEffects(items: ContentItem[]): void;
 export declare function truncateNumberTags(items: ContentItem[], decimals: number): void;
