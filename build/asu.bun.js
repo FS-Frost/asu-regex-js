@@ -119,7 +119,7 @@ var createRegExp = (...inputs) => {
 // src/regex.ts
 var regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
 var regexText = /^[^\\]+/g;
-var regexRomaji = /(?<sil>(?:sha|shi|shu|she|sho|cha|chi|chu|che|cho|tsu|kya|kyi|kyu|kye|kyo|gya|gyi|gyu|gye|gyo|sya|syu|syi|sye|syo|zya|zyu|zyi|zye|zyo|jya|jyu|jyi|jye|jyo|tya|tyi|tyu|tye|tyo|dya|dyi|dyu|dye|dyo|nya|nyi|nyu|nye|nyo|hya|hyi|hyu|hye|hyo|fya|fyi|fyu|fye|fyo|bya|byi|byu|bye|byo|pya|pyi|pyu|pye|pyo|mya|myi|myu|mye|myo|rya|ryi|ryu|rye|ryo|vya|vyi|vyu|vye|vyo|ka|ki|ku|ke|ko|ga|gi|gu|ge|go|sa|su|si|se|so|za|zu|zi|ze|zo|ja|ju|ji|je|jo|ta|ti|tu|te|to|da|di|du|de|do|na|ni|nu|ne|no|ha|hi|hu|he|ho|fa|fi|fu|fe|fo|ba|bi|bu|be|bo|pa|pi|pu|pe|po|ma|mi|mu|me|mo|ya|yi|yu|ye|yo|ra|ri|ru|re|ro|wa|wo|va|vi|vu|ve|vo|a|i|u|e|o|n|t)[^a-zA-Z\d\s:]*\s?)/g;
+var regexRomaji = /(?<sil>(?:sha|shi|shu|she|sho|cha|chi|chu|che|cho|tsu|kya|kyi|kyu|kye|kyo|gya|gyi|gyu|gye|gyo|sya|syu|syi|sye|syo|zya|zyu|zyi|zye|zyo|jya|jyu|jyi|jye|jyo|tya|tyi|tyu|tye|tyo|dya|dyi|dyu|dye|dyo|nya|nyi|nyu|nye|nyo|hya|hyi|hyu|hye|hyo|fya|fyi|fyu|fye|fyo|dzu|bya|byi|byu|bye|byo|pya|pyi|pyu|pye|pyo|mya|myi|myu|mye|myo|rya|ryi|ryu|rye|ryo|vya|vyi|vyu|vye|vyo|ka|ki|ku|ke|ko|ga|gi|gu|ge|go|sa|su|si|se|so|za|zu|zi|ze|zo|ja|ju|ji|je|jo|ta|ti|tu|te|to|da|di|du|de|do|na|ni|nu|ne|no|ha|hi|hu|he|ho|fa|fi|fu|fe|fo|ba|bi|bu|be|bo|pa|pi|pu|pe|po|ma|mi|mu|me|mo|ya|yi|yu|ye|yo|ra|ri|ru|re|ro|wa|wo|va|vi|vu|ve|vo|a|i|u|e|o|n|t)[^a-zA-Z\d\s:]*\s?)/g;
 var reTime = oneOrMore(digit).and(exactly(":")).and(digit.times(2)).and(exactly(":")).and(digit.times(2)).and(exactly(".")).and(digit.times(2));
 var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).and(oneOrMore(digit).optionally().groupedAs("layer")).and(exactly(",")).and(reTime.optionally().groupedAs("start")).and(exactly(",")).and(reTime.optionally().groupedAs("end")).and(exactly(",")).and(oneOrMore(charNotIn(",").optionally()).groupedAs("style")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("actor")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginLeft")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginRight")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginVertical")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("effect")).and(exactly(",")).and(oneOrMore(char).optionally().groupedAs("content"));
 var regexLine = createRegExp(reLine);
@@ -7432,4 +7432,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=2F896B1228CDDAF664756E2164756E21
+//# debugId=8F1A5673F353C4A164756E2164756E21
