@@ -29,3 +29,11 @@ test("karaoke: split syllabes unevenly", () => {
     splitSyllabes(line);
     expect(lineToString(line)).toEqual(expectedText);
 });
+
+test("karaoke: tsudzuki", () => {
+    const expectedText = "Dialogue: 0,0:00:00.00,0:00:05.00,Default,,0,0,0,,{\\kf71}tsu{\\kf71}dzu{\\kf71}ki {\\kf71}ko{\\kf71}re {\\kf71}da {\\kf74}wa";
+    const line = generateDefaultLine();
+    line.content = "tsudzuki kore da wa";
+    splitSyllabes(line);
+    expect(lineToString(line)).toEqual(expectedText);
+});
