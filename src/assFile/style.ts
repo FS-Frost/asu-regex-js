@@ -1,3 +1,4 @@
+import { hexToNumber, numberToHex, parseColorBGR } from "../asu";
 import { Alignment } from "./alignment";
 import { Encoding } from "./encoding";
 
@@ -31,18 +32,42 @@ export type Style = {
     encoding: Encoding;
 };
 
+export function mergeColorWithAlpha(threeHexValuesBGR: string, oneHexValueAlpha: string): string {
+    let hexAlpha = "00";
+    const decimalAlpha = hexToNumber(oneHexValueAlpha);
+    if (!Number.isNaN(decimalAlpha)) {
+        hexAlpha = oneHexValueAlpha;
+    }
+
+    let hexBlue = "00";
+    let hexGreen = "00";
+    let hexRed = "00";
+
+    const colorPrefix = "&H";
+    const color = parseColorBGR(colorPrefix + threeHexValuesBGR);
+    if (color != null) {
+        hexBlue = numberToHex(color.blue);
+        hexGreen = numberToHex(color.green);
+        hexRed = numberToHex(color.red);
+    }
+
+    const merged = `${colorPrefix}${hexAlpha}${hexBlue}${hexGreen}${hexRed}`;
+    return merged;
+}
+
 export function styleToString(style: Style): string {
+    const mergedPrimaryColor = mergeColorWithAlpha(style.primaryColor, style.primaryAlpha);
+    const mergedSecondaryColor = mergeColorWithAlpha(style.secondaryColor, style.secondaryAlpha);
+    const mergedOutlineColor = mergeColorWithAlpha(style.outlineColor, style.outlineAlpha);
+    const mergedBackColor = mergeColorWithAlpha(style.backColor, style.backAlpha);
+
     let s = `Style: ${style.name}`;
     s += `,${style.fontName}`;
     s += `,${style.fontSize}`;
-    s += `,${style.primaryAlpha}`;
-    s += `,${style.primaryColor}`;
-    s += `,${style.secondaryAlpha}`;
-    s += `,${style.secondaryColor}`;
-    s += `,${style.outlineAlpha}`;
-    s += `,${style.outlineColor}`;
-    s += `,${style.backAlpha}`;
-    s += `,${style.backColor}`;
+    s += `,${mergedPrimaryColor}`;
+    s += `,${mergedSecondaryColor}`;
+    s += `,${mergedOutlineColor}`;
+    s += `,${mergedBackColor}`;
     s += `,${style.bold}`;
     s += `,${style.italic}`;
     s += `,${style.underline}`;

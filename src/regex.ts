@@ -57,7 +57,7 @@ const reColorBGR = exactly("&H")
     .and(reHex.groupedAs("color_bgr_blue"))
     .and(reHex.groupedAs("color_bgr_green"))
     .and(reHex.groupedAs("color_bgr_red"))
-    .and(exactly("&"));
+    .and(exactly("&").optionally());
 
 const reColor = exactly("\\c").and(reColorBGR);
 
