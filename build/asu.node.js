@@ -127,7 +127,7 @@ var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
 var reA = exactly("\\").and("a").and(reFloat.groupedAs("a_value"));
 var regexA = createRegExp(reA);
 var reHex = letter.or(digit).times(2);
-var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&"));
+var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&").optionally());
 var reColor = exactly("\\c").and(reColorBGR);
 var reColor1 = exactly("\\1c").and(exactly("&H")).and(reHex.groupedAs("color1_bgr_blue")).and(reHex.groupedAs("color1_bgr_green")).and(reHex.groupedAs("color1_bgr_red")).and(exactly("&"));
 var reColor2 = exactly("\\2c").and(exactly("&H")).and(reHex.groupedAs("color2_bgr_blue")).and(reHex.groupedAs("color2_bgr_green")).and(reHex.groupedAs("color2_bgr_red")).and(exactly("&"));
@@ -308,8 +308,7 @@ function subtractTimes(minuend, subtracting) {
 var util;
 (function(util2) {
   util2.assertEqual = (val) => val;
-  function assertIs(_arg) {
-  }
+  function assertIs(_arg) {}
   util2.assertIs = assertIs;
   function assertNever(_x) {
     throw new Error;
@@ -4538,18 +4537,37 @@ ${key}: ${value}`;
 }
 
 // src/assFile/style.ts
+function mergeColorWithAlpha(threeHexValuesBGR, oneHexValueAlpha) {
+  let hexAlpha = "00";
+  const decimalAlpha = hexToNumber(oneHexValueAlpha);
+  if (!Number.isNaN(decimalAlpha)) {
+    hexAlpha = oneHexValueAlpha;
+  }
+  let hexBlue = "00";
+  let hexGreen = "00";
+  let hexRed = "00";
+  const colorPrefix = "&H";
+  const color = parseColorBGR(colorPrefix + threeHexValuesBGR);
+  if (color != null) {
+    hexBlue = numberToHex(color.blue);
+    hexGreen = numberToHex(color.green);
+    hexRed = numberToHex(color.red);
+  }
+  const merged = `${colorPrefix}${hexAlpha}${hexBlue}${hexGreen}${hexRed}`;
+  return merged;
+}
 function styleToString(style) {
+  const mergedPrimaryColor = mergeColorWithAlpha(style.primaryColor, style.primaryAlpha);
+  const mergedSecondaryColor = mergeColorWithAlpha(style.secondaryColor, style.secondaryAlpha);
+  const mergedOutlineColor = mergeColorWithAlpha(style.outlineColor, style.outlineAlpha);
+  const mergedBackColor = mergeColorWithAlpha(style.backColor, style.backAlpha);
   let s = `Style: ${style.name}`;
   s += `,${style.fontName}`;
   s += `,${style.fontSize}`;
-  s += `,${style.primaryAlpha}`;
-  s += `,${style.primaryColor}`;
-  s += `,${style.secondaryAlpha}`;
-  s += `,${style.secondaryColor}`;
-  s += `,${style.outlineAlpha}`;
-  s += `,${style.outlineColor}`;
-  s += `,${style.backAlpha}`;
-  s += `,${style.backColor}`;
+  s += `,${mergedPrimaryColor}`;
+  s += `,${mergedSecondaryColor}`;
+  s += `,${mergedOutlineColor}`;
+  s += `,${mergedBackColor}`;
   s += `,${style.bold}`;
   s += `,${style.italic}`;
   s += `,${style.underline}`;
@@ -4599,10 +4617,10 @@ function generateDefaultStyle() {
     name: "Default",
     fontName: "Arial",
     fontSize: 20,
-    primaryAlpha: "&H00FFFFFF",
-    primaryColor: "&H000000FF",
-    secondaryAlpha: "&H00000000",
-    secondaryColor: "&H00000000",
+    primaryAlpha: "00",
+    primaryColor: "0000FF",
+    secondaryAlpha: "00",
+    secondaryColor: "000000",
     outlineAlpha: "",
     outlineColor: "",
     backAlpha: "",
@@ -7323,6 +7341,7 @@ export {
   newScriptInfo,
   newProjectGarbage,
   mergeNeighboringEffects,
+  mergeColorWithAlpha,
   lineToString,
   itemsToTags,
   isRomajiWord,
@@ -7431,4 +7450,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=A3D496825E196AF464756E2164756E21
+//# debugId=17CB7092C768294B64756E2164756E21

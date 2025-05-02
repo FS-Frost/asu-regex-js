@@ -152,6 +152,7 @@ export type Style = {
 	marginVertical: number;
 	encoding: Encoding;
 };
+export declare function mergeColorWithAlpha(threeHexValuesBGR: string, oneHexValueAlpha: string): string;
 export declare function styleToString(style: Style): string;
 export type SectionStyles = {
 	format: string;
