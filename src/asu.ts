@@ -1,4 +1,4 @@
-import { hexToNumber, numberToHex, truncate } from "./mat";
+import { hexToNumber, numberToHex, truncate } from "./math";
 import * as regex from "./regex";
 import { Time, parseTime, timeToSeconds, timeToString } from "./time";
 
@@ -16,7 +16,7 @@ export * from "./assFile/sectionGraphics";
 export * from "./assFile/sectionEvents";
 export * from "./assFile/sectionExtraData";
 export * from "./karaoke";
-export * from "./mat";
+export * from "./math";
 export * from "./time";
 
 export enum TagName {

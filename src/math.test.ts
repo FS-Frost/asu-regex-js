@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { hexToNumber, interpolate, numberToHex, truncate } from "./mat";
+import { hexToNumber, interpolate, numberToHex, truncate } from "./math";
 
 test("math: number to hex from 0 to 255", () => {
     for (let n = 0; n <= 255; n++) {
