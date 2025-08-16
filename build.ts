@@ -1,15 +1,16 @@
-import { BuildConfig, Target } from "bun";
+import { $, BuildConfig, Target } from "bun";
 import fs from "node:fs/promises";
 
 const buildDir = "./examples/build";
 {
     console.log("Generating declaration file...");
-    const cmdAArgs: string[] = ["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", `${buildDir}/asu.d.ts`, "--no-check"];
-    console.log(cmdAArgs.join(" "));
-    const cmdResult = Bun.spawnSync(cmdAArgs);
-    if (!cmdResult.success) {
+    const cmdArgs: string[] = ["bun", "dts-bundle-generator", "src/asu.ts", "--out-file", `${buildDir}/asu.d.ts`, "--no-check"];
+    const rawCommand: string = cmdArgs.join(" ");
+    console.log(rawCommand);
+    const cmdResult = await $`${{ raw: rawCommand }} 2>&1`;
+    if (cmdResult.exitCode !== 0) {
         console.error(`ERROR: DTS generation failed with exit code ${cmdResult.exitCode}`);
-        console.error(cmdResult.stderr.toString());
+        console.error(cmdResult.text());
         process.exit(1);
     }
 }
