@@ -288,9 +288,8 @@ function processFontsLine(assFile: ASSFile, line: string, currentAttachedFile: s
             data: [],
         };
 
-        let index = assFile.fonts.files.findIndex(x => x.name === fileName);
         assFile.fonts.files.push(attachedFile);
-        index = assFile.fonts.files.length - 1;
+        const index = assFile.fonts.files.length - 1;
         attachedFile = assFile.fonts.files[index];
         attachedFile.name = fileName;
         currentAttachedFile = fileName;
@@ -316,9 +315,8 @@ function processGraphicsLine(assFile: ASSFile, line: string, currentAttachedFile
             data: [],
         };
 
-        let index = assFile.graphics.files.findIndex(x => x.name === fileName);
         assFile.graphics.files.push(attachedFile);
-        index = assFile.graphics.files.length - 1;
+        const index = assFile.graphics.files.length - 1;
         attachedFile = assFile.graphics.files[index];
         attachedFile.name = fileName;
         currentAttachedFile = fileName;
