@@ -13,7 +13,7 @@ export declare enum Alignments {
 	UP_CENTER = 8,
 	UP_RIGHT = 9
 }
-export declare const Alignment: z.ZodNativeEnum<typeof Alignments>;
+export declare const Alignment: z.ZodEnum<typeof Alignments>;
 export type Alignment = z.infer<typeof Alignment>;
 export type SectionEvents = {
 	format: string;
@@ -109,7 +109,7 @@ export declare enum Encodings {
 	EASTERN_EUROPE = 238,
 	OEM = 255
 }
-export declare const Encoding: z.ZodNativeEnum<typeof Encodings>;
+export declare const Encoding: z.ZodEnum<typeof Encodings>;
 export type Encoding = z.infer<typeof Encoding>;
 export type Style = {
 	name: string;
