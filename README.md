@@ -109,6 +109,9 @@ bun install
 
 ```sh
 bun test --coverage
+bunx eslint
+bun run bundle
+bun run test:publish
 ```
 
 # Applications using Asu

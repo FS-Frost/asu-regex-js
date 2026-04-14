@@ -12,6 +12,6 @@ export enum Alignments {
     UP_RIGHT = 9,
 };
 
-export const Alignment = z.enum(Alignments);
+export const Alignment: z.ZodEnum<typeof Alignments> = z.enum(Alignments);
 
 export type Alignment = z.infer<typeof Alignment>;
