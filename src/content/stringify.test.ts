@@ -114,7 +114,7 @@ describe("stringify content", () => {
         test("should format default tags", () => {
             // Used for simpler tags like \b1, \i1, \blur2
             // Since default casts to specific value formats
-            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.b as any, value: "1" } as any] })).toBe("\\b1");
+            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.b, value: 1 }] })).toBe("\\b1");
         });
     });
 
