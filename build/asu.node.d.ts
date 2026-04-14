@@ -2,18 +2,19 @@
 
 import { z } from 'zod';
 
-export type Time = {
-	hours: number;
-	minutes: number;
-	seconds: number;
-};
-export declare function secondsToTime(seconds: number): Time;
-export declare function parseTime(text: string): Time | null;
-export declare function adjustTimeOverplus(time: Time): void;
-export declare function timeToString(time: Time): string;
-export declare function timeToSeconds(time: Time): number;
-export declare function sumTimes(t1: Time, t2: Time): Time;
-export declare function subtractTimes(minuend: Time, subtracting: Time): Time;
+export declare enum Alignments {
+	DOWN_LEFT = 1,
+	DOWN_CENTER = 2,
+	DOWN_RIGHT = 3,
+	CENTER_LEFT = 4,
+	CENTER_CENTER = 5,
+	CENTER_RIGHT = 6,
+	UP_LEFT = 7,
+	UP_CENTER = 8,
+	UP_RIGHT = 9
+}
+export declare const Alignment: z.ZodNativeEnum<typeof Alignments>;
+export type Alignment = z.infer<typeof Alignment>;
 export type SectionEvents = {
 	format: string;
 	lines: Line[];
@@ -87,19 +88,6 @@ export type SectionScriptInfo = {
 export declare function newScriptInfo(): SectionScriptInfo;
 export declare function generateDefaultSectionScriptInfo(): SectionScriptInfo;
 export declare function sectionScriptInfoToString(info: SectionScriptInfo): string;
-export declare enum Alignments {
-	DOWN_LEFT = 1,
-	DOWN_CENTER = 2,
-	DOWN_RIGHT = 3,
-	CENTER_LEFT = 4,
-	CENTER_CENTER = 5,
-	CENTER_RIGHT = 6,
-	UP_LEFT = 7,
-	UP_CENTER = 8,
-	UP_RIGHT = 9
-}
-export declare const Alignment: z.ZodNativeEnum<typeof Alignments>;
-export type Alignment = z.infer<typeof Alignment>;
 export declare enum Encodings {
 	ANSI = 0,
 	DEFAULT = 1,
@@ -178,12 +166,11 @@ export declare function parseStyle(text: string): [
 	string
 ];
 export declare function generateDefaultASSFile(): ASSFile;
-export declare function splitSyllabes(line: Line): void;
-export declare function isRomajiWord(word: string): boolean;
-export declare function hexToNumber(s: string): number;
-export declare function numberToHex(n: number): string;
-export declare function interpolate(min: number, max: number, intervals: number): number[];
-export declare function truncate(n: number, decimals: number): number;
+export type ColorBGR = {
+	blue: number;
+	green: number;
+	red: number;
+};
 export declare enum TagName {
 	a = "a",
 	alpha = "alpha",
@@ -271,11 +258,6 @@ export type TagXbord = {
 export type TagYbord = {
 	name: TagName.ybord;
 	value: number;
-};
-export type ColorBGR = {
-	blue: number;
-	green: number;
-	red: number;
 };
 export type TagC = ColorBGR & {
 	name: TagName.color;
@@ -478,7 +460,7 @@ export type TagText = {
 	value: string;
 };
 export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagUnknown | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
-export declare function parseTags(text: string, tags: Tags[]): Tags[];
+export declare function parseColorBGR(text: string): ColorBGR | null;
 export type ContentEffect = {
 	name: "effect";
 	tags: Tags[];
@@ -488,13 +470,53 @@ export type ContentText = {
 	value: string;
 };
 export type ContentItem = ContentEffect | ContentText;
+export declare function mergeNeighboringEffects(items: ContentItem[]): void;
+export declare function truncateNumberTags(items: ContentItem[], decimals: number): void;
+export declare function forEachTag(items: ContentItem[], predicate: (tag: Tags) => void): void;
+export declare function tagsToItems(tags: Tags[]): ContentItem[];
+export declare function itemsToTags(items: ContentItem[]): Tags[];
 export declare function parseContent(text: string): ContentItem[];
 export declare function contentEffectToString(item: ContentEffect): string;
 export declare function tagToString(tag: Tags): string;
 export declare function contentsToString(items: ContentItem[]): string;
-export declare function mergeNeighboringEffects(items: ContentItem[]): void;
-export declare function truncateNumberTags(items: ContentItem[], decimals: number): void;
-export declare function forEachTag(items: ContentItem[], predicate: (tag: Tags) => void): void;
+export declare function splitSyllabes(line: Line): void;
+export declare function isRomajiWord(word: string): boolean;
+export type Time = {
+	hours: number;
+	minutes: number;
+	seconds: number;
+};
+export declare function secondsToTime(seconds: number): Time;
+export declare function parseTime(text: string): Time | null;
+export declare function adjustTimeOverplus(time: Time): void;
+export declare function timeToString(time: Time): string;
+export declare function timeToSeconds(time: Time): number;
+export declare function sumTimes(t1: Time, t2: Time): Time;
+export declare function subtractTimes(minuend: Time, subtracting: Time): Time;
+export declare const LINE_TYPE_DIALOGUE = "Dialogue";
+export declare const LINE_TYPE_COMMENT = "Comment";
+export type LineType = typeof LINE_TYPE_DIALOGUE | typeof LINE_TYPE_COMMENT;
+export type Line = {
+	type: LineType;
+	layer: number;
+	start: Time;
+	end: Time;
+	style: string;
+	actor: string;
+	marginLeft: number;
+	marginRight: number;
+	marginVertical: number;
+	effect: string;
+	content: string;
+};
+export declare function parseLine(text: string): Line | null;
+export declare function lineToString(line: Line): string;
+export declare function calculateLineDurationInSeconds(line: Line): number;
+export declare function generateDefaultLine(): Line;
+export declare function hexToNumber(s: string): number;
+export declare function numberToHex(n: number): string;
+export declare function interpolate(min: number, max: number, intervals: number): number[];
+export declare function truncate(n: number, decimals: number): number;
 export declare function findA(items: ContentItem[]): TagA | null;
 export declare function findB(items: ContentItem[]): TagB | null;
 export declare function findColor(items: ContentItem[]): TagC | null;
@@ -547,49 +569,51 @@ export declare function findClip(items: ContentItem[]): TagClip | null;
 export declare function findIclip(items: ContentItem[]): TagIclip | null;
 export declare function findMove(items: ContentItem[]): TagMove | null;
 export declare function findT(items: ContentItem[]): TagT | null;
-export declare function setA(items: ContentItem[], newValue: number): TagA;
-export declare function setAn(items: ContentItem[], newValue: number): TagAn;
-export declare function setB(items: ContentItem[], newValue: number): TagB;
-export declare function setColor(items: ContentItem[], blue: number, green: number, red: number): TagC;
-export declare function setColor1(items: ContentItem[], blue: number, green: number, red: number): Tag1c;
-export declare function setColor2(items: ContentItem[], blue: number, green: number, red: number): Tag2c;
-export declare function setColor3(items: ContentItem[], blue: number, green: number, red: number): Tag3c;
-export declare function setColor4(items: ContentItem[], blue: number, green: number, red: number): Tag4c;
-export declare function setAlpha(items: ContentItem[], newValue: string): TagAlpha;
-export declare function setAlpha1(items: ContentItem[], newValue: string): Tag1a;
-export declare function setAlpha2(items: ContentItem[], newValue: string): Tag2a;
-export declare function setAlpha3(items: ContentItem[], newValue: string): Tag3a;
-export declare function setAlpha4(items: ContentItem[], newValue: string): Tag4a;
-export declare function setBlur(items: ContentItem[], newValue: number): TagBlur;
-export declare function setBord(items: ContentItem[], newValue: number): TagBord;
-export declare function setXbord(items: ContentItem[], newValue: number): TagXbord;
-export declare function setYbord(items: ContentItem[], newValue: number): TagYbord;
-export declare function setFax(items: ContentItem[], newValue: number): TagFax;
-export declare function setFay(items: ContentItem[], newValue: number): TagFay;
-export declare function setFscx(items: ContentItem[], newValue: number): TagFscx;
-export declare function setFscy(items: ContentItem[], newValue: number): TagFscy;
-export declare function setFsp(items: ContentItem[], newValue: number): TagFsp;
+export declare function parseTags(text: string, tags: Tags[]): Tags[];
+export declare function parseTagT(text: string, tags: Tags[], tagNameSource: string, matchTagT: RegExpMatchArray): Tags[];
+export declare const setA: (items: ContentItem[], newValue: number) => TagA;
+export declare const setAn: (items: ContentItem[], newValue: number) => TagAn;
+export declare const setB: (items: ContentItem[], newValue: number) => TagB;
+export declare const setColor: (items: ContentItem[], blue: number, green: number, red: number) => TagC;
+export declare const setColor1: (items: ContentItem[], blue: number, green: number, red: number) => Tag1c;
+export declare const setColor2: (items: ContentItem[], blue: number, green: number, red: number) => Tag2c;
+export declare const setColor3: (items: ContentItem[], blue: number, green: number, red: number) => Tag3c;
+export declare const setColor4: (items: ContentItem[], blue: number, green: number, red: number) => Tag4c;
+export declare const setAlpha: (items: ContentItem[], newValue: string) => TagAlpha;
+export declare const setAlpha1: (items: ContentItem[], newValue: string) => Tag1a;
+export declare const setAlpha2: (items: ContentItem[], newValue: string) => Tag2a;
+export declare const setAlpha3: (items: ContentItem[], newValue: string) => Tag3a;
+export declare const setAlpha4: (items: ContentItem[], newValue: string) => Tag4a;
+export declare const setBlur: (items: ContentItem[], newValue: number) => TagBlur;
+export declare const setBord: (items: ContentItem[], newValue: number) => TagBord;
+export declare const setXbord: (items: ContentItem[], newValue: number) => TagXbord;
+export declare const setYbord: (items: ContentItem[], newValue: number) => TagYbord;
+export declare const setFax: (items: ContentItem[], newValue: number) => TagFax;
+export declare const setFay: (items: ContentItem[], newValue: number) => TagFay;
+export declare const setFscx: (items: ContentItem[], newValue: number) => TagFscx;
+export declare const setFscy: (items: ContentItem[], newValue: number) => TagFscy;
+export declare const setFsp: (items: ContentItem[], newValue: number) => TagFsp;
 export declare function setFe(items: ContentItem[], encodingId: number): TagFe;
 export declare function setFn(items: ContentItem[], font: string): TagFn;
-export declare function setKLowerCase(items: ContentItem[], newValue: number): TagKLowerCase;
-export declare function setKUpperCase(items: ContentItem[], newValue: number): TagKUpperCase;
-export declare function setKf(items: ContentItem[], newValue: number): TagKf;
-export declare function setKo(items: ContentItem[], newValue: number): TagKo;
-export declare function setP(items: ContentItem[], newValue: number): TagP;
-export declare function setPbo(items: ContentItem[], newValue: number): TagPbo;
-export declare function setQ(items: ContentItem[], newValue: number): TagQ;
-export declare function setS(items: ContentItem[], newValue: number): TagS;
-export declare function setShad(items: ContentItem[], newValue: number): TagShad;
-export declare function setXshad(items: ContentItem[], newValue: number): TagXshad;
-export declare function setYshad(items: ContentItem[], newValue: number): TagYshad;
-export declare function setU(items: ContentItem[], newValue: number): TagU;
-export declare function setBe(items: ContentItem[], newValue: number): TagBe;
-export declare function setFs(items: ContentItem[], newValue: number): TagFs;
-export declare function setFr(items: ContentItem[], newValue: number): TagFr;
-export declare function setFrx(items: ContentItem[], newValue: number): TagFrx;
-export declare function setFry(items: ContentItem[], newValue: number): TagFry;
-export declare function setFrz(items: ContentItem[], newValue: number): TagFrz;
-export declare function setI(items: ContentItem[], newValue: number): TagI;
+export declare const setKLowerCase: (items: ContentItem[], newValue: number) => TagKLowerCase;
+export declare const setKUpperCase: (items: ContentItem[], newValue: number) => TagKUpperCase;
+export declare const setKf: (items: ContentItem[], newValue: number) => TagKf;
+export declare const setKo: (items: ContentItem[], newValue: number) => TagKo;
+export declare const setP: (items: ContentItem[], newValue: number) => TagP;
+export declare const setPbo: (items: ContentItem[], newValue: number) => TagPbo;
+export declare const setQ: (items: ContentItem[], newValue: number) => TagQ;
+export declare const setS: (items: ContentItem[], newValue: number) => TagS;
+export declare const setShad: (items: ContentItem[], newValue: number) => TagShad;
+export declare const setXshad: (items: ContentItem[], newValue: number) => TagXshad;
+export declare const setYshad: (items: ContentItem[], newValue: number) => TagYshad;
+export declare const setU: (items: ContentItem[], newValue: number) => TagU;
+export declare const setBe: (items: ContentItem[], newValue: number) => TagBe;
+export declare const setFs: (items: ContentItem[], newValue: number) => TagFs;
+export declare const setFr: (items: ContentItem[], newValue: number) => TagFr;
+export declare const setFrx: (items: ContentItem[], newValue: number) => TagFrx;
+export declare const setFry: (items: ContentItem[], newValue: number) => TagFry;
+export declare const setFrz: (items: ContentItem[], newValue: number) => TagFrz;
+export declare const setI: (items: ContentItem[], newValue: number) => TagI;
 export declare function setR(items: ContentItem[], style: string): TagR;
 export declare function setPos(items: ContentItem[], x: number, y: number): TagPos;
 export declare function setOrg(items: ContentItem[], x: number, y: number): TagOrg;
@@ -599,29 +623,10 @@ export declare function setClip(items: ContentItem[], drawCommands: string): Tag
 export declare function setIclip(items: ContentItem[], drawCommands: string): TagIclip;
 export declare function setMove(items: ContentItem[], x1: number, y1: number, x2: number, y2: number, t1?: number | null, t2?: number | null): TagMove;
 export declare function setT(items: ContentItem[], tags: Tags[], accel?: number | null, t1?: number | null, t2?: number | null): TagT;
-export declare function tagsToItems(tags: Tags[]): ContentItem[];
-export declare function itemsToTags(items: ContentItem[]): Tags[];
+export declare function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [
+	boolean,
+	T
+];
 export declare function removeTag(items: ContentItem[], tagName: TagName): void;
-export declare const LINE_TYPE_DIALOGUE = "Dialogue";
-export declare const LINE_TYPE_COMMENT = "Comment";
-export type LineType = typeof LINE_TYPE_DIALOGUE | typeof LINE_TYPE_COMMENT;
-export type Line = {
-	type: LineType;
-	layer: number;
-	start: Time;
-	end: Time;
-	style: string;
-	actor: string;
-	marginLeft: number;
-	marginRight: number;
-	marginVertical: number;
-	effect: string;
-	content: string;
-};
-export declare function parseLine(text: string): Line | null;
-export declare function lineToString(line: Line): string;
-export declare function calculateLineDurationInSeconds(line: Line): number;
-export declare function parseColorBGR(text: string): ColorBGR | null;
-export declare function generateDefaultLine(): Line;
 
 export {};

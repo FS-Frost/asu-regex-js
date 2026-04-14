@@ -1,319 +1,17 @@
 var __defProp = Object.defineProperty;
+var __returnValue = (v) => v;
+function __exportSetter(name, newValue) {
+  this[name] = __returnValue.bind(null, newValue);
+}
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, {
       get: all[name],
       enumerable: true,
       configurable: true,
-      set: (newValue) => all[name] = () => newValue
+      set: __exportSetter.bind(all, name)
     });
 };
-
-// src/math.ts
-function hexToNumber(s) {
-  return parseInt(s, 16);
-}
-function numberToHex(n) {
-  const int = Math.floor(n);
-  return int.toString(16).padStart(2, "0").toUpperCase();
-}
-function interpolate(min, max, intervals) {
-  const reverse = min > max;
-  let actualMax = max;
-  let actualMin = min;
-  if (reverse) {
-    actualMax = min;
-    actualMin = max;
-  }
-  const range = actualMax - actualMin;
-  const step = range / intervals;
-  let sum = actualMin;
-  const interpolations = [actualMin];
-  for (let i = 1;i < intervals; i++) {
-    sum += step;
-    interpolations.push(sum);
-  }
-  interpolations[intervals - 1] = actualMax;
-  if (reverse) {
-    interpolations.reverse();
-  }
-  return interpolations;
-}
-function truncate(n, decimals) {
-  decimals = Math.floor(decimals);
-  const regexPattern = `(-?\\d+.?\\d{1,${decimals}})`;
-  const regexNumber = new RegExp(regexPattern);
-  const match = n.toString().match(regexNumber);
-  if (!match || match.length === 0) {
-    return n;
-  }
-  const truncatedNumber = Number(match[0]);
-  return truncatedNumber;
-}
-
-// node_modules/magic-regexp/dist/shared/magic-regexp.b7c910ac.mjs
-var NO_WRAP_RE = /^(\(.*\)|\\?.)$/;
-var wrap = (s) => {
-  const v = s.toString();
-  return NO_WRAP_RE.test(v) ? v : `(?:${v})`;
-};
-var GROUPED_AS_REPLACE_RE = /^(?:\(\?:(.+)\)|(\(?.+\)?))$/;
-var GROUPED_REPLACE_RE = /^(?:\(\?:(.+)\)([?+*]|{[\d,]+})?|(.+))$/;
-var createInput = (s) => {
-  const groupedAsFn = (key) => createInput(`(?<${key}>${`${s}`.replace(GROUPED_AS_REPLACE_RE, "$1$2")})`);
-  return {
-    toString: () => s.toString(),
-    and: Object.assign((...inputs) => createInput(`${s}${exactly(...inputs)}`), {
-      referenceTo: (groupName) => createInput(`${s}\\k<${groupName}>`)
-    }),
-    or: (...inputs) => createInput(`(?:${s}|${exactly(...inputs)})`),
-    after: (...input) => createInput(`(?<=${exactly(...input)})${s}`),
-    before: (...input) => createInput(`${s}(?=${exactly(...input)})`),
-    notAfter: (...input) => createInput(`(?<!${exactly(...input)})${s}`),
-    notBefore: (...input) => createInput(`${s}(?!${exactly(...input)})`),
-    times: Object.assign((number) => createInput(`${wrap(s)}{${number}}`), {
-      any: () => createInput(`${wrap(s)}*`),
-      atLeast: (min) => createInput(`${wrap(s)}{${min},}`),
-      atMost: (max) => createInput(`${wrap(s)}{0,${max}}`),
-      between: (min, max) => createInput(`${wrap(s)}{${min},${max}}`)
-    }),
-    optionally: () => createInput(`${wrap(s)}?`),
-    as: groupedAsFn,
-    groupedAs: groupedAsFn,
-    grouped: () => createInput(`${s}`.replace(GROUPED_REPLACE_RE, "($1$3)$2")),
-    at: {
-      lineStart: () => createInput(`^${s}`),
-      lineEnd: () => createInput(`${s}$`)
-    }
-  };
-};
-var ESCAPE_REPLACE_RE = /[.*+?^${}()|[\]\\/]/g;
-var charNotIn = (chars) => createInput(`[^${chars.replace(/[-\\^\]]/g, "\\$&")}]`);
-var anyOf = (...inputs) => createInput(`(?:${inputs.map((a) => exactly(a)).join("|")})`);
-var char = createInput(".");
-var word = createInput("\\b\\w+\\b");
-var wordChar = createInput("\\w");
-var wordBoundary = createInput("\\b");
-var digit = createInput("\\d");
-var whitespace = createInput("\\s");
-var letter = Object.assign(createInput("[a-zA-Z]"), {
-  lowercase: createInput("[a-z]"),
-  uppercase: createInput("[A-Z]")
-});
-var tab = createInput("\\t");
-var linefeed = createInput("\\n");
-var carriageReturn = createInput("\\r");
-var not = {
-  word: createInput("\\W+"),
-  wordChar: createInput("\\W"),
-  wordBoundary: createInput("\\B"),
-  digit: createInput("\\D"),
-  whitespace: createInput("\\S"),
-  letter: Object.assign(createInput("[^a-zA-Z]"), {
-    lowercase: createInput("[^a-z]"),
-    uppercase: createInput("[^A-Z]")
-  }),
-  tab: createInput("[^\\t]"),
-  linefeed: createInput("[^\\n]"),
-  carriageReturn: createInput("[^\\r]")
-};
-var exactly = (...inputs) => createInput(inputs.map((input) => typeof input === "string" ? input.replace(ESCAPE_REPLACE_RE, "\\$&") : input).join(""));
-var oneOrMore = (...inputs) => createInput(`${wrap(exactly(...inputs))}+`);
-
-// node_modules/magic-regexp/dist/index.mjs
-var createRegExp = (...inputs) => {
-  const flags = inputs.length > 1 && (Array.isArray(inputs[inputs.length - 1]) || inputs[inputs.length - 1] instanceof Set) ? inputs.pop() : undefined;
-  return new RegExp(exactly(...inputs).toString(), [...flags || ""].join(""));
-};
-
-// src/regex.ts
-var regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
-var regexText = /^[^\\]+/g;
-var regexRomaji = /(?<sil>(?:sha|shi|shu|she|sho|cha|chi|chu|che|cho|tsu|kya|kyi|kyu|kye|kyo|gya|gyi|gyu|gye|gyo|sya|syu|syi|sye|syo|zya|zyu|zyi|zye|zyo|jya|jyu|jyi|jye|jyo|tya|tyi|tyu|tye|tyo|dya|dyi|dyu|dye|dyo|nya|nyi|nyu|nye|nyo|hya|hyi|hyu|hye|hyo|fya|fyi|fyu|fye|fyo|dzu|bya|byi|byu|bye|byo|pya|pyi|pyu|pye|pyo|mya|myi|myu|mye|myo|rya|ryi|ryu|rye|ryo|vya|vyi|vyu|vye|vyo|ka|ki|ku|ke|ko|ga|gi|gu|ge|go|sa|su|si|se|so|za|zu|zi|ze|zo|ja|ju|ji|je|jo|ta|ti|tu|te|to|da|di|du|de|do|na|ni|nu|ne|no|ha|hi|hu|he|ho|fa|fi|fu|fe|fo|ba|bi|bu|be|bo|pa|pi|pu|pe|po|ma|mi|mu|me|mo|ya|yi|yu|ye|yo|ra|ri|ru|re|ro|wa|wo|va|vi|vu|ve|vo|a|i|u|e|o|n|t)[^a-zA-Z\d\s:]*\s?)/g;
-var reTime = oneOrMore(digit).and(exactly(":")).and(digit.times(2)).and(exactly(":")).and(digit.times(2)).and(exactly(".")).and(digit.times(2));
-var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).and(oneOrMore(digit).optionally().groupedAs("layer")).and(exactly(",")).and(reTime.optionally().groupedAs("start")).and(exactly(",")).and(reTime.optionally().groupedAs("end")).and(exactly(",")).and(oneOrMore(charNotIn(",").optionally()).groupedAs("style")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("actor")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginLeft")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginRight")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginVertical")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("effect")).and(exactly(",")).and(oneOrMore(char).optionally().groupedAs("content"));
-var regexLine = createRegExp(reLine);
-var reInt = exactly("-").optionally().and(oneOrMore(digit));
-var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
-var reA = exactly("\\").and("a").and(reFloat.groupedAs("a_value"));
-var regexA = createRegExp(reA);
-var reHex = letter.or(digit).times(2);
-var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&").optionally());
-var reColor = exactly("\\c").and(reColorBGR);
-var reColor1 = exactly("\\1c").and(exactly("&H")).and(reHex.groupedAs("color1_bgr_blue")).and(reHex.groupedAs("color1_bgr_green")).and(reHex.groupedAs("color1_bgr_red")).and(exactly("&"));
-var reColor2 = exactly("\\2c").and(exactly("&H")).and(reHex.groupedAs("color2_bgr_blue")).and(reHex.groupedAs("color2_bgr_green")).and(reHex.groupedAs("color2_bgr_red")).and(exactly("&"));
-var reColor3 = exactly("\\3c").and(exactly("&H")).and(reHex.groupedAs("color3_bgr_blue")).and(reHex.groupedAs("color3_bgr_green")).and(reHex.groupedAs("color3_bgr_red")).and(exactly("&"));
-var reColor4 = exactly("\\4c").and(exactly("&H")).and(reHex.groupedAs("color4_bgr_blue")).and(reHex.groupedAs("color4_bgr_green")).and(reHex.groupedAs("color4_bgr_red")).and(exactly("&"));
-var regexColorBGR = createRegExp(reColorBGR);
-var regexColor = createRegExp(reColor);
-var regexColor1 = createRegExp(reColor1);
-var regexColor2 = createRegExp(reColor2);
-var regexColor3 = createRegExp(reColor3);
-var regexColor4 = createRegExp(reColor4);
-var reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")).groupedAs("alpha_value"));
-var regexAlpha = createRegExp(reAlpha);
-var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha1_value"));
-var regexAlpha1 = createRegExp(reAlpha1);
-var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha2_value"));
-var regexAlpha2 = createRegExp(reAlpha2);
-var reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha3_value"));
-var regexAlpha3 = createRegExp(reAlpha3);
-var reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha4_value"));
-var regexAlpha4 = createRegExp(reAlpha4);
-var reKLowerCase = exactly("\\").and("k").and(reFloat.groupedAs("k_lower_case_value"));
-var regexKLowerCase = createRegExp(reKLowerCase);
-var reKUpperCase = exactly("\\").and("K").and(reFloat.groupedAs("k_upper_case_value"));
-var regexKUpperCase = createRegExp(reKUpperCase);
-var reKf = exactly("\\").and("kf").and(reFloat.groupedAs("kf_value"));
-var regexKf = createRegExp(reKf);
-var reKo = exactly("\\").and("ko").and(reFloat.groupedAs("ko_value"));
-var regexKo = createRegExp(reKo);
-var reQ = exactly("\\").and("q").and(reFloat.groupedAs("q_value"));
-var regexQ = createRegExp(reQ);
-var reS = exactly("\\").and("s").and(reFloat.groupedAs("s_value"));
-var regexS = createRegExp(reS);
-var reU = exactly("\\").and("u").and(reFloat.groupedAs("u_value"));
-var regexU = createRegExp(reU);
-var reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")).groupedAs("r_value"));
-var regexR = createRegExp(reR);
-var reFe = exactly("\\").and("fe").and(reFloat.groupedAs("fe_value"));
-var regexFe = createRegExp(reFe);
-var reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")).groupedAs("fn_value"));
-var regexFn = createRegExp(reFn);
-var reP = exactly("\\").and("p").and(reFloat.groupedAs("p_value"));
-var regexP = createRegExp(reP);
-var rePbo = exactly("\\").and("pbo").and(reFloat.groupedAs("pbo_value"));
-var regexPbo = createRegExp(rePbo);
-var reAn = exactly("\\").and("an").and(reFloat.groupedAs("an_value"));
-var regexAn = createRegExp(reAn);
-var reB = exactly("\\").and("b").and(reFloat.groupedAs("b_value"));
-var regexB = createRegExp(reB);
-var reBe = exactly("\\").and("be").and(reFloat.groupedAs("be_value"));
-var regexBe = createRegExp(reBe);
-var reBlur = exactly("\\").and("blur").and(reFloat.groupedAs("blur_value"));
-var regexBlur = createRegExp(reBlur);
-var reBord = exactly("\\").and("bord").and(reFloat.groupedAs("bord_value"));
-var regexBord = createRegExp(reBord);
-var reXbord = exactly("\\").and("xbord").and(reFloat.groupedAs("xbord_value"));
-var regexXbord = createRegExp(reXbord);
-var reYbord = exactly("\\").and("ybord").and(reFloat.groupedAs("ybord_value"));
-var regexYbord = createRegExp(reYbord);
-var reShad = exactly("\\").and("shad").and(reFloat.groupedAs("shad_value"));
-var regexShad = createRegExp(reShad);
-var reXshad = exactly("\\").and("xshad").and(reFloat.groupedAs("xshad_value"));
-var regexXshad = createRegExp(reXshad);
-var reYshad = exactly("\\").and("yshad").and(reFloat.groupedAs("yshad_value"));
-var regexYshad = createRegExp(reYshad);
-var reFax = exactly("\\").and("fax").and(reFloat.groupedAs("fax_value"));
-var regexFax = createRegExp(reFax);
-var reFay = exactly("\\").and("fay").and(reFloat.groupedAs("fay_value"));
-var regexFay = createRegExp(reFay);
-var reFscx = exactly("\\").and("fscx").and(reFloat.groupedAs("fscx_value"));
-var regexFscx = createRegExp(reFscx);
-var reFscy = exactly("\\").and("fscy").and(reFloat.groupedAs("fscy_value"));
-var regexFscy = createRegExp(reFscy);
-var reFsp = exactly("\\").and("fsp").and(reFloat.groupedAs("fsp_value"));
-var regexFsp = createRegExp(reFsp);
-var reFr = exactly("\\").and("fr").and(reFloat.groupedAs("fr_value"));
-var regexFr = createRegExp(reFr);
-var reFrx = exactly("\\").and("frx").and(reFloat.groupedAs("frx_value"));
-var regexFrx = createRegExp(reFrx);
-var reFry = exactly("\\").and("fry").and(reFloat.groupedAs("fry_value"));
-var regexFry = createRegExp(reFry);
-var reFrz = exactly("\\").and("frz").and(reFloat.groupedAs("frz_value"));
-var regexFrz = createRegExp(reFrz);
-var reI = exactly("\\").and("i").and(exactly("1").or("0").groupedAs("i_value"));
-var regexI = createRegExp(reI);
-var reFs = exactly("\\").and("fs").and(reFloat.groupedAs("fs_value"));
-var regexFs = createRegExp(reFs);
-var rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
-var regexPos = createRegExp(rePos);
-var reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
-var regexOrg = createRegExp(reOrg);
-var reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
-var regexFad = createRegExp(reFad);
-var reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
-var regexFade = createRegExp(reFade);
-var reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
-var reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
-var regexMove = createRegExp(reMove);
-var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
-var regexClip = createRegExp(reClip);
-var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
-var regexIclip = createRegExp(reIclip);
-var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")).groupedAs("unknown_value"));
-var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase).or(reUnknown);
-var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
-var regexTags = createRegExp(unitTags);
-var regexTagT = createRegExp(reTGeneral);
-
-// src/time.ts
-function secondsToTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds / 3600 - hours) * 60);
-  seconds = seconds - hours * 3600 - minutes * 60;
-  return {
-    hours,
-    minutes,
-    seconds
-  };
-}
-function parseTime(text) {
-  const regexTime = /(?<h>\d+):(?<m>[0-9]{1,2}?):(?<s>[0-9]{1,2}(?:\.[0-9]{1,2})?)/;
-  const match = text.match(regexTime);
-  if (!match || match.length === 0) {
-    return null;
-  }
-  const hours = Math.floor(Number(match.groups?.h ?? "0"));
-  const minutes = Math.floor(Number(match.groups?.m ?? "0"));
-  const seconds = Number(match.groups?.s ?? "0");
-  const time = {
-    hours,
-    minutes,
-    seconds
-  };
-  adjustTimeOverplus(time);
-  return time;
-}
-function adjustTimeOverplus(time) {
-  if (time.seconds >= 60) {
-    time.seconds -= 60;
-    time.minutes++;
-  }
-  if (time.minutes >= 60) {
-    time.minutes -= 60;
-    time.hours++;
-  }
-  if (time.hours >= 9) {
-    time.hours = 9;
-    time.minutes = 59;
-    time.seconds = 59.99;
-  }
-}
-function timeToString(time) {
-  adjustTimeOverplus(time);
-  const hours = time.hours.toFixed(0);
-  const minutes = time.minutes.toFixed(0).padStart("00".length, "0");
-  const seconds = time.seconds.toFixed(2).padStart("00.00".length, "0");
-  return `${hours}:${minutes}:${seconds}`;
-}
-function timeToSeconds(time) {
-  adjustTimeOverplus(time);
-  const seconds = time.hours * 3600 + time.minutes * 60 + time.seconds;
-  return seconds;
-}
-function sumTimes(t1, t2) {
-  const seconds1 = timeToSeconds(t1);
-  const seconds2 = timeToSeconds(t2);
-  const totalSeconds = seconds1 + seconds2;
-  return secondsToTime(totalSeconds);
-}
-function subtractTimes(minuend, subtracting) {
-  const minuendSeconds = timeToSeconds(minuend);
-  const subtractingSeconds = timeToSeconds(subtracting);
-  const deltaSeconds = minuendSeconds - subtractingSeconds;
-  return secondsToTime(deltaSeconds);
-}
 
 // node_modules/zod/v3/external.js
 var exports_external = {};
@@ -4302,7 +4000,6 @@ var Alignments;
   Alignments2[Alignments2["UP_RIGHT"] = 9] = "UP_RIGHT";
 })(Alignments ||= {});
 var Alignment = exports_external.nativeEnum(Alignments);
-
 // src/assFile/encoding.ts
 var Encodings;
 ((Encodings2) => {
@@ -4811,12 +4508,12 @@ function removeUtf8Boom(s) {
   return s;
 }
 function parseKeyValue(text) {
-  const regexLine2 = /(?<key>.+):\s+(?<value>.*)\s*/;
+  const regexLine = /(?<key>.+):\s+(?<value>.*)\s*/;
   const kv = {
     key: "",
     value: ""
   };
-  const match = text.match(regexLine2);
+  const match = text.match(regexLine);
   if (!match || match.length === 0) {
     return [kv, `not a key-value pair: ${text}`];
   }
@@ -4924,71 +4621,259 @@ function processExtraDataLine(assFile, line) {
   const datum = line.substring(_DataStart.length);
   assFile.extraData.data.push(datum);
 }
-// src/karaoke.ts
-function splitSyllabes(line) {
-  const syls = [];
-  const words = line.content.split(" ");
-  for (let i = 0;i < words.length; i++) {
-    const word2 = words[i];
-    if (isRomajiWord(word2)) {
-      const matches = word2.matchAll(regexRomaji);
-      for (const match of matches) {
-        syls.push({
-          text: match[1],
-          durationInMs: 0
-        });
-      }
-    } else {
-      syls.push({
-        text: word2,
-        durationInMs: 0
-      });
-    }
-    if (i != words.length - 1) {
-      syls[syls.length - 1].text += " ";
-    }
-  }
-  const lineDurationInSeconds = calculateLineDurationInSeconds(line);
-  const sylDurationInMs = Math.floor(Math.round(lineDurationInSeconds * 100 / syls.length));
-  const karaokeDurationInMs = syls.length * sylDurationInMs;
-  for (const syl of syls) {
-    syl.durationInMs = sylDurationInMs;
-  }
-  const karaokeDurationMatchesLineDuration = karaokeDurationInMs === lineDurationInSeconds * 100;
-  if (!karaokeDurationMatchesLineDuration) {
-    const lineDurationInMs = lineDurationInSeconds * 100;
-    const deltaInMs = lineDurationInMs - karaokeDurationInMs;
-    syls[syls.length - 1].durationInMs += deltaInMs;
-  }
-  const items = [];
-  for (const syl of syls) {
-    items.push({
-      name: "effect",
-      tags: [
-        {
-          name: "kf" /* kf */,
-          value: syl.durationInMs
-        }
-      ]
-    }, {
-      name: "text",
-      value: syl.text
-    });
-  }
-  line.content = contentsToString(items);
+// src/math.ts
+function hexToNumber(s) {
+  return parseInt(s, 16);
 }
-function isRomajiWord(word2) {
-  while (word2.length > 0) {
-    const match = word2.match(regexRomaji);
-    if (!match || match.length === 0) {
-      return false;
-    }
-    word2 = word2.substring(match[0].length);
+function numberToHex(n) {
+  const int = Math.floor(n);
+  return int.toString(16).padStart(2, "0").toUpperCase();
+}
+function interpolate(min, max, intervals) {
+  const reverse = min > max;
+  let actualMax = max;
+  let actualMin = min;
+  if (reverse) {
+    actualMax = min;
+    actualMin = max;
   }
-  return true;
+  const range = actualMax - actualMin;
+  const step = range / intervals;
+  let sum = actualMin;
+  const interpolations = [actualMin];
+  for (let i = 1;i < intervals; i++) {
+    sum += step;
+    interpolations.push(sum);
+  }
+  interpolations[intervals - 1] = actualMax;
+  if (reverse) {
+    interpolations.reverse();
+  }
+  return interpolations;
+}
+function truncate(n, decimals) {
+  decimals = Math.floor(decimals);
+  const regexPattern = `(-?\\d+.?\\d{1,${decimals}})`;
+  const regexNumber = new RegExp(regexPattern);
+  const match = n.toString().match(regexNumber);
+  if (!match || match.length === 0) {
+    return n;
+  }
+  const truncatedNumber = Number(match[0]);
+  return truncatedNumber;
 }
 
-// src/asu.ts
+// node_modules/magic-regexp/dist/shared/magic-regexp.b7c910ac.mjs
+var NO_WRAP_RE = /^(\(.*\)|\\?.)$/;
+var wrap = (s) => {
+  const v = s.toString();
+  return NO_WRAP_RE.test(v) ? v : `(?:${v})`;
+};
+var GROUPED_AS_REPLACE_RE = /^(?:\(\?:(.+)\)|(\(?.+\)?))$/;
+var GROUPED_REPLACE_RE = /^(?:\(\?:(.+)\)([?+*]|{[\d,]+})?|(.+))$/;
+var createInput = (s) => {
+  const groupedAsFn = (key) => createInput(`(?<${key}>${`${s}`.replace(GROUPED_AS_REPLACE_RE, "$1$2")})`);
+  return {
+    toString: () => s.toString(),
+    and: Object.assign((...inputs) => createInput(`${s}${exactly(...inputs)}`), {
+      referenceTo: (groupName) => createInput(`${s}\\k<${groupName}>`)
+    }),
+    or: (...inputs) => createInput(`(?:${s}|${exactly(...inputs)})`),
+    after: (...input) => createInput(`(?<=${exactly(...input)})${s}`),
+    before: (...input) => createInput(`${s}(?=${exactly(...input)})`),
+    notAfter: (...input) => createInput(`(?<!${exactly(...input)})${s}`),
+    notBefore: (...input) => createInput(`${s}(?!${exactly(...input)})`),
+    times: Object.assign((number) => createInput(`${wrap(s)}{${number}}`), {
+      any: () => createInput(`${wrap(s)}*`),
+      atLeast: (min) => createInput(`${wrap(s)}{${min},}`),
+      atMost: (max) => createInput(`${wrap(s)}{0,${max}}`),
+      between: (min, max) => createInput(`${wrap(s)}{${min},${max}}`)
+    }),
+    optionally: () => createInput(`${wrap(s)}?`),
+    as: groupedAsFn,
+    groupedAs: groupedAsFn,
+    grouped: () => createInput(`${s}`.replace(GROUPED_REPLACE_RE, "($1$3)$2")),
+    at: {
+      lineStart: () => createInput(`^${s}`),
+      lineEnd: () => createInput(`${s}$`)
+    }
+  };
+};
+var ESCAPE_REPLACE_RE = /[.*+?^${}()|[\]\\/]/g;
+var charNotIn = (chars) => createInput(`[^${chars.replace(/[-\\^\]]/g, "\\$&")}]`);
+var anyOf = (...inputs) => createInput(`(?:${inputs.map((a) => exactly(a)).join("|")})`);
+var char = createInput(".");
+var word = createInput("\\b\\w+\\b");
+var wordChar = createInput("\\w");
+var wordBoundary = createInput("\\b");
+var digit = createInput("\\d");
+var whitespace = createInput("\\s");
+var letter = Object.assign(createInput("[a-zA-Z]"), {
+  lowercase: createInput("[a-z]"),
+  uppercase: createInput("[A-Z]")
+});
+var tab = createInput("\\t");
+var linefeed = createInput("\\n");
+var carriageReturn = createInput("\\r");
+var not = {
+  word: createInput("\\W+"),
+  wordChar: createInput("\\W"),
+  wordBoundary: createInput("\\B"),
+  digit: createInput("\\D"),
+  whitespace: createInput("\\S"),
+  letter: Object.assign(createInput("[^a-zA-Z]"), {
+    lowercase: createInput("[^a-z]"),
+    uppercase: createInput("[^A-Z]")
+  }),
+  tab: createInput("[^\\t]"),
+  linefeed: createInput("[^\\n]"),
+  carriageReturn: createInput("[^\\r]")
+};
+var exactly = (...inputs) => createInput(inputs.map((input) => typeof input === "string" ? input.replace(ESCAPE_REPLACE_RE, "\\$&") : input).join(""));
+var oneOrMore = (...inputs) => createInput(`${wrap(exactly(...inputs))}+`);
+
+// node_modules/magic-regexp/dist/index.mjs
+var createRegExp = (...inputs) => {
+  const flags = inputs.length > 1 && (Array.isArray(inputs[inputs.length - 1]) || inputs[inputs.length - 1] instanceof Set) ? inputs.pop() : undefined;
+  return new RegExp(exactly(...inputs).toString(), [...flags || ""].join(""));
+};
+
+// src/regex.ts
+var regexContent = /(?<fx>{[^{]*})|(?<txt>{*[^{]*)/g;
+var regexText = /^[^\\]+/g;
+var regexRomaji = /(?<sil>(?:sha|shi|shu|she|sho|cha|chi|chu|che|cho|tsu|kya|kyi|kyu|kye|kyo|gya|gyi|gyu|gye|gyo|sya|syu|syi|sye|syo|zya|zyu|zyi|zye|zyo|jya|jyu|jyi|jye|jyo|tya|tyi|tyu|tye|tyo|dya|dyi|dyu|dye|dyo|nya|nyi|nyu|nye|nyo|hya|hyi|hyu|hye|hyo|fya|fyi|fyu|fye|fyo|dzu|bya|byi|byu|bye|byo|pya|pyi|pyu|pye|pyo|mya|myi|myu|mye|myo|rya|ryi|ryu|rye|ryo|vya|vyi|vyu|vye|vyo|ka|ki|ku|ke|ko|ga|gi|gu|ge|go|sa|su|si|se|so|za|zu|zi|ze|zo|ja|ju|ji|je|jo|ta|ti|tu|te|to|da|di|du|de|do|na|ni|nu|ne|no|ha|hi|hu|he|ho|fa|fi|fu|fe|fo|ba|bi|bu|be|bo|pa|pi|pu|pe|po|ma|mi|mu|me|mo|ya|yi|yu|ye|yo|ra|ri|ru|re|ro|wa|wo|va|vi|vu|ve|vo|a|i|u|e|o|n|t)[^a-zA-Z\d\s:]*\s?)/g;
+var reTime = oneOrMore(digit).and(exactly(":")).and(digit.times(2)).and(exactly(":")).and(digit.times(2)).and(exactly(".")).and(digit.times(2));
+var reLine = anyOf("Dialogue", "Comment").groupedAs("type").and(exactly(": ")).and(oneOrMore(digit).optionally().groupedAs("layer")).and(exactly(",")).and(reTime.optionally().groupedAs("start")).and(exactly(",")).and(reTime.optionally().groupedAs("end")).and(exactly(",")).and(oneOrMore(charNotIn(",").optionally()).groupedAs("style")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("actor")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginLeft")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginRight")).and(exactly(",")).and(oneOrMore(digit).optionally().groupedAs("marginVertical")).and(exactly(",")).and(oneOrMore(charNotIn(",")).optionally().groupedAs("effect")).and(exactly(",")).and(oneOrMore(char).optionally().groupedAs("content"));
+var regexLine = createRegExp(reLine);
+var reInt = exactly("-").optionally().and(oneOrMore(digit));
+var reFloat = reInt.and(exactly(".").and(oneOrMore(digit)).optionally());
+var reA = exactly("\\").and("a").and(reFloat.groupedAs("a_value"));
+var regexA = createRegExp(reA);
+var reHex = letter.or(digit).times(2);
+var reColorBGR = exactly("&H").and(reHex.groupedAs("color_bgr_blue")).and(reHex.groupedAs("color_bgr_green")).and(reHex.groupedAs("color_bgr_red")).and(exactly("&").optionally());
+var reColor = exactly("\\c").and(reColorBGR);
+var reColor1 = exactly("\\1c").and(exactly("&H")).and(reHex.groupedAs("color1_bgr_blue")).and(reHex.groupedAs("color1_bgr_green")).and(reHex.groupedAs("color1_bgr_red")).and(exactly("&"));
+var reColor2 = exactly("\\2c").and(exactly("&H")).and(reHex.groupedAs("color2_bgr_blue")).and(reHex.groupedAs("color2_bgr_green")).and(reHex.groupedAs("color2_bgr_red")).and(exactly("&"));
+var reColor3 = exactly("\\3c").and(exactly("&H")).and(reHex.groupedAs("color3_bgr_blue")).and(reHex.groupedAs("color3_bgr_green")).and(reHex.groupedAs("color3_bgr_red")).and(exactly("&"));
+var reColor4 = exactly("\\4c").and(exactly("&H")).and(reHex.groupedAs("color4_bgr_blue")).and(reHex.groupedAs("color4_bgr_green")).and(reHex.groupedAs("color4_bgr_red")).and(exactly("&"));
+var regexColorBGR = createRegExp(reColorBGR);
+var regexColor = createRegExp(reColor);
+var regexColor1 = createRegExp(reColor1);
+var regexColor2 = createRegExp(reColor2);
+var regexColor3 = createRegExp(reColor3);
+var regexColor4 = createRegExp(reColor4);
+var reAlpha = exactly("\\").and("alpha").and(oneOrMore(charNotIn("\\")).groupedAs("alpha_value"));
+var regexAlpha = createRegExp(reAlpha);
+var reAlpha1 = exactly("\\").and("1a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha1_value"));
+var regexAlpha1 = createRegExp(reAlpha1);
+var reAlpha2 = exactly("\\").and("2a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha2_value"));
+var regexAlpha2 = createRegExp(reAlpha2);
+var reAlpha3 = exactly("\\").and("3a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha3_value"));
+var regexAlpha3 = createRegExp(reAlpha3);
+var reAlpha4 = exactly("\\").and("4a").and(oneOrMore(charNotIn("\\")).groupedAs("alpha4_value"));
+var regexAlpha4 = createRegExp(reAlpha4);
+var reKLowerCase = exactly("\\").and("k").and(reFloat.groupedAs("k_lower_case_value"));
+var regexKLowerCase = createRegExp(reKLowerCase);
+var reKUpperCase = exactly("\\").and("K").and(reFloat.groupedAs("k_upper_case_value"));
+var regexKUpperCase = createRegExp(reKUpperCase);
+var reKf = exactly("\\").and("kf").and(reFloat.groupedAs("kf_value"));
+var regexKf = createRegExp(reKf);
+var reKo = exactly("\\").and("ko").and(reFloat.groupedAs("ko_value"));
+var regexKo = createRegExp(reKo);
+var reQ = exactly("\\").and("q").and(reFloat.groupedAs("q_value"));
+var regexQ = createRegExp(reQ);
+var reS = exactly("\\").and("s").and(reFloat.groupedAs("s_value"));
+var regexS = createRegExp(reS);
+var reU = exactly("\\").and("u").and(reFloat.groupedAs("u_value"));
+var regexU = createRegExp(reU);
+var reR = exactly("\\").and("r").and(oneOrMore(charNotIn("\\")).groupedAs("r_value"));
+var regexR = createRegExp(reR);
+var reFe = exactly("\\").and("fe").and(reFloat.groupedAs("fe_value"));
+var regexFe = createRegExp(reFe);
+var reFn = exactly("\\").and("fn").and(oneOrMore(charNotIn("\\")).groupedAs("fn_value"));
+var regexFn = createRegExp(reFn);
+var reP = exactly("\\").and("p").and(reFloat.groupedAs("p_value"));
+var regexP = createRegExp(reP);
+var rePbo = exactly("\\").and("pbo").and(reFloat.groupedAs("pbo_value"));
+var regexPbo = createRegExp(rePbo);
+var reAn = exactly("\\").and("an").and(reFloat.groupedAs("an_value"));
+var regexAn = createRegExp(reAn);
+var reB = exactly("\\").and("b").and(reFloat.groupedAs("b_value"));
+var regexB = createRegExp(reB);
+var reBe = exactly("\\").and("be").and(reFloat.groupedAs("be_value"));
+var regexBe = createRegExp(reBe);
+var reBlur = exactly("\\").and("blur").and(reFloat.groupedAs("blur_value"));
+var regexBlur = createRegExp(reBlur);
+var reBord = exactly("\\").and("bord").and(reFloat.groupedAs("bord_value"));
+var regexBord = createRegExp(reBord);
+var reXbord = exactly("\\").and("xbord").and(reFloat.groupedAs("xbord_value"));
+var regexXbord = createRegExp(reXbord);
+var reYbord = exactly("\\").and("ybord").and(reFloat.groupedAs("ybord_value"));
+var regexYbord = createRegExp(reYbord);
+var reShad = exactly("\\").and("shad").and(reFloat.groupedAs("shad_value"));
+var regexShad = createRegExp(reShad);
+var reXshad = exactly("\\").and("xshad").and(reFloat.groupedAs("xshad_value"));
+var regexXshad = createRegExp(reXshad);
+var reYshad = exactly("\\").and("yshad").and(reFloat.groupedAs("yshad_value"));
+var regexYshad = createRegExp(reYshad);
+var reFax = exactly("\\").and("fax").and(reFloat.groupedAs("fax_value"));
+var regexFax = createRegExp(reFax);
+var reFay = exactly("\\").and("fay").and(reFloat.groupedAs("fay_value"));
+var regexFay = createRegExp(reFay);
+var reFscx = exactly("\\").and("fscx").and(reFloat.groupedAs("fscx_value"));
+var regexFscx = createRegExp(reFscx);
+var reFscy = exactly("\\").and("fscy").and(reFloat.groupedAs("fscy_value"));
+var regexFscy = createRegExp(reFscy);
+var reFsp = exactly("\\").and("fsp").and(reFloat.groupedAs("fsp_value"));
+var regexFsp = createRegExp(reFsp);
+var reFr = exactly("\\").and("fr").and(reFloat.groupedAs("fr_value"));
+var regexFr = createRegExp(reFr);
+var reFrx = exactly("\\").and("frx").and(reFloat.groupedAs("frx_value"));
+var regexFrx = createRegExp(reFrx);
+var reFry = exactly("\\").and("fry").and(reFloat.groupedAs("fry_value"));
+var regexFry = createRegExp(reFry);
+var reFrz = exactly("\\").and("frz").and(reFloat.groupedAs("frz_value"));
+var regexFrz = createRegExp(reFrz);
+var reI = exactly("\\").and("i").and(exactly("1").or("0").groupedAs("i_value"));
+var regexI = createRegExp(reI);
+var reFs = exactly("\\").and("fs").and(reFloat.groupedAs("fs_value"));
+var regexFs = createRegExp(reFs);
+var rePos = exactly("\\").and("pos").and(exactly("(")).and(reFloat.groupedAs("pos_x")).and(exactly(",")).and(reFloat.groupedAs("pos_y")).and(exactly(")"));
+var regexPos = createRegExp(rePos);
+var reOrg = exactly("\\").and("org").and(exactly("(")).and(reFloat.groupedAs("org_x")).and(exactly(",")).and(reFloat.groupedAs("org_y")).and(exactly(")"));
+var regexOrg = createRegExp(reOrg);
+var reFad = exactly("\\").and("fad").and(exactly("(")).and(reFloat.groupedAs("in")).and(exactly(",")).and(reFloat.groupedAs("out")).and(exactly(")"));
+var regexFad = createRegExp(reFad);
+var reFade = exactly("\\").and("fade").and(exactly("(")).and(reFloat.groupedAs("fade_alpha1")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha2")).and(exactly(",")).and(reFloat.groupedAs("fade_alpha3")).and(exactly(",")).and(reFloat.groupedAs("fade_t1")).and(exactly(",")).and(reFloat.groupedAs("fade_t2")).and(exactly(",")).and(reFloat.groupedAs("fade_t3")).and(exactly(",")).and(reFloat.groupedAs("fade_t4")).and(exactly(")"));
+var regexFade = createRegExp(reFade);
+var reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
+var reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
+var regexMove = createRegExp(reMove);
+var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+var regexClip = createRegExp(reClip);
+var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
+var regexIclip = createRegExp(reIclip);
+var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")).groupedAs("unknown_value"));
+var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase).or(reUnknown);
+var reTGeneral = exactly("\\").at.lineStart().and("t").and(exactly("(")).and(reFloat.groupedAs("arg1").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg2").and(exactly(",")).optionally()).and(reFloat.groupedAs("arg3").and(exactly(",")).optionally()).and(oneOrMore(unitTags).groupedAs("tags")).and(exactly(")"));
+var regexTags = createRegExp(unitTags);
+var regexTagT = createRegExp(reTGeneral);
+
+// src/color.ts
+function parseColorBGR(text) {
+  const match = text.match(regexColorBGR);
+  if (match == null) {
+    return null;
+  }
+  const groups = match.groups;
+  const color = {
+    blue: hexToNumber(groups?.color_bgr_blue ?? ""),
+    green: hexToNumber(groups?.color_bgr_green ?? ""),
+    red: hexToNumber(groups?.color_bgr_red ?? "")
+  };
+  return color;
+}
+// src/tags/types.ts
 var TagName;
 ((TagName2) => {
   TagName2["a"] = "a";
@@ -5046,6 +4931,604 @@ var TagName;
   TagName2["ybord"] = "ybord";
   TagName2["yshad"] = "yshad";
 })(TagName ||= {});
+
+// src/content/modifiers.ts
+function mergeNeighboringEffects(items) {
+  const indexToRemove = [];
+  for (let i = 0;i < items.length; i++) {
+    const item = items[i];
+    if (item.name != "effect") {
+      continue;
+    }
+    const nextItem = items[i + 1];
+    if (nextItem == null || nextItem.name != "effect") {
+      i++;
+      continue;
+    }
+    item.tags.push(...nextItem.tags);
+    indexToRemove.push(i + 1);
+  }
+  for (const index of indexToRemove.reverse()) {
+    items.splice(index, 1);
+  }
+}
+function truncateNumberTags(items, decimals) {
+  forEachTag(items, (tag) => {
+    switch (tag.name) {
+      case "t" /* t */: {
+        if (tag.accel != null) {
+          tag.accel = truncate(tag.accel, decimals);
+        }
+        if (tag.t1 != null) {
+          tag.t1 = truncate(tag.t1, decimals);
+        }
+        if (tag.t2 != null) {
+          tag.t2 = truncate(tag.t2, decimals);
+        }
+        break;
+      }
+      case "pos" /* pos */:
+      case "org" /* org */:
+        tag.x = truncate(tag.x, decimals);
+        tag.y = truncate(tag.y, decimals);
+        break;
+      case "move" /* move */:
+        tag.x1 = truncate(tag.x1, decimals);
+        tag.y1 = truncate(tag.y1, decimals);
+        tag.x2 = truncate(tag.x2, decimals);
+        tag.y2 = truncate(tag.y2, decimals);
+        if (tag.t1 != null) {
+          tag.t1 = truncate(tag.t1, decimals);
+        }
+        if (tag.t2 != null) {
+          tag.t2 = truncate(tag.t2, decimals);
+        }
+        break;
+      case "fad" /* fad */:
+        tag.in = truncate(tag.in, decimals);
+        tag.out = truncate(tag.out, decimals);
+        break;
+      case "fade" /* fade */:
+        tag.t1 = truncate(tag.t1, decimals);
+        tag.t2 = truncate(tag.t2, decimals);
+        tag.t3 = truncate(tag.t3, decimals);
+        tag.t4 = truncate(tag.t4, decimals);
+        tag.alpha1 = truncate(tag.alpha1, decimals);
+        tag.alpha2 = truncate(tag.alpha2, decimals);
+        tag.alpha3 = truncate(tag.alpha3, decimals);
+        break;
+      case "fe" /* fe */:
+        tag.encodingId = Math.floor(tag.encodingId);
+        break;
+      case "c" /* color */:
+      case "1c" /* color1 */:
+      case "2c" /* color2 */:
+      case "3c" /* color3 */:
+      case "4c" /* color4 */:
+        tag.blue = Math.floor(tag.blue);
+        tag.green = Math.floor(tag.green);
+        tag.red = Math.floor(tag.red);
+        break;
+      case "clip" /* clip */:
+      case "iclip" /* iclip */:
+      case "fn" /* fn */:
+      case "r" /* r */:
+      case "text" /* text */:
+      case "unknown" /* unknown */:
+        break;
+      default:
+        if (typeof tag.value === "number") {
+          tag.value = truncate(tag.value, decimals);
+        }
+        break;
+    }
+  });
+}
+function forEachTag(items, predicate) {
+  for (const item of items) {
+    if (item.name != "effect") {
+      continue;
+    }
+    for (const tag of item.tags) {
+      predicate(tag);
+    }
+  }
+}
+function tagsToItems(tags) {
+  const items = [
+    {
+      name: "effect",
+      tags
+    }
+  ];
+  return items;
+}
+function itemsToTags(items) {
+  const fx = items.find((x) => x.name === "effect");
+  if (fx == null || fx.name != "effect") {
+    return [];
+  }
+  return fx.tags;
+}
+// src/tags/registry.ts
+var tagParsers = [
+  {
+    regex: regexMove,
+    parse: (groups) => ({
+      name: "move" /* move */,
+      x1: Number(groups.move_x1 ?? "0"),
+      y1: Number(groups.move_y1 ?? "0"),
+      x2: Number(groups.move_x2 ?? "0"),
+      y2: Number(groups.move_y2 ?? "0"),
+      t1: groups.move_t1 ? Number(groups.move_t1) : null,
+      t2: groups.move_t2 ? Number(groups.move_t2) : null
+    })
+  },
+  {
+    regex: regexAlpha,
+    parse: (groups) => ({
+      name: "alpha" /* alpha */,
+      value: groups.alpha_value ?? ""
+    })
+  },
+  {
+    regex: regexXbord,
+    parse: (groups) => {
+      const value = Number(groups.xbord_value ?? "0");
+      return {
+        name: "xbord" /* xbord */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexYbord,
+    parse: (groups) => {
+      const value = Number(groups.ybord_value ?? "0");
+      return {
+        name: "ybord" /* ybord */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexXshad,
+    parse: (groups) => {
+      const value = Number(groups.xshad_value ?? "0");
+      return {
+        name: "xshad" /* xshad */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexYshad,
+    parse: (groups) => {
+      const value = Number(groups.yshad_value ?? "0");
+      return {
+        name: "yshad" /* yshad */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexIclip,
+    parse: (groups) => ({
+      name: "iclip" /* iclip */,
+      drawCommands: groups.iclip_args ?? ""
+    })
+  },
+  {
+    regex: regexBlur,
+    parse: (groups) => {
+      const value = Number(groups.blur_value ?? "0");
+      return {
+        name: "blur" /* blur */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexBord,
+    parse: (groups) => {
+      const value = Number(groups.bord_value ?? "0");
+      return {
+        name: "bord" /* bord */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexShad,
+    parse: (groups) => {
+      const value = Number(groups.shad_value ?? "0");
+      return {
+        name: "shad" /* shad */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFscx,
+    parse: (groups) => {
+      const value = Number(groups.fscx_value ?? "0");
+      return {
+        name: "fscx" /* fscx */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFscy,
+    parse: (groups) => {
+      const value = Number(groups.fscy_value ?? "0");
+      return {
+        name: "fscy" /* fscy */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFade,
+    parse: (groups) => ({
+      name: "fade" /* fade */,
+      alpha1: Number(groups.fade_alpha1 ?? "0"),
+      alpha2: Number(groups.fade_alpha2 ?? "0"),
+      alpha3: Number(groups.fade_alpha3 ?? "0"),
+      t1: Number(groups.fade_t1 ?? "0"),
+      t2: Number(groups.fade_t2 ?? "0"),
+      t3: Number(groups.fade_t3 ?? "0"),
+      t4: Number(groups.fade_t4 ?? "0")
+    })
+  },
+  {
+    regex: regexClip,
+    parse: (groups) => ({
+      name: "clip" /* clip */,
+      drawCommands: groups.clip_args ?? ""
+    })
+  },
+  {
+    regex: regexFsp,
+    parse: (groups) => {
+      const value = Number(groups.fsp_value ?? "0");
+      return {
+        name: "fsp" /* fsp */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexPos,
+    parse: (groups) => ({
+      name: "pos" /* pos */,
+      x: Number(groups.pos_x ?? "0"),
+      y: Number(groups.pos_y ?? "0")
+    })
+  },
+  {
+    regex: regexOrg,
+    parse: (groups) => ({
+      name: "org" /* org */,
+      x: Number(groups.org_x ?? "0"),
+      y: Number(groups.org_y ?? "0")
+    })
+  },
+  {
+    regex: regexFad,
+    parse: (groups) => ({
+      name: "fad" /* fad */,
+      in: Number(groups.in ?? "0"),
+      out: Number(groups.out ?? "0")
+    })
+  },
+  {
+    regex: regexFrx,
+    parse: (groups) => {
+      const value = Number(groups.frx_value ?? "0");
+      return {
+        name: "frx" /* frx */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFry,
+    parse: (groups) => {
+      const value = Number(groups.fry_value ?? "0");
+      return {
+        name: "fry" /* fry */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFrz,
+    parse: (groups) => {
+      const value = Number(groups.frz_value ?? "0");
+      return {
+        name: "frz" /* frz */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFax,
+    parse: (groups) => {
+      const value = Number(groups.fax_value ?? "0");
+      return {
+        name: "fax" /* fax */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFay,
+    parse: (groups) => {
+      const value = Number(groups.fay_value ?? "0");
+      return {
+        name: "fay" /* fay */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexPbo,
+    parse: (groups) => {
+      const value = Number(groups.pbo_value ?? "0");
+      return {
+        name: "pbo" /* pbo */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFe,
+    parse: (groups) => ({
+      name: "fe" /* fe */,
+      encodingId: Number(groups.fe_value ?? "0")
+    })
+  },
+  {
+    regex: regexFn,
+    parse: (groups) => ({
+      name: "fn" /* fn */,
+      font: groups.fn_value ?? ""
+    })
+  },
+  {
+    regex: regexAn,
+    parse: (groups) => {
+      const value = Number(groups.an_value ?? "0");
+      return {
+        name: "an" /* an */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexBe,
+    parse: (groups) => {
+      const value = Number(groups.be_value ?? "0");
+      return {
+        name: "be" /* be */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFr,
+    parse: (groups) => {
+      const value = Number(groups.fr_value ?? "0");
+      return {
+        name: "fr" /* fr */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexFs,
+    parse: (groups) => {
+      const value = Number(groups.fs_value ?? "0");
+      return {
+        name: "fs" /* fs */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexKo,
+    parse: (groups) => {
+      const value = Number(groups.ko_value ?? "0");
+      return {
+        name: "ko" /* ko */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexKf,
+    parse: (groups) => {
+      const value = Number(groups.kf_value ?? "0");
+      return {
+        name: "kf" /* kf */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexColor1,
+    parse: (groups) => ({
+      name: "1c" /* color1 */,
+      blue: Number(hexToNumber(groups.color1_bgr_blue ?? "0")),
+      green: Number(hexToNumber(groups.color1_bgr_green ?? "0")),
+      red: Number(hexToNumber(groups.color1_bgr_red ?? "0"))
+    })
+  },
+  {
+    regex: regexColor2,
+    parse: (groups) => ({
+      name: "2c" /* color2 */,
+      blue: Number(hexToNumber(groups.color2_bgr_blue ?? "0")),
+      green: Number(hexToNumber(groups.color2_bgr_green ?? "0")),
+      red: Number(hexToNumber(groups.color2_bgr_red ?? "0"))
+    })
+  },
+  {
+    regex: regexColor3,
+    parse: (groups) => ({
+      name: "3c" /* color3 */,
+      blue: Number(hexToNumber(groups.color3_bgr_blue ?? "0")),
+      green: Number(hexToNumber(groups.color3_bgr_green ?? "0")),
+      red: Number(hexToNumber(groups.color3_bgr_red ?? "0"))
+    })
+  },
+  {
+    regex: regexColor4,
+    parse: (groups) => ({
+      name: "4c" /* color4 */,
+      blue: Number(hexToNumber(groups.color4_bgr_blue ?? "0")),
+      green: Number(hexToNumber(groups.color4_bgr_green ?? "0")),
+      red: Number(hexToNumber(groups.color4_bgr_red ?? "0"))
+    })
+  },
+  {
+    regex: regexAlpha1,
+    parse: (groups) => ({
+      name: "1a" /* alpha1 */,
+      value: groups.alpha1_value ?? ""
+    })
+  },
+  {
+    regex: regexAlpha2,
+    parse: (groups) => ({
+      name: "2a" /* alpha2 */,
+      value: groups.alpha2_value ?? ""
+    })
+  },
+  {
+    regex: regexAlpha3,
+    parse: (groups) => ({
+      name: "3a" /* alpha3 */,
+      value: groups.alpha3_value ?? ""
+    })
+  },
+  {
+    regex: regexAlpha4,
+    parse: (groups) => ({
+      name: "4a" /* alpha4 */,
+      value: groups.alpha4_value ?? ""
+    })
+  },
+  {
+    regex: regexKLowerCase,
+    parse: (groups) => {
+      const value = Number(groups.k_lower_case_value ?? "0");
+      return {
+        name: "k" /* kLowerCase */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexKUpperCase,
+    parse: (groups) => {
+      const value = Number(groups.k_upper_case_value ?? "0");
+      return {
+        name: "K" /* kUpperCase */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexQ,
+    parse: (groups) => {
+      const value = Number(groups.q_value ?? "0");
+      return {
+        name: "q" /* q */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexS,
+    parse: (groups) => {
+      const value = Number(groups.s_value ?? "0");
+      return {
+        name: "s" /* s */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexU,
+    parse: (groups) => {
+      const value = Number(groups.u_value ?? "0");
+      return {
+        name: "u" /* u */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexR,
+    parse: (groups) => ({
+      name: "r" /* r */,
+      style: groups.r_value ?? ""
+    })
+  },
+  {
+    regex: regexP,
+    parse: (groups) => {
+      const value = Number(groups.p_value ?? "0");
+      return {
+        name: "p" /* p */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexI,
+    parse: (groups) => {
+      const value = Number(groups.i_value ?? "0");
+      return {
+        name: "i" /* i */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexColor,
+    parse: (groups) => ({
+      name: "c" /* color */,
+      blue: Number(hexToNumber(groups.color_bgr_blue ?? "0")),
+      green: Number(hexToNumber(groups.color_bgr_green ?? "0")),
+      red: Number(hexToNumber(groups.color_bgr_red ?? "0"))
+    })
+  },
+  {
+    regex: regexB,
+    parse: (groups) => {
+      const value = Number(groups.b_value ?? "0");
+      return {
+        name: "b" /* b */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  },
+  {
+    regex: regexA,
+    parse: (groups) => {
+      const value = Number(groups.a_value ?? "0");
+      return {
+        name: "a" /* a */,
+        value: Number.isNaN(value) ? 0 : value
+      };
+    }
+  }
+];
+
+// src/tags/parse.ts
 function parseTags(text, tags) {
   const tagNameSource = text.substring(1);
   const matchTagT = text.match(regexTagT);
@@ -5054,19 +5537,19 @@ function parseTags(text, tags) {
   }
   const matchText = text.match(regexText);
   if (matchText && matchText.length > 0) {
-    const value2 = matchText[0];
+    const value = matchText[0];
     tags.push({
       name: "text" /* text */,
-      value: value2
+      value
     });
-    text = text.substring(value2.length);
+    text = text.substring(value.length);
     if (text.length > 0) {
       parseTags(text, tags);
     }
     return tags;
   }
   const matchUnitTags = text.match(regexTags);
-  if (!matchUnitTags || matchUnitTags.length == 0) {
+  if (!matchUnitTags || matchUnitTags.length === 0) {
     return tags;
   }
   function parseNextTag(tags2, parsedTag, parsedTextLength) {
@@ -5077,519 +5560,19 @@ function parseTags(text, tags) {
     }
     return tags2;
   }
-  let match = matchUnitTags[0].match(regexMove)?.groups;
-  if (match != null) {
-    const x1 = Number(match?.move_x1 ?? "0");
-    const y1 = Number(match?.move_y1 ?? "0");
-    const x2 = Number(match?.move_x2 ?? "0");
-    const y2 = Number(match?.move_y2 ?? "0");
-    const t1 = match?.move_t1 ? Number(match.move_t1) : null;
-    const t2 = match?.move_t2 ? Number(match.move_t2) : null;
-    const tag2 = {
-      name: "move" /* move */,
-      x1,
-      y1,
-      x2,
-      y2,
-      t1,
-      t2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
+  const currentTagText = matchUnitTags[0];
+  for (const parser of tagParsers) {
+    const match = currentTagText.match(parser.regex)?.groups;
+    if (match != null) {
+      const tag2 = parser.parse(match);
+      return parseNextTag(tags, tag2, currentTagText.length);
+    }
   }
-  match = matchUnitTags[0].match(regexAlpha)?.groups;
-  if (match != null) {
-    const value2 = match?.alpha_value ?? "";
-    const tag2 = {
-      name: "alpha" /* alpha */,
-      value: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexXbord)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.xbord_value ?? "0");
-    const tag2 = {
-      name: "xbord" /* xbord */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexYbord)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.ybord_value ?? "0");
-    const tag2 = {
-      name: "ybord" /* ybord */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexXshad)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.xshad_value ?? "0");
-    const tag2 = {
-      name: "xshad" /* xshad */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexYshad)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.yshad_value ?? "0");
-    const tag2 = {
-      name: "yshad" /* yshad */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexIclip)?.groups;
-  if (match != null) {
-    const args = match?.iclip_args ?? "";
-    const tag2 = {
-      name: "iclip" /* iclip */,
-      drawCommands: args
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexBlur)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.blur_value ?? "0");
-    const tag2 = {
-      name: "blur" /* blur */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexBord)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.bord_value ?? "0");
-    const tag2 = {
-      name: "bord" /* bord */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexShad)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.shad_value ?? "0");
-    const tag2 = {
-      name: "shad" /* shad */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFscx)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fscx_value ?? "0");
-    const tag2 = {
-      name: "fscx" /* fscx */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFscy)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fscy_value ?? "0");
-    const tag2 = {
-      name: "fscy" /* fscy */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFade)?.groups;
-  if (match != null) {
-    const alpha1 = Number(match?.fade_alpha1 ?? "0");
-    const alpha2 = Number(match?.fade_alpha2 ?? "0");
-    const alpha3 = Number(match?.fade_alpha3 ?? "0");
-    const t1 = Number(match?.fade_t1 ?? "0");
-    const t2 = Number(match?.fade_t2 ?? "0");
-    const t3 = Number(match?.fade_t3 ?? "0");
-    const t4 = Number(match?.fade_t4 ?? "0");
-    const tag2 = {
-      name: "fade" /* fade */,
-      alpha1,
-      alpha2,
-      alpha3,
-      t1,
-      t2,
-      t3,
-      t4
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexClip)?.groups;
-  if (match != null) {
-    const args = match?.clip_args ?? "";
-    const tag2 = {
-      name: "clip" /* clip */,
-      drawCommands: args
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFsp)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fsp_value ?? "0");
-    const tag2 = {
-      name: "fsp" /* fsp */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexPos)?.groups;
-  if (match != null) {
-    const x = Number(match?.pos_x ?? "0");
-    const y = Number(match?.pos_y ?? "0");
-    const tag2 = {
-      name: "pos" /* pos */,
-      x,
-      y
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexOrg)?.groups;
-  if (match != null) {
-    const x = Number(match?.org_x ?? "0");
-    const y = Number(match?.org_y ?? "0");
-    const tag2 = {
-      name: "org" /* org */,
-      x,
-      y
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFad)?.groups;
-  if (match != null) {
-    const fadeIn = Number(match?.in ?? "0");
-    const fadeOut = Number(match?.out ?? "0");
-    const tag2 = {
-      name: "fad" /* fad */,
-      in: fadeIn,
-      out: fadeOut
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFrx)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.frx_value ?? "0");
-    const tag2 = {
-      name: "frx" /* frx */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFry)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fry_value ?? "0");
-    const tag2 = {
-      name: "fry" /* fry */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFrz)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.frz_value ?? "0");
-    const tag2 = {
-      name: "frz" /* frz */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFax)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fax_value ?? "0");
-    const tag2 = {
-      name: "fax" /* fax */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFay)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fay_value ?? "0");
-    const tag2 = {
-      name: "fay" /* fay */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexPbo)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.pbo_value ?? "0");
-    const tag2 = {
-      name: "pbo" /* pbo */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFe)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fe_value ?? "0");
-    const tag2 = {
-      name: "fe" /* fe */,
-      encodingId: Number(value2)
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFn)?.groups;
-  if (match != null) {
-    const value2 = match?.fn_value ?? "";
-    const tag2 = {
-      name: "fn" /* fn */,
-      font: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexAn)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.an_value ?? "0");
-    const tag2 = {
-      name: "an" /* an */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexBe)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.be_value ?? "0");
-    const tag2 = {
-      name: "be" /* be */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFr)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fr_value ?? "0");
-    const tag2 = {
-      name: "fr" /* fr */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexFs)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.fs_value ?? "0");
-    const tag2 = {
-      name: "fs" /* fs */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexKo)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.ko_value ?? "0");
-    const tag2 = {
-      name: "ko" /* ko */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexKf)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.kf_value ?? "0");
-    const tag2 = {
-      name: "kf" /* kf */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexColor1)?.groups;
-  if (match != null) {
-    const blue = Number(hexToNumber(match?.color1_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(match?.color1_bgr_green ?? "0"));
-    const red = Number(hexToNumber(match?.color1_bgr_red ?? "0"));
-    const tag2 = {
-      name: "1c" /* color1 */,
-      blue,
-      green,
-      red
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexColor2)?.groups;
-  if (match != null) {
-    const blue = Number(hexToNumber(match?.color2_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(match?.color2_bgr_green ?? "0"));
-    const red = Number(hexToNumber(match?.color2_bgr_red ?? "0"));
-    const tag2 = {
-      name: "2c" /* color2 */,
-      blue,
-      green,
-      red
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexColor3)?.groups;
-  if (match != null) {
-    const blue = Number(hexToNumber(match?.color3_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(match?.color3_bgr_green ?? "0"));
-    const red = Number(hexToNumber(match?.color3_bgr_red ?? "0"));
-    const tag2 = {
-      name: "3c" /* color3 */,
-      blue,
-      green,
-      red
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexColor4)?.groups;
-  if (match != null) {
-    const blue = Number(hexToNumber(match?.color4_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(match?.color4_bgr_green ?? "0"));
-    const red = Number(hexToNumber(match?.color4_bgr_red ?? "0"));
-    const tag2 = {
-      name: "4c" /* color4 */,
-      blue,
-      green,
-      red
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexAlpha1)?.groups;
-  if (match != null) {
-    const value2 = match.alpha1_value ?? "";
-    const tag2 = {
-      name: "1a" /* alpha1 */,
-      value: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexAlpha2)?.groups;
-  if (match != null) {
-    const value2 = match.alpha2_value ?? "";
-    const tag2 = {
-      name: "2a" /* alpha2 */,
-      value: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexAlpha3)?.groups;
-  if (match != null) {
-    const value2 = match.alpha3_value ?? "";
-    const tag2 = {
-      name: "3a" /* alpha3 */,
-      value: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexAlpha4)?.groups;
-  if (match != null) {
-    const value2 = match.alpha4_value ?? "";
-    const tag2 = {
-      name: "4a" /* alpha4 */,
-      value: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexKLowerCase)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.k_lower_case_value ?? "0");
-    const tag2 = {
-      name: "k" /* kLowerCase */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexKUpperCase)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.k_upper_case_value ?? "0");
-    const tag2 = {
-      name: "K" /* kUpperCase */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexQ)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.q_value ?? "0");
-    const tag2 = {
-      name: "q" /* q */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexS)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.s_value ?? "0");
-    const tag2 = {
-      name: "s" /* s */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexU)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.u_value ?? "0");
-    const tag2 = {
-      name: "u" /* u */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexR)?.groups;
-  if (match != null) {
-    const value2 = match?.r_value ?? "";
-    const tag2 = {
-      name: "r" /* r */,
-      style: value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexP)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.p_value ?? "0");
-    const tag2 = {
-      name: "p" /* p */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexI)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.i_value ?? "0");
-    const tag2 = {
-      name: "i" /* i */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexColor)?.groups;
-  if (match != null) {
-    const blue = Number(hexToNumber(match?.color_bgr_blue ?? "0"));
-    const green = Number(hexToNumber(match?.color_bgr_green ?? "0"));
-    const red = Number(hexToNumber(match?.color_bgr_red ?? "0"));
-    const tag2 = {
-      name: "c" /* color */,
-      blue,
-      green,
-      red
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexB)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.b_value ?? "0");
-    const tag2 = {
-      name: "b" /* b */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  match = matchUnitTags[0].match(regexA)?.groups;
-  if (match != null) {
-    const value2 = Number(match?.a_value ?? "0");
-    const tag2 = {
-      name: "a" /* a */,
-      value: Number.isNaN(value2) ? 0 : value2
-    };
-    return parseNextTag(tags, tag2, matchUnitTags[0].length);
-  }
-  const value = matchUnitTags[0];
   const tag = {
     name: "unknown" /* unknown */,
-    value
+    value: currentTagText
   };
-  return parseNextTag(tags, tag, matchUnitTags[0].length);
+  return parseNextTag(tags, tag, currentTagText.length);
 }
 function parseTagT(text, tags, tagNameSource, matchTagT) {
   if (tagNameSource.startsWith("t" /* t */)) {
@@ -5626,6 +5609,8 @@ function parseTagT(text, tags, tagNameSource, matchTagT) {
   }
   return tags;
 }
+
+// src/content/parse.ts
 function parseContent(text) {
   const items = [];
   const result = text.matchAll(regexContent);
@@ -5650,6 +5635,7 @@ function parseContent(text) {
   }
   return items;
 }
+// src/content/stringify.ts
 function contentEffectToString(item) {
   let s = "";
   for (const tag of item.tags) {
@@ -5740,1403 +5726,138 @@ function contentsToString(items) {
   }
   return s;
 }
-function mergeNeighboringEffects(items) {
-  const indexToRemove = [];
-  for (let i = 0;i < items.length; i++) {
-    const item = items[i];
-    if (item.name != "effect") {
-      continue;
-    }
-    const nextItem = items[i + 1];
-    if (nextItem.name != "effect") {
-      i++;
-      continue;
-    }
-    if (nextItem == null) {
-      break;
-    }
-    item.tags.push(...nextItem.tags);
-    indexToRemove.push(i + 1);
-  }
-  for (const index of indexToRemove) {
-    items.splice(index, 1);
-  }
-}
-function truncateNumberTags(items, decimals) {
-  forEachTag(items, (tag) => {
-    switch (tag.name) {
-      case "t" /* t */: {
-        if (tag.accel != null) {
-          tag.accel = truncate(tag.accel, decimals);
-        }
-        if (tag.t1 != null) {
-          tag.t1 = truncate(tag.t1, decimals);
-        }
-        if (tag.t2 != null) {
-          tag.t2 = truncate(tag.t2, decimals);
-        }
-        break;
+// src/karaoke.ts
+function splitSyllabes(line) {
+  const syls = [];
+  const words = line.content.split(" ");
+  for (let i = 0;i < words.length; i++) {
+    const word2 = words[i];
+    if (isRomajiWord(word2)) {
+      const matches = word2.matchAll(regexRomaji);
+      for (const match of matches) {
+        syls.push({
+          text: match[1],
+          durationInMs: 0
+        });
       }
-      case "pos" /* pos */:
-      case "org" /* org */:
-        tag.x = truncate(tag.x, decimals);
-        tag.y = truncate(tag.y, decimals);
-        break;
-      case "move" /* move */:
-        tag.x1 = truncate(tag.x1, decimals);
-        tag.y1 = truncate(tag.y1, decimals);
-        tag.x2 = truncate(tag.x2, decimals);
-        tag.y2 = truncate(tag.y2, decimals);
-        if (tag.t1 != null) {
-          tag.t1 = truncate(tag.t1, decimals);
-        }
-        if (tag.t2 != null) {
-          tag.t2 = truncate(tag.t2, decimals);
-        }
-        break;
-      case "fad" /* fad */:
-        tag.in = truncate(tag.in, decimals);
-        tag.out = truncate(tag.out, decimals);
-        break;
-      case "fade" /* fade */:
-        tag.t1 = truncate(tag.t1, decimals);
-        tag.t2 = truncate(tag.t2, decimals);
-        tag.t3 = truncate(tag.t3, decimals);
-        tag.t4 = truncate(tag.t4, decimals);
-        tag.alpha1 = truncate(tag.alpha1, decimals);
-        tag.alpha2 = truncate(tag.alpha2, decimals);
-        tag.alpha3 = truncate(tag.alpha3, decimals);
-        break;
-      case "fe" /* fe */:
-        tag.encodingId = Math.floor(tag.encodingId);
-        break;
-      case "c" /* color */:
-      case "1c" /* color1 */:
-      case "2c" /* color2 */:
-      case "3c" /* color3 */:
-      case "4c" /* color4 */:
-        tag.blue = Math.floor(tag.blue);
-        tag.green = Math.floor(tag.green);
-        tag.red = Math.floor(tag.red);
-        break;
-      case "clip" /* clip */:
-      case "iclip" /* iclip */:
-      case "fn" /* fn */:
-      case "r" /* r */:
-      case "text" /* text */:
-      case "unknown" /* unknown */:
-        break;
-      default:
-        if (typeof tag.value === "number") {
-          tag.value = truncate(tag.value, decimals);
-        }
-        break;
+    } else {
+      syls.push({
+        text: word2,
+        durationInMs: 0
+      });
     }
-  });
-}
-function forEachTag(items, predicate) {
-  for (const item of items) {
-    if (item.name != "effect") {
-      continue;
-    }
-    for (const tag of item.tags) {
-      predicate(tag);
+    if (i != words.length - 1) {
+      syls[syls.length - 1].text += " ";
     }
   }
-}
-function findA(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "a" /* a */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findB(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "b" /* b */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findColor(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "c" /* color */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findColor1(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "1c" /* color1 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findColor2(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "2c" /* color2 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findColor3(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "3c" /* color3 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findColor4(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "4c" /* color4 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAlpha(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "alpha" /* alpha */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAlpha1(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "1a" /* alpha1 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAlpha2(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "2a" /* alpha2 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAlpha3(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "3a" /* alpha3 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAlpha4(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "4a" /* alpha4 */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findAn(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "an" /* an */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findBe(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "be" /* be */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findBlur(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "blur" /* blur */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findBord(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "bord" /* bord */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findXbord(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "xbord" /* xbord */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findYbord(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "ybord" /* ybord */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findShad(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "shad" /* shad */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findXshad(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "xshad" /* xshad */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findYshad(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "yshad" /* yshad */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFr(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fr" /* fr */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFrx(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "frx" /* frx */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFry(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fry" /* fry */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFrz(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "frz" /* frz */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFax(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fax" /* fax */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFay(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fay" /* fay */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findP(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "p" /* p */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findPbo(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "pbo" /* pbo */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findQ(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "q" /* q */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findS(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "s" /* s */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findU(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "u" /* u */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findR(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "r" /* r */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFe(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fe" /* fe */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFn(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fn" /* fn */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFscx(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fscx" /* fscx */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFscy(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fscy" /* fscy */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFsp(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fsp" /* fsp */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findKLowerCase(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "k" /* kLowerCase */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findKUpperCase(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "K" /* kUpperCase */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findKo(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "ko" /* ko */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findKf(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "kf" /* kf */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findI(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "i" /* i */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFs(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fs" /* fs */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findPos(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "pos" /* pos */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findOrg(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "org" /* org */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFad(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fad" /* fad */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findFade(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "fade" /* fade */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findClip(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "clip" /* clip */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findIclip(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "iclip" /* iclip */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findMove(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "move" /* move */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function findT(items) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return null;
-  }
-  const tagName = "t" /* t */;
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    return null;
-  }
-  return tag;
-}
-function setA(items, newValue) {
-  const defaultTag = {
-    name: "a" /* a */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setAn(items, newValue) {
-  const defaultTag = {
-    name: "an" /* an */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setB(items, newValue) {
-  const defaultTag = {
-    name: "b" /* b */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setColor(items, blue, green, red) {
-  const defaultTag = {
-    name: "c" /* color */,
-    blue,
-    green,
-    red
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.blue = blue;
-    tag.green = green;
-    tag.red = red;
-  }
-  return tag;
-}
-function setColor1(items, blue, green, red) {
-  const defaultTag = {
-    name: "1c" /* color1 */,
-    blue,
-    green,
-    red
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.blue = blue;
-    tag.green = green;
-    tag.red = red;
-  }
-  return tag;
-}
-function setColor2(items, blue, green, red) {
-  const defaultTag = {
-    name: "2c" /* color2 */,
-    blue,
-    green,
-    red
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.blue = blue;
-    tag.green = green;
-    tag.red = red;
-  }
-  return tag;
-}
-function setColor3(items, blue, green, red) {
-  const defaultTag = {
-    name: "3c" /* color3 */,
-    blue,
-    green,
-    red
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.blue = blue;
-    tag.green = green;
-    tag.red = red;
-  }
-  return tag;
-}
-function setColor4(items, blue, green, red) {
-  const defaultTag = {
-    name: "4c" /* color4 */,
-    blue,
-    green,
-    red
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.blue = blue;
-    tag.green = green;
-    tag.red = red;
-  }
-  return tag;
-}
-function setAlpha(items, newValue) {
-  const defaultTag = {
-    name: "alpha" /* alpha */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setAlpha1(items, newValue) {
-  const defaultTag = {
-    name: "1a" /* alpha1 */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setAlpha2(items, newValue) {
-  const defaultTag = {
-    name: "2a" /* alpha2 */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setAlpha3(items, newValue) {
-  const defaultTag = {
-    name: "3a" /* alpha3 */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setAlpha4(items, newValue) {
-  const defaultTag = {
-    name: "4a" /* alpha4 */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setBlur(items, newValue) {
-  const defaultTag = {
-    name: "blur" /* blur */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setBord(items, newValue) {
-  const defaultTag = {
-    name: "bord" /* bord */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setXbord(items, newValue) {
-  const defaultTag = {
-    name: "xbord" /* xbord */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setYbord(items, newValue) {
-  const defaultTag = {
-    name: "ybord" /* ybord */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFax(items, newValue) {
-  const defaultTag = {
-    name: "fax" /* fax */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFay(items, newValue) {
-  const defaultTag = {
-    name: "fay" /* fay */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFscx(items, newValue) {
-  const defaultTag = {
-    name: "fscx" /* fscx */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFscy(items, newValue) {
-  const defaultTag = {
-    name: "fscy" /* fscy */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFsp(items, newValue) {
-  const defaultTag = {
-    name: "fsp" /* fsp */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFe(items, encodingId) {
-  const defaultTag = {
-    name: "fe" /* fe */,
-    encodingId
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.encodingId = encodingId;
-  }
-  return tag;
-}
-function setFn(items, font) {
-  const defaultTag = {
-    name: "fn" /* fn */,
-    font
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.font = font;
-  }
-  return tag;
-}
-function setKLowerCase(items, newValue) {
-  const defaultTag = {
-    name: "k" /* kLowerCase */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setKUpperCase(items, newValue) {
-  const defaultTag = {
-    name: "K" /* kUpperCase */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setKf(items, newValue) {
-  const defaultTag = {
-    name: "kf" /* kf */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setKo(items, newValue) {
-  const defaultTag = {
-    name: "ko" /* ko */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setP(items, newValue) {
-  const defaultTag = {
-    name: "p" /* p */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setPbo(items, newValue) {
-  const defaultTag = {
-    name: "pbo" /* pbo */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setQ(items, newValue) {
-  const defaultTag = {
-    name: "q" /* q */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setS(items, newValue) {
-  const defaultTag = {
-    name: "s" /* s */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setShad(items, newValue) {
-  const defaultTag = {
-    name: "shad" /* shad */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setXshad(items, newValue) {
-  const defaultTag = {
-    name: "xshad" /* xshad */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setYshad(items, newValue) {
-  const defaultTag = {
-    name: "yshad" /* yshad */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setU(items, newValue) {
-  const defaultTag = {
-    name: "u" /* u */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setBe(items, newValue) {
-  const defaultTag = {
-    name: "be" /* be */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFs(items, newValue) {
-  const defaultTag = {
-    name: "fs" /* fs */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFr(items, newValue) {
-  const defaultTag = {
-    name: "fr" /* fr */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFrx(items, newValue) {
-  const defaultTag = {
-    name: "frx" /* frx */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFry(items, newValue) {
-  const defaultTag = {
-    name: "fry" /* fry */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setFrz(items, newValue) {
-  const defaultTag = {
-    name: "frz" /* frz */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setI(items, newValue) {
-  const defaultTag = {
-    name: "i" /* i */,
-    value: newValue
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.value = newValue;
-  }
-  return tag;
-}
-function setR(items, style2) {
-  const defaultTag = {
-    name: "r" /* r */,
-    style: style2
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.style = style2;
-  }
-  return tag;
-}
-function setPos(items, x, y) {
-  const defaultTag = {
-    name: "pos" /* pos */,
-    x,
-    y
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.x = x;
-    tag.y = y;
-  }
-  return tag;
-}
-function setOrg(items, x, y) {
-  const defaultTag = {
-    name: "org" /* org */,
-    x,
-    y
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.x = x;
-    tag.y = y;
-  }
-  return tag;
-}
-function setFad(items, fadeIn, fadeOut) {
-  const defaultTag = {
-    name: "fad" /* fad */,
-    in: fadeIn,
-    out: fadeOut
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.in = fadeIn;
-    tag.out = fadeOut;
-  }
-  return tag;
-}
-function setFade(items, alpha1, alpha2, alpha3, t1, t2, t3, t4) {
-  const defaultTag = {
-    name: "fade" /* fade */,
-    alpha1,
-    alpha2,
-    alpha3,
-    t1,
-    t2,
-    t3,
-    t4
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.alpha1 = alpha1;
-    tag.alpha2 = alpha2;
-    tag.alpha3 = alpha3;
-    tag.t1 = t1;
-    tag.t2 = t2;
-    tag.t3 = t3;
-    tag.t4 = t4;
-  }
-  return tag;
-}
-function setClip(items, drawCommands) {
-  const defaultTag = {
-    name: "clip" /* clip */,
-    drawCommands
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.drawCommands = drawCommands;
-  }
-  return tag;
-}
-function setIclip(items, drawCommands) {
-  const defaultTag = {
-    name: "iclip" /* iclip */,
-    drawCommands
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.drawCommands = drawCommands;
-  }
-  return tag;
-}
-function setMove(items, x1, y1, x2, y2, t1 = null, t2 = null) {
-  const defaultTag = {
-    name: "move" /* move */,
-    x1,
-    y1,
-    x2,
-    y2,
-    t1,
-    t2
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.x1 = x1;
-    tag.y1 = y1;
-    tag.x2 = x2;
-    tag.y2 = y2;
-    tag.t1 = t1;
-    tag.t2 = t2;
-  }
-  return tag;
-}
-function setT(items, tags, accel = null, t1 = null, t2 = null) {
-  const defaultTag = {
-    name: "t" /* t */,
-    t1,
-    t2,
-    accel,
-    tags
-  };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated) {
-    tag.t1 = t1;
-    tag.t2 = t2;
-    tag.accel = accel;
-    tag.tags = tags;
-  }
-  return tag;
-}
-function tagsToItems(tags) {
-  const items = [
-    {
+  const lineDurationInSeconds = calculateLineDurationInSeconds(line);
+  const sylDurationInMs = Math.floor(Math.round(lineDurationInSeconds * 100 / syls.length));
+  const karaokeDurationInMs = syls.length * sylDurationInMs;
+  for (const syl of syls) {
+    syl.durationInMs = sylDurationInMs;
+  }
+  const karaokeDurationMatchesLineDuration = karaokeDurationInMs === lineDurationInSeconds * 100;
+  if (!karaokeDurationMatchesLineDuration) {
+    const lineDurationInMs = lineDurationInSeconds * 100;
+    const deltaInMs = lineDurationInMs - karaokeDurationInMs;
+    syls[syls.length - 1].durationInMs += deltaInMs;
+  }
+  const items = [];
+  for (const syl of syls) {
+    items.push({
       name: "effect",
-      tags
-    }
-  ];
-  return items;
-}
-function itemsToTags(items) {
-  const fx = items.find((x) => x.name === "effect");
-  if (fx == null || fx.name != "effect") {
-    return [];
-  }
-  return fx.tags;
-}
-function setTag(items, tagName, defaultTag) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    items.unshift({
-      name: "effect",
-      tags: [defaultTag]
+      tags: [
+        {
+          name: "kf" /* kf */,
+          value: syl.durationInMs
+        }
+      ]
+    }, {
+      name: "text",
+      value: syl.text
     });
-    return [true, defaultTag];
   }
-  const tag = fx.tags.find((tag2) => tag2.name == tagName);
-  if (tag?.name != tagName) {
-    fx.tags.push(defaultTag);
-    return [true, defaultTag];
-  }
-  return [false, tag];
+  line.content = contentsToString(items);
 }
-function removeTag(items, tagName) {
-  const fx = items.find((item) => item.name == "effect");
-  if (fx?.name != "effect") {
-    return;
+function isRomajiWord(word2) {
+  while (word2.length > 0) {
+    const match = word2.match(regexRomaji);
+    if (!match || match.length === 0) {
+      return false;
+    }
+    word2 = word2.substring(match[0].length);
   }
-  const index = fx.tags.findIndex((tag) => tag.name === tagName);
-  if (index < 0) {
-    return;
-  }
-  fx.tags.splice(index, 1);
+  return true;
 }
+// src/time.ts
+function secondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds / 3600 - hours) * 60);
+  seconds = seconds - hours * 3600 - minutes * 60;
+  return {
+    hours,
+    minutes,
+    seconds
+  };
+}
+function parseTime(text) {
+  const regexTime = /(?<h>\d+):(?<m>[0-9]{1,2}?):(?<s>[0-9]{1,2}(?:\.[0-9]{1,2})?)/;
+  const match = text.match(regexTime);
+  if (!match || match.length === 0) {
+    return null;
+  }
+  const hours = Math.floor(Number(match.groups?.h ?? "0"));
+  const minutes = Math.floor(Number(match.groups?.m ?? "0"));
+  const seconds = Number(match.groups?.s ?? "0");
+  const time = {
+    hours,
+    minutes,
+    seconds
+  };
+  adjustTimeOverplus(time);
+  return time;
+}
+function adjustTimeOverplus(time) {
+  if (time.seconds >= 60) {
+    time.seconds -= 60;
+    time.minutes++;
+  }
+  if (time.minutes >= 60) {
+    time.minutes -= 60;
+    time.hours++;
+  }
+  if (time.hours >= 9) {
+    time.hours = 9;
+    time.minutes = 59;
+    time.seconds = 59.99;
+  }
+}
+function timeToString(time) {
+  adjustTimeOverplus(time);
+  const hours = time.hours.toFixed(0);
+  const minutes = time.minutes.toFixed(0).padStart("00".length, "0");
+  const seconds = time.seconds.toFixed(2).padStart("00.00".length, "0");
+  return `${hours}:${minutes}:${seconds}`;
+}
+function timeToSeconds(time) {
+  adjustTimeOverplus(time);
+  const seconds = time.hours * 3600 + time.minutes * 60 + time.seconds;
+  return seconds;
+}
+function sumTimes(t1, t2) {
+  const seconds1 = timeToSeconds(t1);
+  const seconds2 = timeToSeconds(t2);
+  const totalSeconds = seconds1 + seconds2;
+  return secondsToTime(totalSeconds);
+}
+function subtractTimes(minuend, subtracting) {
+  const minuendSeconds = timeToSeconds(minuend);
+  const subtractingSeconds = timeToSeconds(subtracting);
+  const deltaSeconds = minuendSeconds - subtractingSeconds;
+  return secondsToTime(deltaSeconds);
+}
+
+// src/line.ts
 var LINE_TYPE_DIALOGUE = "Dialogue";
 var LINE_TYPE_COMMENT = "Comment";
 function parseLine(text) {
@@ -7196,19 +5917,6 @@ function calculateLineDurationInSeconds(line) {
   const duration = timeToSeconds(line.end) - timeToSeconds(line.start);
   return duration;
 }
-function parseColorBGR(text) {
-  const match = text.match(regexColorBGR);
-  if (match == null) {
-    return null;
-  }
-  const groups = match.groups;
-  const color = {
-    blue: hexToNumber(groups?.color_bgr_blue ?? ""),
-    green: hexToNumber(groups?.color_bgr_green ?? ""),
-    red: hexToNumber(groups?.color_bgr_red ?? "")
-  };
-  return color;
-}
 function generateDefaultLine() {
   return {
     type: "Dialogue",
@@ -7232,6 +5940,361 @@ function generateDefaultLine() {
     content: ""
   };
 }
+// src/tags/find.ts
+function findTag(items, tagName) {
+  const fx = items.find((item) => item.name === "effect");
+  if (fx?.name !== "effect") {
+    return null;
+  }
+  const tag = fx.tags.find((tag2) => tag2.name === tagName);
+  if (tag?.name !== tagName) {
+    return null;
+  }
+  return tag;
+}
+function findA(items) {
+  return findTag(items, "a" /* a */);
+}
+function findB(items) {
+  return findTag(items, "b" /* b */);
+}
+function findColor(items) {
+  return findTag(items, "c" /* color */);
+}
+function findColor1(items) {
+  return findTag(items, "1c" /* color1 */);
+}
+function findColor2(items) {
+  return findTag(items, "2c" /* color2 */);
+}
+function findColor3(items) {
+  return findTag(items, "3c" /* color3 */);
+}
+function findColor4(items) {
+  return findTag(items, "4c" /* color4 */);
+}
+function findAlpha(items) {
+  return findTag(items, "alpha" /* alpha */);
+}
+function findAlpha1(items) {
+  return findTag(items, "1a" /* alpha1 */);
+}
+function findAlpha2(items) {
+  return findTag(items, "2a" /* alpha2 */);
+}
+function findAlpha3(items) {
+  return findTag(items, "3a" /* alpha3 */);
+}
+function findAlpha4(items) {
+  return findTag(items, "4a" /* alpha4 */);
+}
+function findAn(items) {
+  return findTag(items, "an" /* an */);
+}
+function findBe(items) {
+  return findTag(items, "be" /* be */);
+}
+function findBlur(items) {
+  return findTag(items, "blur" /* blur */);
+}
+function findBord(items) {
+  return findTag(items, "bord" /* bord */);
+}
+function findXbord(items) {
+  return findTag(items, "xbord" /* xbord */);
+}
+function findYbord(items) {
+  return findTag(items, "ybord" /* ybord */);
+}
+function findShad(items) {
+  return findTag(items, "shad" /* shad */);
+}
+function findXshad(items) {
+  return findTag(items, "xshad" /* xshad */);
+}
+function findYshad(items) {
+  return findTag(items, "yshad" /* yshad */);
+}
+function findFr(items) {
+  return findTag(items, "fr" /* fr */);
+}
+function findFrx(items) {
+  return findTag(items, "frx" /* frx */);
+}
+function findFry(items) {
+  return findTag(items, "fry" /* fry */);
+}
+function findFrz(items) {
+  return findTag(items, "frz" /* frz */);
+}
+function findFax(items) {
+  return findTag(items, "fax" /* fax */);
+}
+function findFay(items) {
+  return findTag(items, "fay" /* fay */);
+}
+function findP(items) {
+  return findTag(items, "p" /* p */);
+}
+function findPbo(items) {
+  return findTag(items, "pbo" /* pbo */);
+}
+function findQ(items) {
+  return findTag(items, "q" /* q */);
+}
+function findS(items) {
+  return findTag(items, "s" /* s */);
+}
+function findU(items) {
+  return findTag(items, "u" /* u */);
+}
+function findR(items) {
+  return findTag(items, "r" /* r */);
+}
+function findFe(items) {
+  return findTag(items, "fe" /* fe */);
+}
+function findFn(items) {
+  return findTag(items, "fn" /* fn */);
+}
+function findFscx(items) {
+  return findTag(items, "fscx" /* fscx */);
+}
+function findFscy(items) {
+  return findTag(items, "fscy" /* fscy */);
+}
+function findFsp(items) {
+  return findTag(items, "fsp" /* fsp */);
+}
+function findKLowerCase(items) {
+  return findTag(items, "k" /* kLowerCase */);
+}
+function findKUpperCase(items) {
+  return findTag(items, "K" /* kUpperCase */);
+}
+function findKo(items) {
+  return findTag(items, "ko" /* ko */);
+}
+function findKf(items) {
+  return findTag(items, "kf" /* kf */);
+}
+function findI(items) {
+  return findTag(items, "i" /* i */);
+}
+function findFs(items) {
+  return findTag(items, "fs" /* fs */);
+}
+function findPos(items) {
+  return findTag(items, "pos" /* pos */);
+}
+function findOrg(items) {
+  return findTag(items, "org" /* org */);
+}
+function findFad(items) {
+  return findTag(items, "fad" /* fad */);
+}
+function findFade(items) {
+  return findTag(items, "fade" /* fade */);
+}
+function findClip(items) {
+  return findTag(items, "clip" /* clip */);
+}
+function findIclip(items) {
+  return findTag(items, "iclip" /* iclip */);
+}
+function findMove(items) {
+  return findTag(items, "move" /* move */);
+}
+function findT(items) {
+  return findTag(items, "t" /* t */);
+}
+// src/tags/set.ts
+function setSingleValueTag(items, tagName, newValue) {
+  const defaultTag = { name: tagName, value: newValue };
+  const [updated, tag] = setTag(items, tagName, defaultTag);
+  if (!updated) {
+    tag.value = newValue;
+  }
+  return tag;
+}
+function setColorTag(items, tagName, blue, green, red) {
+  const defaultTag = { name: tagName, blue, green, red };
+  const [updated, tag] = setTag(items, tagName, defaultTag);
+  if (!updated) {
+    tag.blue = blue;
+    tag.green = green;
+    tag.red = red;
+  }
+  return tag;
+}
+var setA = (items, newValue) => setSingleValueTag(items, "a" /* a */, newValue);
+var setAn = (items, newValue) => setSingleValueTag(items, "an" /* an */, newValue);
+var setB = (items, newValue) => setSingleValueTag(items, "b" /* b */, newValue);
+var setColor = (items, blue, green, red) => setColorTag(items, "c" /* color */, blue, green, red);
+var setColor1 = (items, blue, green, red) => setColorTag(items, "1c" /* color1 */, blue, green, red);
+var setColor2 = (items, blue, green, red) => setColorTag(items, "2c" /* color2 */, blue, green, red);
+var setColor3 = (items, blue, green, red) => setColorTag(items, "3c" /* color3 */, blue, green, red);
+var setColor4 = (items, blue, green, red) => setColorTag(items, "4c" /* color4 */, blue, green, red);
+var setAlpha = (items, newValue) => setSingleValueTag(items, "alpha" /* alpha */, newValue);
+var setAlpha1 = (items, newValue) => setSingleValueTag(items, "1a" /* alpha1 */, newValue);
+var setAlpha2 = (items, newValue) => setSingleValueTag(items, "2a" /* alpha2 */, newValue);
+var setAlpha3 = (items, newValue) => setSingleValueTag(items, "3a" /* alpha3 */, newValue);
+var setAlpha4 = (items, newValue) => setSingleValueTag(items, "4a" /* alpha4 */, newValue);
+var setBlur = (items, newValue) => setSingleValueTag(items, "blur" /* blur */, newValue);
+var setBord = (items, newValue) => setSingleValueTag(items, "bord" /* bord */, newValue);
+var setXbord = (items, newValue) => setSingleValueTag(items, "xbord" /* xbord */, newValue);
+var setYbord = (items, newValue) => setSingleValueTag(items, "ybord" /* ybord */, newValue);
+var setFax = (items, newValue) => setSingleValueTag(items, "fax" /* fax */, newValue);
+var setFay = (items, newValue) => setSingleValueTag(items, "fay" /* fay */, newValue);
+var setFscx = (items, newValue) => setSingleValueTag(items, "fscx" /* fscx */, newValue);
+var setFscy = (items, newValue) => setSingleValueTag(items, "fscy" /* fscy */, newValue);
+var setFsp = (items, newValue) => setSingleValueTag(items, "fsp" /* fsp */, newValue);
+function setFe(items, encodingId) {
+  const defaultTag = { name: "fe" /* fe */, encodingId };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated)
+    tag.encodingId = encodingId;
+  return tag;
+}
+function setFn(items, font) {
+  const defaultTag = { name: "fn" /* fn */, font };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated)
+    tag.font = font;
+  return tag;
+}
+var setKLowerCase = (items, newValue) => setSingleValueTag(items, "k" /* kLowerCase */, newValue);
+var setKUpperCase = (items, newValue) => setSingleValueTag(items, "K" /* kUpperCase */, newValue);
+var setKf = (items, newValue) => setSingleValueTag(items, "kf" /* kf */, newValue);
+var setKo = (items, newValue) => setSingleValueTag(items, "ko" /* ko */, newValue);
+var setP = (items, newValue) => setSingleValueTag(items, "p" /* p */, newValue);
+var setPbo = (items, newValue) => setSingleValueTag(items, "pbo" /* pbo */, newValue);
+var setQ = (items, newValue) => setSingleValueTag(items, "q" /* q */, newValue);
+var setS = (items, newValue) => setSingleValueTag(items, "s" /* s */, newValue);
+var setShad = (items, newValue) => setSingleValueTag(items, "shad" /* shad */, newValue);
+var setXshad = (items, newValue) => setSingleValueTag(items, "xshad" /* xshad */, newValue);
+var setYshad = (items, newValue) => setSingleValueTag(items, "yshad" /* yshad */, newValue);
+var setU = (items, newValue) => setSingleValueTag(items, "u" /* u */, newValue);
+var setBe = (items, newValue) => setSingleValueTag(items, "be" /* be */, newValue);
+var setFs = (items, newValue) => setSingleValueTag(items, "fs" /* fs */, newValue);
+var setFr = (items, newValue) => setSingleValueTag(items, "fr" /* fr */, newValue);
+var setFrx = (items, newValue) => setSingleValueTag(items, "frx" /* frx */, newValue);
+var setFry = (items, newValue) => setSingleValueTag(items, "fry" /* fry */, newValue);
+var setFrz = (items, newValue) => setSingleValueTag(items, "frz" /* frz */, newValue);
+var setI = (items, newValue) => setSingleValueTag(items, "i" /* i */, newValue);
+function setR(items, style) {
+  const defaultTag = { name: "r" /* r */, style };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated)
+    tag.style = style;
+  return tag;
+}
+function setPos(items, x, y) {
+  const defaultTag = { name: "pos" /* pos */, x, y };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.x = x;
+    tag.y = y;
+  }
+  return tag;
+}
+function setOrg(items, x, y) {
+  const defaultTag = { name: "org" /* org */, x, y };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.x = x;
+    tag.y = y;
+  }
+  return tag;
+}
+function setFad(items, fadeIn, fadeOut) {
+  const defaultTag = { name: "fad" /* fad */, in: fadeIn, out: fadeOut };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.in = fadeIn;
+    tag.out = fadeOut;
+  }
+  return tag;
+}
+function setFade(items, alpha1, alpha2, alpha3, t1, t2, t3, t4) {
+  const defaultTag = { name: "fade" /* fade */, alpha1, alpha2, alpha3, t1, t2, t3, t4 };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.alpha1 = alpha1;
+    tag.alpha2 = alpha2;
+    tag.alpha3 = alpha3;
+    tag.t1 = t1;
+    tag.t2 = t2;
+    tag.t3 = t3;
+    tag.t4 = t4;
+  }
+  return tag;
+}
+function setClip(items, drawCommands) {
+  const defaultTag = { name: "clip" /* clip */, drawCommands };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated)
+    tag.drawCommands = drawCommands;
+  return tag;
+}
+function setIclip(items, drawCommands) {
+  const defaultTag = { name: "iclip" /* iclip */, drawCommands };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated)
+    tag.drawCommands = drawCommands;
+  return tag;
+}
+function setMove(items, x1, y1, x2, y2, t1 = null, t2 = null) {
+  const defaultTag = { name: "move" /* move */, x1, y1, x2, y2, t1, t2 };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.x1 = x1;
+    tag.y1 = y1;
+    tag.x2 = x2;
+    tag.y2 = y2;
+    tag.t1 = t1;
+    tag.t2 = t2;
+  }
+  return tag;
+}
+function setT(items, tags, accel = null, t1 = null, t2 = null) {
+  const defaultTag = { name: "t" /* t */, t1, t2, accel, tags };
+  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
+  if (!updated) {
+    tag.t1 = t1;
+    tag.t2 = t2;
+    tag.accel = accel;
+    tag.tags = tags;
+  }
+  return tag;
+}
+function setTag(items, tagName, defaultTag) {
+  const fx = items.find((item) => item.name == "effect");
+  if (fx?.name != "effect") {
+    items.unshift({
+      name: "effect",
+      tags: [defaultTag]
+    });
+    return [true, defaultTag];
+  }
+  const tag = fx.tags.find((tag2) => tag2.name == tagName);
+  if (tag?.name != tagName) {
+    fx.tags.push(defaultTag);
+    return [true, defaultTag];
+  }
+  return [false, tag];
+}
+function removeTag(items, tagName) {
+  const fx = items.find((item) => item.name == "effect");
+  if (fx?.name != "effect") {
+    return;
+  }
+  const index = fx.tags.findIndex((tag) => tag.name === tagName);
+  if (index < 0) {
+    return;
+  }
+  fx.tags.splice(index, 1);
+}
 export {
   truncateNumberTags,
   truncate,
@@ -7248,6 +6311,7 @@ export {
   setXshad,
   setXbord,
   setU,
+  setTag,
   setT,
   setShad,
   setS,
@@ -7306,6 +6370,7 @@ export {
   removeTag,
   parseTime,
   parseTags,
+  parseTagT,
   parseStyle,
   parseLine,
   parseContent,
@@ -7429,4 +6494,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=B8C3A364AFE4678D64756E2164756E21
+//# debugId=BA42570C669888C664756E2164756E21
