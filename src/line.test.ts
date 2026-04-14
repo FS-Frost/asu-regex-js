@@ -19,6 +19,18 @@ test("parse invalid line", () => {
     expect(line).toBeNull();
 });
 
+test("parse invalid line (bad start time)", () => {
+    const text = "Dialogue: 0,,0:00:05.00,Default,,0,0,0,,text";
+    const line = asu.parseLine(text);
+    expect(line).toBeNull();
+});
+
+test("parse invalid line (bad end time)", () => {
+    const text = "Dialogue: 0,0:00:05.00,,Default,,0,0,0,,text";
+    const line = asu.parseLine(text);
+    expect(line).toBeNull();
+});
+
 test("line to string", () => {
     const text = "Dialogue: 0,0:00:00.00,0:00:00.00,Default,a,0,0,0,b,{\\pos(182.123489123918322193,421.847593450834985)\\be2.1234}LINE 1";
     const expectedText = "Dialogue: 0,0:00:00.00,0:00:00.00,Default,a,0,0,0,b,{\\pos(182.123,421.847)\\be2.123}LINE 1";

@@ -12,6 +12,12 @@ test("time: parse time", () => {
     expect(timeToString(time)).toEqual(text);
 });
 
+test("time: parse invalid time", () => {
+    const text = "invalid:time";
+    const time = parseTime(text);
+    expect(time).toBeNull();
+});
+
 test("time: adjust hours overplus", () => {
     const text = "10:23:45.67";
     const expectedText = "9:59:59.99";

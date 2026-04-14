@@ -37,3 +37,27 @@ test("remove tag on content without fx", () => {
     asu.removeTag(items, asu.TagName.fs);
     expect(asu.contentsToString(items)).toEqual(text);
 });
+
+test("truncate number tags", () => {
+    const items = asu.parseContent(
+        "{\\t(1.123,2.456,3.789,\\bord1.234)\\pos(1.11,2.22)\\move(1.1,2.2,3.3,4.4,5.5,6.6)\\fad(1.1,2.2)\\fade(1.1,2.2,3.3,4.4,5.5,6.6,7.7)\\fe1.5\\1c&H000000&\\bord1.123\\clip(1,2,3,4)\\iclip(m 1 2 3)\\fnArial\\rDefault\\unknown_tag}Text"
+    );
+
+    asu.truncateNumberTags(items, 2);
+
+    expect(asu.contentsToString(items)).toEqual(
+        "{\\t(1.12,2.45,3.78,\\bord1.234)\\pos(1.11,2.22)\\move(1.1,2.2,3.3,4.4,5.5,6.6)\\fad(1.1,2.2)\\fade(1.1,2.2,3.3,4.4,5.5,6.6,7.7)\\fe1\\1c&H000000&\\bord1.12\\clip(1,2,3,4)\\iclip(m 1 2 3)\\fnArial\\rDefault\\unknown_tag}Text"
+    );
+});
+
+test("itemsToTags and tagsToItems", () => {
+    const items = asu.parseContent("{\\bord1}");
+    const tags = asu.itemsToTags(items);
+    expect(tags.length).toBe(1);
+    const newItems = asu.tagsToItems(tags);
+    expect(newItems.length).toBe(1);
+    expect(newItems[0].name).toBe("effect");
+
+    expect(asu.itemsToTags([])).toEqual([]);
+    expect(asu.itemsToTags([{ name: "text", value: "hello" }])).toEqual([]);
+});

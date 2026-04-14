@@ -14,6 +14,14 @@ test("karaoke: word is not romaji", () => {
     expect(result).toBeFalse();
 });
 
+test("karaoke: split syllabes with non-romaji words", () => {
+    const expectedText = "Dialogue: 0,0:00:00.00,0:00:05.00,Default,,0,0,0,,{\\kf167}ueh {\\kf167}ta{\\kf166}i";
+    const line = generateDefaultLine();
+    line.content = "ueh tai";
+    splitSyllabes(line);
+    expect(lineToString(line)).toEqual(expectedText);
+});
+
 test("karaoke: split syllabes evenly", () => {
     const expectedText = "Dialogue: 0,0:00:00.00,0:00:05.00,Default,,0,0,0,,{\\kf100}ko{\\kf100}re {\\kf100}ka{\\kf100}ra {\\kf100}da!";
     const line = generateDefaultLine();
