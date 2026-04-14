@@ -1,4 +1,5 @@
 import {
+    ColorBGR,
     Tag1a,
     Tag1c,
     Tag2a,
@@ -56,712 +57,172 @@ import {
 } from "./types";
 import { ContentItem } from "../content/types";
 
-export function setA(items: ContentItem[], newValue: number): TagA {
-    const defaultTag: TagA = {
-        name: TagName.a,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setAn(items: ContentItem[], newValue: number): TagAn {
-    const defaultTag: TagAn = {
-        name: TagName.an,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setB(items: ContentItem[], newValue: number): TagB {
-    const defaultTag: TagB = {
-        name: TagName.b,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setColor(
+function setSingleValueTag<T extends Tags & { value: string | number; }>(
     items: ContentItem[],
+    tagName: TagName,
+    newValue: T["value"],
+): T {
+    const defaultTag = { name: tagName, value: newValue } as T;
+    const [updated, tag] = setTag<T>(items, tagName, defaultTag);
+    if (!updated) {
+        tag.value = newValue;
+    }
+    return tag;
+}
+
+function setColorTag<T extends Tags & ColorBGR>(
+    items: ContentItem[],
+    tagName: TagName,
     blue: number,
     green: number,
     red: number,
-): TagC {
-    const defaultTag: TagC = {
-        name: TagName.color,
-        blue: blue,
-        green: green,
-        red: red,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
+): T {
+    const defaultTag = { name: tagName, blue, green, red } as T;
+    const [updated, tag] = setTag<T>(items, tagName, defaultTag);
     if (!updated) {
         tag.blue = blue;
         tag.green = green;
         tag.red = red;
     }
-
     return tag;
 }
 
-export function setColor1(
-    items: ContentItem[],
-    blue: number,
-    green: number,
-    red: number,
-): Tag1c {
-    const defaultTag: Tag1c = {
-        name: TagName.color1,
-        blue: blue,
-        green: green,
-        red: red,
-    };
+export const setA = (items: ContentItem[], newValue: number): TagA => setSingleValueTag(items, TagName.a, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.blue = blue;
-        tag.green = green;
-        tag.red = red;
-    }
+export const setAn = (items: ContentItem[], newValue: number): TagAn => setSingleValueTag(items, TagName.an, newValue);
 
-    return tag;
-}
+export const setB = (items: ContentItem[], newValue: number): TagB => setSingleValueTag(items, TagName.b, newValue);
 
-export function setColor2(
-    items: ContentItem[],
-    blue: number,
-    green: number,
-    red: number,
-): Tag2c {
-    const defaultTag: Tag2c = {
-        name: TagName.color2,
-        blue: blue,
-        green: green,
-        red: red,
-    };
+export const setColor = (items: ContentItem[], blue: number, green: number, red: number): TagC =>
+    setColorTag(items, TagName.color, blue, green, red);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.blue = blue;
-        tag.green = green;
-        tag.red = red;
-    }
+export const setColor1 = (items: ContentItem[], blue: number, green: number, red: number): Tag1c =>
+    setColorTag(items, TagName.color1, blue, green, red);
 
-    return tag;
-}
+export const setColor2 = (items: ContentItem[], blue: number, green: number, red: number): Tag2c =>
+    setColorTag(items, TagName.color2, blue, green, red);
 
-export function setColor3(
-    items: ContentItem[],
-    blue: number,
-    green: number,
-    red: number,
-): Tag3c {
-    const defaultTag: Tag3c = {
-        name: TagName.color3,
-        blue: blue,
-        green: green,
-        red: red,
-    };
+export const setColor3 = (items: ContentItem[], blue: number, green: number, red: number): Tag3c =>
+    setColorTag(items, TagName.color3, blue, green, red);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.blue = blue;
-        tag.green = green;
-        tag.red = red;
-    }
+export const setColor4 = (items: ContentItem[], blue: number, green: number, red: number): Tag4c =>
+    setColorTag(items, TagName.color4, blue, green, red);
 
-    return tag;
-}
+export const setAlpha = (items: ContentItem[], newValue: string): TagAlpha => setSingleValueTag(items, TagName.alpha, newValue);
 
-export function setColor4(
-    items: ContentItem[],
-    blue: number,
-    green: number,
-    red: number,
-): Tag4c {
-    const defaultTag: Tag4c = {
-        name: TagName.color4,
-        blue: blue,
-        green: green,
-        red: red,
-    };
+export const setAlpha1 = (items: ContentItem[], newValue: string): Tag1a => setSingleValueTag(items, TagName.alpha1, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.blue = blue;
-        tag.green = green;
-        tag.red = red;
-    }
+export const setAlpha2 = (items: ContentItem[], newValue: string): Tag2a => setSingleValueTag(items, TagName.alpha2, newValue);
 
-    return tag;
-}
+export const setAlpha3 = (items: ContentItem[], newValue: string): Tag3a => setSingleValueTag(items, TagName.alpha3, newValue);
 
-export function setAlpha(items: ContentItem[], newValue: string): TagAlpha {
-    const defaultTag: TagAlpha = {
-        name: TagName.alpha,
-        value: newValue,
-    };
+export const setAlpha4 = (items: ContentItem[], newValue: string): Tag4a => setSingleValueTag(items, TagName.alpha4, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setBlur = (items: ContentItem[], newValue: number): TagBlur => setSingleValueTag(items, TagName.blur, newValue);
 
-    return tag;
-}
+export const setBord = (items: ContentItem[], newValue: number): TagBord => setSingleValueTag(items, TagName.bord, newValue);
 
-export function setAlpha1(items: ContentItem[], newValue: string): Tag1a {
-    const defaultTag: Tag1a = {
-        name: TagName.alpha1,
-        value: newValue,
-    };
+export const setXbord = (items: ContentItem[], newValue: number): TagXbord => setSingleValueTag(items, TagName.xbord, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setYbord = (items: ContentItem[], newValue: number): TagYbord => setSingleValueTag(items, TagName.ybord, newValue);
 
-    return tag;
-}
+export const setFax = (items: ContentItem[], newValue: number): TagFax => setSingleValueTag(items, TagName.fax, newValue);
 
-export function setAlpha2(items: ContentItem[], newValue: string): Tag2a {
-    const defaultTag: Tag2a = {
-        name: TagName.alpha2,
-        value: newValue,
-    };
+export const setFay = (items: ContentItem[], newValue: number): TagFay => setSingleValueTag(items, TagName.fay, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setFscx = (items: ContentItem[], newValue: number): TagFscx => setSingleValueTag(items, TagName.fscx, newValue);
 
-    return tag;
-}
-
-export function setAlpha3(items: ContentItem[], newValue: string): Tag3a {
-    const defaultTag: Tag3a = {
-        name: TagName.alpha3,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setAlpha4(items: ContentItem[], newValue: string): Tag4a {
-    const defaultTag: Tag4a = {
-        name: TagName.alpha4,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setBlur(items: ContentItem[], newValue: number): TagBlur {
-    const defaultTag: TagBlur = {
-        name: TagName.blur,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setBord(items: ContentItem[], newValue: number): TagBord {
-    const defaultTag: TagBord = {
-        name: TagName.bord,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setXbord(items: ContentItem[], newValue: number): TagXbord {
-    const defaultTag: TagXbord = {
-        name: TagName.xbord,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setYbord(items: ContentItem[], newValue: number): TagYbord {
-    const defaultTag: TagYbord = {
-        name: TagName.ybord,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFax(items: ContentItem[], newValue: number): TagFax {
-    const defaultTag: TagFax = {
-        name: TagName.fax,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFay(items: ContentItem[], newValue: number): TagFay {
-    const defaultTag: TagFay = {
-        name: TagName.fay,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFscx(items: ContentItem[], newValue: number): TagFscx {
-    const defaultTag: TagFscx = {
-        name: TagName.fscx,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFscy(items: ContentItem[], newValue: number): TagFscy {
-    const defaultTag: TagFscy = {
-        name: TagName.fscy,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFsp(items: ContentItem[], newValue: number): TagFsp {
-    const defaultTag: TagFsp = {
-        name: TagName.fsp,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
+export const setFscy = (items: ContentItem[], newValue: number): TagFscy => setSingleValueTag(items, TagName.fscy, newValue);
+export const setFsp = (items: ContentItem[], newValue: number): TagFsp => setSingleValueTag(items, TagName.fsp, newValue);
 
 export function setFe(items: ContentItem[], encodingId: number): TagFe {
-    const defaultTag: TagFe = {
-        name: TagName.fe,
-        encodingId: encodingId,
-    };
-
+    const defaultTag: TagFe = { name: TagName.fe, encodingId: encodingId };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.encodingId = encodingId;
-    }
-
+    if (!updated) tag.encodingId = encodingId;
     return tag;
 }
 
 export function setFn(items: ContentItem[], font: string): TagFn {
-    const defaultTag: TagFn = {
-        name: TagName.fn,
-        font: font,
-    };
-
+    const defaultTag: TagFn = { name: TagName.fn, font: font };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.font = font;
-    }
-
+    if (!updated) tag.font = font;
     return tag;
 }
 
-export function setKLowerCase(items: ContentItem[], newValue: number): TagKLowerCase {
-    const defaultTag: TagKLowerCase = {
-        name: TagName.kLowerCase,
-        value: newValue,
-    };
+export const setKLowerCase = (items: ContentItem[], newValue: number): TagKLowerCase =>
+    setSingleValueTag(items, TagName.kLowerCase, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setKUpperCase = (items: ContentItem[], newValue: number): TagKUpperCase =>
+    setSingleValueTag(items, TagName.kUpperCase, newValue);
 
-    return tag;
-}
+export const setKf = (items: ContentItem[], newValue: number): TagKf => setSingleValueTag(items, TagName.kf, newValue);
 
-export function setKUpperCase(items: ContentItem[], newValue: number): TagKUpperCase {
-    const defaultTag: TagKUpperCase = {
-        name: TagName.kUpperCase,
-        value: newValue,
-    };
+export const setKo = (items: ContentItem[], newValue: number): TagKo => setSingleValueTag(items, TagName.ko, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setP = (items: ContentItem[], newValue: number): TagP => setSingleValueTag(items, TagName.p, newValue);
 
-    return tag;
-}
+export const setPbo = (items: ContentItem[], newValue: number): TagPbo => setSingleValueTag(items, TagName.pbo, newValue);
 
-export function setKf(items: ContentItem[], newValue: number): TagKf {
-    const defaultTag: TagKf = {
-        name: TagName.kf,
-        value: newValue,
-    };
+export const setQ = (items: ContentItem[], newValue: number): TagQ => setSingleValueTag(items, TagName.q, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setS = (items: ContentItem[], newValue: number): TagS => setSingleValueTag(items, TagName.s, newValue);
 
-    return tag;
-}
+export const setShad = (items: ContentItem[], newValue: number): TagShad => setSingleValueTag(items, TagName.shad, newValue);
 
-export function setKo(items: ContentItem[], newValue: number): TagKo {
-    const defaultTag: TagKo = {
-        name: TagName.ko,
-        value: newValue,
-    };
+export const setXshad = (items: ContentItem[], newValue: number): TagXshad => setSingleValueTag(items, TagName.xshad, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setYshad = (items: ContentItem[], newValue: number): TagYshad => setSingleValueTag(items, TagName.yshad, newValue);
 
-    return tag;
-}
+export const setU = (items: ContentItem[], newValue: number): TagU => setSingleValueTag(items, TagName.u, newValue);
 
-export function setP(items: ContentItem[], newValue: number): TagP {
-    const defaultTag: TagP = {
-        name: TagName.p,
-        value: newValue,
-    };
+export const setBe = (items: ContentItem[], newValue: number): TagBe => setSingleValueTag(items, TagName.be, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setFs = (items: ContentItem[], newValue: number): TagFs => setSingleValueTag(items, TagName.fs, newValue);
 
-    return tag;
-}
+export const setFr = (items: ContentItem[], newValue: number): TagFr => setSingleValueTag(items, TagName.fr, newValue);
 
-export function setPbo(items: ContentItem[], newValue: number): TagPbo {
-    const defaultTag: TagPbo = {
-        name: TagName.pbo,
-        value: newValue,
-    };
+export const setFrx = (items: ContentItem[], newValue: number): TagFrx => setSingleValueTag(items, TagName.frx, newValue);
 
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
+export const setFry = (items: ContentItem[], newValue: number): TagFry => setSingleValueTag(items, TagName.fry, newValue);
 
-    return tag;
-}
+export const setFrz = (items: ContentItem[], newValue: number): TagFrz => setSingleValueTag(items, TagName.frz, newValue);
 
-export function setQ(items: ContentItem[], newValue: number): TagQ {
-    const defaultTag: TagQ = {
-        name: TagName.q,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setS(items: ContentItem[], newValue: number): TagS {
-    const defaultTag: TagS = {
-        name: TagName.s,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setShad(items: ContentItem[], newValue: number): TagShad {
-    const defaultTag: TagShad = {
-        name: TagName.shad,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setXshad(items: ContentItem[], newValue: number): TagXshad {
-    const defaultTag: TagXshad = {
-        name: TagName.xshad,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setYshad(items: ContentItem[], newValue: number): TagYshad {
-    const defaultTag: TagYshad = {
-        name: TagName.yshad,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setU(items: ContentItem[], newValue: number): TagU {
-    const defaultTag: TagU = {
-        name: TagName.u,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setBe(items: ContentItem[], newValue: number): TagBe {
-    const defaultTag: TagBe = {
-        name: TagName.be,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFs(items: ContentItem[], newValue: number): TagFs {
-    const defaultTag: TagFs = {
-        name: TagName.fs,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFr(items: ContentItem[], newValue: number): TagFr {
-    const defaultTag: TagFr = {
-        name: TagName.fr,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFrx(items: ContentItem[], newValue: number): TagFrx {
-    const defaultTag: TagFrx = {
-        name: TagName.frx,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFry(items: ContentItem[], newValue: number): TagFry {
-    const defaultTag: TagFry = {
-        name: TagName.fry,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setFrz(items: ContentItem[], newValue: number): TagFrz {
-    const defaultTag: TagFrz = {
-        name: TagName.frz,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
-
-export function setI(items: ContentItem[], newValue: number): TagI {
-    const defaultTag: TagI = {
-        name: TagName.i,
-        value: newValue,
-    };
-
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.value = newValue;
-    }
-
-    return tag;
-}
+export const setI = (items: ContentItem[], newValue: number): TagI => setSingleValueTag(items, TagName.i, newValue);
 
 export function setR(items: ContentItem[], style: string): TagR {
-    const defaultTag: TagR = {
-        name: TagName.r,
-        style: style,
-    };
-
+    const defaultTag: TagR = { name: TagName.r, style: style };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.style = style;
-    }
-
+    if (!updated) tag.style = style;
     return tag;
 }
 
 export function setPos(items: ContentItem[], x: number, y: number): TagPos {
-    const defaultTag: TagPos = {
-        name: TagName.pos,
-        x: x,
-        y: y,
-    };
-
+    const defaultTag: TagPos = { name: TagName.pos, x, y };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.x = x;
         tag.y = y;
     }
-
     return tag;
 }
 
 export function setOrg(items: ContentItem[], x: number, y: number): TagOrg {
-    const defaultTag: TagOrg = {
-        name: TagName.org,
-        x: x,
-        y: y,
-    };
-
+    const defaultTag: TagOrg = { name: TagName.org, x, y };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.x = x;
         tag.y = y;
     }
-
     return tag;
 }
 
 export function setFad(items: ContentItem[], fadeIn: number, fadeOut: number): TagFad {
-    const defaultTag: TagFad = {
-        name: TagName.fad,
-        in: fadeIn,
-        out: fadeOut,
-    };
-
+    const defaultTag: TagFad = { name: TagName.fad, in: fadeIn, out: fadeOut };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.in = fadeIn;
         tag.out = fadeOut;
     }
-
     return tag;
 }
 
@@ -775,17 +236,7 @@ export function setFade(
     t3: number,
     t4: number,
 ): TagFade {
-    const defaultTag: TagFade = {
-        name: TagName.fade,
-        alpha1: alpha1,
-        alpha2: alpha2,
-        alpha3: alpha3,
-        t1: t1,
-        t2: t2,
-        t3: t3,
-        t4: t4,
-    };
-
+    const defaultTag: TagFade = { name: TagName.fade, alpha1, alpha2, alpha3, t1, t2, t3, t4 };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.alpha1 = alpha1;
@@ -796,35 +247,20 @@ export function setFade(
         tag.t3 = t3;
         tag.t4 = t4;
     }
-
     return tag;
 }
 
 export function setClip(items: ContentItem[], drawCommands: string): TagClip {
-    const defaultTag: TagClip = {
-        name: TagName.clip,
-        drawCommands: drawCommands,
-    };
-
+    const defaultTag: TagClip = { name: TagName.clip, drawCommands };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.drawCommands = drawCommands;
-    }
-
+    if (!updated) tag.drawCommands = drawCommands;
     return tag;
 }
 
 export function setIclip(items: ContentItem[], drawCommands: string): TagIclip {
-    const defaultTag: TagIclip = {
-        name: TagName.iclip,
-        drawCommands: drawCommands,
-    };
-
+    const defaultTag: TagIclip = { name: TagName.iclip, drawCommands };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        tag.drawCommands = drawCommands;
-    }
-
+    if (!updated) tag.drawCommands = drawCommands;
     return tag;
 }
 
@@ -837,16 +273,7 @@ export function setMove(
     t1: number | null = null,
     t2: number | null = null,
 ): TagMove {
-    const defaultTag: TagMove = {
-        name: TagName.move,
-        x1: x1,
-        y1: y1,
-        x2: x2,
-        y2: y2,
-        t1: t1,
-        t2: t2,
-    };
-
+    const defaultTag: TagMove = { name: TagName.move, x1, y1, x2, y2, t1, t2 };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.x1 = x1;
@@ -856,7 +283,6 @@ export function setMove(
         tag.t1 = t1;
         tag.t2 = t2;
     }
-
     return tag;
 }
 
@@ -867,14 +293,7 @@ export function setT(
     t1: number | null = null,
     t2: number | null = null,
 ): TagT {
-    const defaultTag: TagT = {
-        name: TagName.t,
-        t1: t1,
-        t2: t2,
-        accel: accel,
-        tags: tags,
-    };
-
+    const defaultTag: TagT = { name: TagName.t, t1, t2, accel, tags };
     const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
     if (!updated) {
         tag.t1 = t1;
@@ -882,15 +301,10 @@ export function setT(
         tag.accel = accel;
         tag.tags = tags;
     }
-
     return tag;
 }
 
-export function setTag<T extends Tags>(
-    items: ContentItem[],
-    tagName: TagName,
-    defaultTag: T,
-): [boolean, T] {
+export function setTag<T extends Tags>(items: ContentItem[], tagName: TagName, defaultTag: T): [boolean, T] {
     const fx = items.find((item) => item.name == "effect");
     if (fx?.name != "effect") {
         items.unshift({
