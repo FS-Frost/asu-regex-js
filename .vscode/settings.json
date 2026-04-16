@@ -2,7 +2,7 @@
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
     "files.insertFinalNewline": true,
-    "typescript.format.semicolons": "insert",
+    "js/ts.format.semicolons": "insert",
     "liveServer.settings.port": 3000,
     "liveServer.settings.root": "/",
     "eslint.enable": true,
