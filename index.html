@@ -18,66 +18,273 @@
 </head>
 
 <body>
-    <main>
-        <h1 class="title is-3 has-text-centered mt-2">Asu Playground</h1>
+    <main class="container mt-4">
+        <h1 class="title is-3 has-text-centered">Asu Playground</h1>
 
-        <div class="buttons">
+        <div class="buttons is-centered mb-5">
             <a href="https://github.com/FS-Frost/asu-regex-js" target="_blank">
                 <button class="button">GitHub Repository</button>
             </a>
-
             <a href="docs/" target="_blank">
                 <button class="button">Documentation</button>
             </a>
-
             <a href="bundles/" target="_blank">
                 <button class="button">Bundles</button>
             </a>
         </div>
 
-        <button class="button is-link show-example">Show example</button>
+        <div class="tabs is-centered is-boxed">
+            <ul>
+                <li class="is-active" data-tab="tab-line"><a>Line Parser</a></li>
+                <li data-tab="tab-file"><a>File Parser</a></li>
+                <li data-tab="tab-utils"><a>Time & Color</a></li>
+            </ul>
+        </div>
 
-        <label class="label" for="">Subtitle</label>
+        <!-- LINE PARSER TAB -->
+        <div id="tab-line" class="tab-content block">
+            <div class="columns">
+                <div class="column is-5">
+                    <label class="label">Subtitle Line</label>
+                    <textarea class="textarea text" rows="5"></textarea>
+                    <button class="button is-link mt-2 show-example-line">Show Example</button>
+                    <p class="error mt-2 has-text-danger" style="display: none;"></p>
+                </div>
+                <div class="column is-7">
+                    <div class="box">
+                        <table class="table is-narrow is-fullwidth is-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Layer</th>
+                                    <td class="line-layer"></td>
+                                </tr>
+                                <tr>
+                                    <th>Start</th>
+                                    <td class="line-start"></td>
+                                </tr>
+                                <tr>
+                                    <th>End</th>
+                                    <td class="line-end"></td>
+                                </tr>
+                                <tr>
+                                    <th>Style</th>
+                                    <td class="line-style"></td>
+                                </tr>
+                                <tr>
+                                    <th>Actor</th>
+                                    <td class="line-actor"></td>
+                                </tr>
+                                <tr>
+                                    <th>Margins (L/R/V)</th>
+                                    <td><span class="line-margin-left"></span> / <span class="line-margin-right"></span>
+                                        / <span class="line-margin-vertical"></span></td>
+                                </tr>
+                                <tr>
+                                    <th>Effect</th>
+                                    <td class="line-effect"></td>
+                                </tr>
+                                <tr>
+                                    <th>Content</th>
+                                    <td class="line-content"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-        <textarea class="textarea text"></textarea>
+            <div class="box">
+                <div class="level">
+                    <div class="level-left">
+                        <label class="label items-count mb-0"></label>
+                    </div>
+                    <div class="level-right">
+                        <div class="buttons has-addons">
+                            <button class="button is-small is-link is-selected" id="btn-view-json">JSON</button>
+                            <button class="button is-small" id="btn-view-visual">Visual</button>
+                        </div>
+                    </div>
+                </div>
 
-        <p class="error mt-2"></p>
+                <div id="view-json" class="block">
+                    <pre><code class="language-json" id="line-items-json"></code></pre>
+                </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Layer</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Style</th>
-                    <th>Actor</th>
-                    <th>Right Margin</th>
-                    <th>Left Margin</th>
-                    <th>Vertical Margin</th>
-                    <th>Effect</th>
-                    <th>Content</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="line-layer"></td>
-                    <td class="line-start"></td>
-                    <td class="line-end"></td>
-                    <td class="line-style"></td>
-                    <td class="line-actor"></td>
-                    <td class="line-margin-right"></td>
-                    <td class="line-margin-left"></td>
-                    <td class="line-margin-vertical"></td>
-                    <td class="line-effect"></td>
-                    <td class="line-content"></td>
-                </tr>
-            </tbody>
-        </table>
+                <div id="view-visual" class="block is-hidden">
+                    <div id="line-items-visual" class="visual-container content"></div>
+                </div>
+            </div>
+        </div>
 
-        <label class="label items-count" for=""></label>
+        <!-- FILE PARSER TAB -->
+        <div id="tab-file" class="tab-content block is-hidden">
+            <div class="columns">
+                <div class="column is-4">
+                    <label class="label">Full .ass File Content</label>
+                    <textarea class="textarea file-text" rows="15"></textarea>
+                    <button class="button is-link mt-2 show-example-file">Show Example</button>
+                    <p class="file-error mt-2 has-text-danger" style="display: none;"></p>
+                </div>
+                <div class="column is-8">
+                    <div class="box">
+                        <h2 class="title is-5">Script Info</h2>
+                        <div class="table-container">
+                            <table class="table is-narrow is-fullwidth is-striped script-info-table">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <h2 class="title is-5">Styles</h2>
+                        <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table is-narrow is-fullwidth is-striped styles-table">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <h2 class="title is-5">Events</h2>
+                        <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table is-narrow is-fullwidth is-striped events-table">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <textarea class="textarea items"></textarea>
+        <!-- UTILS TAB -->
+        <div id="tab-utils" class="tab-content block is-hidden">
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <h2 class="title is-5">Color Converter</h2>
+                        <div class="field">
+                            <label class="label">ASS Color</label>
+                            <div class="control">
+                                <input class="input color-input-ass" type="text" placeholder="&H0000FF& or &H000000FF">
+                            </div>
+                        </div>
+                        <div class="columns is-mobile mt-2">
+                            <div class="column">
+                                <label class="label is-small">Red</label>
+                                <input class="input color-input-r" type="number" min="0" max="255" placeholder="255">
+                            </div>
+                            <div class="column">
+                                <label class="label is-small">Green</label>
+                                <input class="input color-input-g" type="number" min="0" max="255" placeholder="0">
+                            </div>
+                            <div class="column">
+                                <label class="label is-small">Blue</label>
+                                <input class="input color-input-b" type="number" min="0" max="255" placeholder="0">
+                            </div>
+                            <div class="column">
+                                <label class="label is-small">Alpha</label>
+                                <input class="input color-input-a" type="number" min="0" max="255" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="color-result mt-3 is-flex is-align-items-center">
+                            <div class="color-preview"
+                                style="width: 40px; height: 40px; border: 1px solid #ccc; margin-right: 15px; border-radius: 4px;">
+                            </div>
+                            <p class="color-error has-text-danger" style="display: none;">Invalid color format.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h2 class="title is-5">Time Converter</h2>
+                        <div class="field">
+                            <label class="label">ASS Time</label>
+                            <div class="control">
+                                <input class="input time-input" type="text" placeholder="1:23:45.67">
+                            </div>
+                        </div>
+                        <div class="time-result mt-3">
+                            <pre><code class="time-output"></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
+
+    <style>
+        .is-hidden {
+            display: none !important;
+        }
+
+        pre {
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            padding: 1rem;
+        }
+
+        .visual-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .visual-item-text {
+            background-color: #fff;
+            border-left: 4px solid #3273dc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .visual-item-effect {
+            background-color: #fff;
+            border-left: 4px solid #48c774;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .visual-tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .visual-tag {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            font-size: 0.85rem;
+            border-radius: 3px;
+            display: inline-flex;
+            overflow: hidden;
+        }
+
+        .visual-tag-name {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            font-weight: bold;
+            color: #555;
+            border-right: 1px solid #ddd;
+        }
+
+        .visual-tag-value {
+            padding: 2px 6px;
+            color: #333;
+        }
+    </style>
 </body>
 
 </html>
