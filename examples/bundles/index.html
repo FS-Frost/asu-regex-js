@@ -5,89 +5,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asu Bundles</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <style>
+        body {
+            background-color: var(--bulma-background);
+        }
+
+        .container-box {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .files {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .groups-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .group-container {
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+        }
+
+        .file-button {
+            justify-content: flex-start;
+            padding-left: 2rem;
+        }
+
+        .header-title {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 
 <body>
-    <main>
-        <h1 class="title is-3 has-text-centered mt-2">Bundles</h1>
+    <section class="section">
+        <div class="container container-box">
+            <div class="box">
+                <h1 class="title is-3 has-text-centered header-title">📦 Asu Bundles</h1>
 
-        <div class="files">
-            <a href="https://jsr.io/@fs-frost/asu" target="_blank">
-                <button class="button is-primary is-fullwidth">Last release: https://jsr.io/@fs-frost/asu</button>
-            </a>
+                <div class="files" id="files-container">
+                    <a href="https://jsr.io/@fs-frost/asu" target="_blank"
+                        class="button is-primary is-medium is-fullwidth file-button">
+                        <strong>🌟 Last release: jsr.io/@fs-frost/asu</strong>
+                    </a>
+
+                    <hr class="my-4">
+
+                    <h2 class="title is-5 has-text-centered section-title">🌙 Nightly bundles</h2>
+
+                    <div id="nightly-files" class="groups-row">
+                        <!-- Nightly files will be injected here -->
+                        <div class="has-text-centered has-text-grey w-100" id="loading-text">Loading bundles...</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
+
+    <script>
+        async function main() {
+            const nightlyFilesDiv = document.getElementById("nightly-files");
+            const loadingText = document.getElementById("loading-text");
+
+            try {
+                const response = await fetch("files.json");
+                if (!response.ok) {
+                    loadingText.innerHTML = `<span class="has-text-danger">Failed to fetch files (Status: ${response.status})</span>`;
+                    console.error("failed to fetch files", { status: response.status });
+                    return;
+                }
+
+                const files = await response.json();
+
+                if (!Array.isArray(files)) {
+                    loadingText.innerHTML = `<span class="has-text-danger">Error: files data is invalid</span>`;
+                    console.error("files is not an array", { files });
+                    return;
+                }
+
+                if (files.length === 0) {
+                    loadingText.innerHTML = "<span>No bundle files available.</span>";
+                    return;
+                }
+
+                const groups = {};
+                for (const file of files) {
+                    const parts = file.split('.');
+                    const groupName = parts.length > 1 ? parts[1] : "other";
+                    if (!groups[groupName]) {
+                        groups[groupName] = [];
+                    }
+                    groups[groupName].push(file);
+                }
+
+                let html = "";
+                const groupNames = Object.keys(groups).sort();
+
+                for (const group of groupNames) {
+                    html += `
+                        <div class="group-container mb-3">
+                            <h3 class="title is-6 has-text-grey has-text-left mb-2" style="border-bottom: 1px solid #eee; padding-bottom: 0.25rem; text-transform: capitalize;">📁 ${group}</h3>
+                            <div class="is-flex is-flex-direction-column" style="gap: 0.5rem;">
+                    `;
+
+                    const groupFiles = groups[group].sort().reverse();
+                    for (const file of groupFiles) {
+                        html += `
+                            <a href="../build/${file}" target="_blank" class="button is-link is-light is-fullwidth file-button">
+                                <span>📄 ${file}</span>
+                            </a>
+                        `;
+                    }
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                nightlyFilesDiv.innerHTML = html;
+            } catch (error) {
+                if (loadingText) {
+                    loadingText.innerHTML = `<span class="has-text-danger">Error loading files.</span>`;
+                }
+                console.error("main error", error);
+            }
+        }
+
+        main();
+    </script>
 </body>
 
-<script>
-    const textNoFiles = "No bundle files available.";
-    async function main() {
-        try {
-            const response = await fetch("files.json");
-            if (!response.ok) {
-                console.error("failed to fetch files", {
-                    status: response.status,
-                });
-                return;
-            }
-
-            const files = await response.json();
-            const selector = "div.files";
-            const divFiles = document.querySelector(selector);
-            if (divFiles == null) {
-                console.error(`${selector} not found`);
-                return;
-            }
-
-            if (!Array.isArray(files)) {
-                console.error("files is not an array", { files });
-                return;
-            }
-
-            divFiles.innerHTML += `
-                <p class="title is-5 has-text-centered mb-2">Nightly bundles</p>
-            `;
-
-            files.sort();
-            let html = "";
-            for (const file of files) {
-                html += `
-                    <a href="../build/${file}" target="_blank">
-                        <button class="button is-link is-fullwidth">${file}</button>
-                    </a>
-                `;
-            }
-
-            divFiles.innerHTML += html;
-        } catch (error) {
-            console.error("main error", error);
-        }
-    }
-
-    main();
-</script>
-
 </html>
-
-<style>
-    main {
-        padding: 1rem;
-    }
-
-    .error {
-        font-weight: bold;
-        color: red;
-    }
-
-    .files {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .files button {
-        margin-bottom: .5rem;
-    }
-</style>
