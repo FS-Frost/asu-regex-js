@@ -294,14 +294,36 @@ export type Tag4a = {
 	name: TagName.alpha4;
 	value: string;
 };
-export type TagClip = {
+export type TagClipRect = {
 	name: TagName.clip;
-	drawCommands: string;
+	type: "rect";
+	x1: number;
+	y1: number;
+	x2: number;
+	y2: number;
 };
-export type TagIclip = {
+export type TagClipVector = {
+	name: TagName.clip;
+	type: "vector";
+	scale: number | null;
+	commands: string;
+};
+export type TagClip = TagClipRect | TagClipVector;
+export type TagIclipRect = {
 	name: TagName.iclip;
-	drawCommands: string;
+	type: "rect";
+	x1: number;
+	y1: number;
+	x2: number;
+	y2: number;
 };
+export type TagIclipVector = {
+	name: TagName.iclip;
+	type: "vector";
+	scale: number | null;
+	commands: string;
+};
+export type TagIclip = TagIclipRect | TagIclipVector;
 export type TagFad = {
 	name: TagName.fad;
 	in: number;
@@ -461,6 +483,58 @@ export type TagText = {
 };
 export type Tags = TagA | TagAn | TagB | TagBlur | TagBord | TagXbord | TagYbord | TagC | Tag1c | Tag2c | Tag3c | Tag4c | TagAlpha | Tag1a | Tag2a | Tag3a | Tag4a | TagClip | TagIclip | TagFad | TagFade | TagFax | TagFay | TagFe | TagFn | TagFscx | TagFscy | TagFsp | TagKLowerCase | TagKUpperCase | TagKf | TagKo | TagOrg | TagP | TagPbo | TagQ | TagR | TagS | TagShad | TagXshad | TagYshad | TagU | TagUnknown | TagBe | TagFr | TagFrx | TagFry | TagFrz | TagI | TagFs | TagT | TagText | TagPos | TagMove;
 export declare function parseColorBGR(text: string): ColorBGR | null;
+export declare enum DrawingCommandNames {
+	move = "m",
+	moveNoClose = "n",
+	line = "l",
+	bezier = "b",
+	spline = "s",
+	extendSpline = "p",
+	closeSpline = "c"
+}
+export declare const DrawingCommandName: z.ZodEnum<typeof DrawingCommandNames>;
+export type DrawingCommandName = z.infer<typeof DrawingCommandName>;
+export type DrawingCommandMove = {
+	name: DrawingCommandNames.move;
+	x: number;
+	y: number;
+};
+export type DrawingCommandMoveNoClose = {
+	name: DrawingCommandNames.moveNoClose;
+	x: number;
+	y: number;
+};
+export type DrawingCommandLine = {
+	name: DrawingCommandNames.line;
+	x: number;
+	y: number;
+};
+export type DrawingCommandBezier = {
+	name: DrawingCommandNames.bezier;
+	x1: number;
+	y1: number;
+	x2: number;
+	y2: number;
+	x3: number;
+	y3: number;
+};
+export type DrawingPoint = {
+	x: number;
+	y: number;
+};
+export type DrawingCommandSpline = {
+	name: DrawingCommandNames.spline;
+	points: DrawingPoint[];
+};
+export type DrawingCommandExtendSpline = {
+	name: DrawingCommandNames.extendSpline;
+	x: number;
+	y: number;
+};
+export type DrawingCommandCloseSpline = {
+	name: DrawingCommandNames.closeSpline;
+};
+export type DrawingCommand = DrawingCommandMove | DrawingCommandMoveNoClose | DrawingCommandLine | DrawingCommandBezier | DrawingCommandSpline | DrawingCommandExtendSpline | DrawingCommandCloseSpline;
 export type ContentEffect = {
 	name: "effect";
 	tags: Tags[];
@@ -469,8 +543,13 @@ export type ContentText = {
 	name: "text";
 	value: string;
 };
-export type ContentItem = ContentEffect | ContentText;
+export type ContentDrawing = {
+	name: "drawing";
+	commands: DrawingCommand[];
+};
+export type ContentItem = ContentEffect | ContentText | ContentDrawing;
 export declare function mergeNeighboringEffects(items: ContentItem[]): void;
+export declare function optimizeContent(items: ContentItem[]): void;
 export declare function truncateNumberTags(items: ContentItem[], decimals: number): void;
 export declare function forEachTag(items: ContentItem[], predicate: (tag: Tags) => void): void;
 export declare function tagsToItems(tags: Tags[]): ContentItem[];
@@ -479,6 +558,8 @@ export declare function parseContent(text: string): ContentItem[];
 export declare function contentEffectToString(item: ContentEffect): string;
 export declare function tagToString(tag: Tags): string;
 export declare function contentsToString(items: ContentItem[]): string;
+export declare function parseDrawingCommands(text: string): DrawingCommand[];
+export declare function drawingCommandsToString(commands: DrawingCommand[]): string;
 export declare function splitSyllabes(line: Line): void;
 export declare function isRomajiWord(word: string): boolean;
 export type Time = {
@@ -569,6 +650,7 @@ export declare function findClip(items: ContentItem[]): TagClip | null;
 export declare function findIclip(items: ContentItem[]): TagIclip | null;
 export declare function findMove(items: ContentItem[]): TagMove | null;
 export declare function findT(items: ContentItem[]): TagT | null;
+export declare function optimizeTags(tags: Tags[]): Tags[];
 export declare function parseTags(text: string, tags: Tags[]): Tags[];
 export declare function parseTagT(text: string, tags: Tags[], tagNameSource: string, matchTagT: RegExpMatchArray): Tags[];
 export declare const setA: (items: ContentItem[], newValue: number) => TagA;
@@ -619,7 +701,11 @@ export declare function setPos(items: ContentItem[], x: number, y: number): TagP
 export declare function setOrg(items: ContentItem[], x: number, y: number): TagOrg;
 export declare function setFad(items: ContentItem[], fadeIn: number, fadeOut: number): TagFad;
 export declare function setFade(items: ContentItem[], alpha1: number, alpha2: number, alpha3: number, t1: number, t2: number, t3: number, t4: number): TagFade;
+export declare function setClipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagClipRect;
+export declare function setClipVector(items: ContentItem[], commands: string, scale?: number | null): TagClipVector;
 export declare function setClip(items: ContentItem[], drawCommands: string): TagClip;
+export declare function setIclipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagIclipRect;
+export declare function setIclipVector(items: ContentItem[], commands: string, scale?: number | null): TagIclipVector;
 export declare function setIclip(items: ContentItem[], drawCommands: string): TagIclip;
 export declare function setMove(items: ContentItem[], x1: number, y1: number, x2: number, y2: number, t1?: number | null, t2?: number | null): TagMove;
 export declare function setT(items: ContentItem[], tags: Tags[], accel?: number | null, t1?: number | null, t2?: number | null): TagT;

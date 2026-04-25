@@ -14427,9 +14427,13 @@ var regexFade = createRegExp(reFade);
 var reMoveTimeArgs = exactly(",").and(reFloat.groupedAs("move_t1")).and(exactly(",")).and(reFloat.groupedAs("move_t2")).optionally();
 var reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs("move_x1")).and(exactly(",")).and(reFloat.groupedAs("move_y1")).and(exactly(",")).and(reFloat.groupedAs("move_x2")).and(exactly(",")).and(reFloat.groupedAs("move_y2")).and(reMoveTimeArgs).and(exactly(")"));
 var regexMove = createRegExp(reMove);
-var reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+var reClipRect = exactly("\\").and("clip").and(exactly("(")).and(reFloat.groupedAs("clip_rect_x1")).and(exactly(",")).and(reFloat.groupedAs("clip_rect_y1")).and(exactly(",")).and(reFloat.groupedAs("clip_rect_x2")).and(exactly(",")).and(reFloat.groupedAs("clip_rect_y2")).and(exactly(")"));
+var reClipVector = exactly("\\").and("clip").and(exactly("(")).and(reFloat.and(exactly(",")).optionally().groupedAs("clip_vector_scale")).and(oneOrMore(charNotIn(")")).groupedAs("clip_vector_commands")).and(exactly(")"));
+var reIclipRect = exactly("\\").and("iclip").and(exactly("(")).and(reFloat.groupedAs("iclip_rect_x1")).and(exactly(",")).and(reFloat.groupedAs("iclip_rect_y1")).and(exactly(",")).and(reFloat.groupedAs("iclip_rect_x2")).and(exactly(",")).and(reFloat.groupedAs("iclip_rect_y2")).and(exactly(")"));
+var reIclipVector = exactly("\\").and("iclip").and(exactly("(")).and(reFloat.and(exactly(",")).optionally().groupedAs("iclip_vector_scale")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_vector_commands")).and(exactly(")"));
+var reClip = reClipRect.or(reClipVector);
+var reIclip = reIclipRect.or(reIclipVector);
 var regexClip = createRegExp(reClip);
-var reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
 var regexIclip = createRegExp(reIclip);
 var reUnknown = exactly("\\").and(oneOrMore(charNotIn("\\")).groupedAs("unknown_value"));
 var unitTags = reBe.or(reAlpha).or(reXbord).or(reYbord).or(reXshad).or(reYshad).or(reIclip).or(reMove).or(reBlur).or(reBord).or(reShad).or(reFscx).or(reFscy).or(reFade).or(reClip).or(reFsp).or(rePos).or(reOrg).or(reFad).or(rePbo).or(reFrx).or(reFry).or(reFrz).or(reFax).or(reFay).or(reKo).or(reKf).or(reFr).or(reFs).or(reFe).or(reFn).or(reAn).or(reColor1).or(reColor2).or(reColor3).or(reColor4).or(reAlpha1).or(reAlpha2).or(reAlpha3).or(reAlpha4).or(reColor).or(reQ).or(reU).or(reS).or(reP).or(reR).or(reI).or(reB).or(reA).or(reKLowerCase).or(reKUpperCase).or(reUnknown);
@@ -14510,6 +14514,97 @@ var TagName;
   TagName2["yshad"] = "yshad";
 })(TagName ||= {});
 
+// src/tags/optimize.ts
+var overridableTags = new Set([
+  "a" /* a */,
+  "alpha" /* alpha */,
+  "1a" /* alpha1 */,
+  "2a" /* alpha2 */,
+  "3a" /* alpha3 */,
+  "4a" /* alpha4 */,
+  "an" /* an */,
+  "b" /* b */,
+  "be" /* be */,
+  "blur" /* blur */,
+  "bord" /* bord */,
+  "c" /* color */,
+  "1c" /* color1 */,
+  "2c" /* color2 */,
+  "3c" /* color3 */,
+  "4c" /* color4 */,
+  "fax" /* fax */,
+  "fay" /* fay */,
+  "fe" /* fe */,
+  "fn" /* fn */,
+  "fr" /* fr */,
+  "frx" /* frx */,
+  "fry" /* fry */,
+  "frz" /* frz */,
+  "fs" /* fs */,
+  "fscx" /* fscx */,
+  "fscy" /* fscy */,
+  "fsp" /* fsp */,
+  "i" /* i */,
+  "p" /* p */,
+  "pbo" /* pbo */,
+  "q" /* q */,
+  "r" /* r */,
+  "s" /* s */,
+  "shad" /* shad */,
+  "u" /* u */,
+  "xbord" /* xbord */,
+  "xshad" /* xshad */,
+  "ybord" /* ybord */,
+  "yshad" /* yshad */,
+  "pos" /* pos */,
+  "move" /* move */,
+  "org" /* org */,
+  "fad" /* fad */,
+  "fade" /* fade */,
+  "clip" /* clip */,
+  "iclip" /* iclip */
+]);
+function optimizeTags(tags) {
+  if (tags.length === 0) {
+    return [];
+  }
+  const workingTags = getWorkingTagsAfterReset(tags);
+  const lastIndices = getLastTagIndices(workingTags);
+  return filterRedundantTags(workingTags, lastIndices);
+}
+function getWorkingTagsAfterReset(tags) {
+  const lastRIndex = tags.findLastIndex((tag) => tag.name === "r" /* r */);
+  return lastRIndex !== -1 ? tags.slice(lastRIndex) : tags;
+}
+function getLastTagIndices(tags) {
+  const lastIndices = new Map;
+  for (let i = 0;i < tags.length; i++) {
+    const tag = tags[i];
+    if (overridableTags.has(tag.name)) {
+      lastIndices.set(tag.name, i);
+    }
+  }
+  return lastIndices;
+}
+function filterRedundantTags(tags, lastIndices) {
+  const result = [];
+  for (let i = 0;i < tags.length; i++) {
+    const tag = tags[i];
+    if (tag.name === "t" /* t */) {
+      const tTag = {
+        ...tag,
+        tags: optimizeTags(tag.tags)
+      };
+      result.push(tTag);
+      continue;
+    }
+    if (!overridableTags.has(tag.name) || lastIndices.get(tag.name) === i) {
+      result.push(tag);
+    }
+  }
+  return result;
+}
+
 // src/content/modifiers.ts
 function mergeNeighboringEffects(items) {
   const indexToRemove = [];
@@ -14528,6 +14623,13 @@ function mergeNeighboringEffects(items) {
   }
   for (const index of indexToRemove.reverse()) {
     items.splice(index, 1);
+  }
+}
+function optimizeContent(items) {
+  for (const item of items) {
+    if (item.name === "effect") {
+      item.tags = optimizeTags(item.tags);
+    }
   }
 }
 function truncateNumberTags(items, decimals) {
@@ -14589,6 +14691,15 @@ function truncateNumberTags(items, decimals) {
         break;
       case "clip" /* clip */:
       case "iclip" /* iclip */:
+        if (tag.type === "rect") {
+          tag.x1 = truncate(tag.x1, decimals);
+          tag.y1 = truncate(tag.y1, decimals);
+          tag.x2 = truncate(tag.x2, decimals);
+          tag.y2 = truncate(tag.y2, decimals);
+        } else if (tag.scale !== null) {
+          tag.scale = truncate(tag.scale, decimals);
+        }
+        break;
       case "fn" /* fn */:
       case "r" /* r */:
       case "text" /* text */:
@@ -14691,10 +14802,24 @@ var tagParsers = [
   },
   {
     regex: regexIclip,
-    parse: (groups) => ({
-      name: "iclip" /* iclip */,
-      drawCommands: groups.iclip_args ?? ""
-    })
+    parse: (groups) => {
+      if (groups.iclip_rect_x1 !== undefined) {
+        return {
+          name: "iclip" /* iclip */,
+          type: "rect",
+          x1: Number(groups.iclip_rect_x1),
+          y1: Number(groups.iclip_rect_y1),
+          x2: Number(groups.iclip_rect_x2),
+          y2: Number(groups.iclip_rect_y2)
+        };
+      }
+      return {
+        name: "iclip" /* iclip */,
+        type: "vector",
+        scale: groups.iclip_vector_scale ? Number(groups.iclip_vector_scale.replace(",", "")) : null,
+        commands: groups.iclip_vector_commands ?? ""
+      };
+    }
   },
   {
     regex: regexBlur,
@@ -14761,10 +14886,24 @@ var tagParsers = [
   },
   {
     regex: regexClip,
-    parse: (groups) => ({
-      name: "clip" /* clip */,
-      drawCommands: groups.clip_args ?? ""
-    })
+    parse: (groups) => {
+      if (groups.clip_rect_x1 !== undefined) {
+        return {
+          name: "clip" /* clip */,
+          type: "rect",
+          x1: Number(groups.clip_rect_x1),
+          y1: Number(groups.clip_rect_y1),
+          x2: Number(groups.clip_rect_x2),
+          y2: Number(groups.clip_rect_y2)
+        };
+      }
+      return {
+        name: "clip" /* clip */,
+        type: "vector",
+        scale: groups.clip_vector_scale ? Number(groups.clip_vector_scale.replace(",", "")) : null,
+        commands: groups.clip_vector_commands ?? ""
+      };
+    }
   },
   {
     regex: regexFsp,
@@ -15188,15 +15327,156 @@ function parseTagT(text, tags, tagNameSource, matchTagT) {
   return tags;
 }
 
+// src/drawing/types.ts
+var DrawingCommandNames;
+((DrawingCommandNames2) => {
+  DrawingCommandNames2["move"] = "m";
+  DrawingCommandNames2["moveNoClose"] = "n";
+  DrawingCommandNames2["line"] = "l";
+  DrawingCommandNames2["bezier"] = "b";
+  DrawingCommandNames2["spline"] = "s";
+  DrawingCommandNames2["extendSpline"] = "p";
+  DrawingCommandNames2["closeSpline"] = "c";
+})(DrawingCommandNames ||= {});
+var DrawingCommandName = exports_external.enum(DrawingCommandNames);
+
+// src/drawing/parse.ts
+function parseDrawingCommands(text) {
+  const commands = [];
+  const tokens = text.trim().split(/\s+/);
+  if (tokens.length === 0 || tokens[0] === "") {
+    return commands;
+  }
+  let i = 0;
+  while (i < tokens.length) {
+    const token = tokens[i].toLowerCase();
+    switch (token) {
+      case "m" /* move */: {
+        if (i + 2 < tokens.length) {
+          commands.push({
+            name: "m" /* move */,
+            x: Number(tokens[i + 1]),
+            y: Number(tokens[i + 2])
+          });
+          i += 3;
+        } else {
+          i++;
+        }
+        break;
+      }
+      case "n" /* moveNoClose */: {
+        if (i + 2 < tokens.length) {
+          commands.push({
+            name: "n" /* moveNoClose */,
+            x: Number(tokens[i + 1]),
+            y: Number(tokens[i + 2])
+          });
+          i += 3;
+        } else {
+          i++;
+        }
+        break;
+      }
+      case "l" /* line */: {
+        if (i + 2 < tokens.length) {
+          commands.push({
+            name: "l" /* line */,
+            x: Number(tokens[i + 1]),
+            y: Number(tokens[i + 2])
+          });
+          i += 3;
+        } else {
+          i++;
+        }
+        break;
+      }
+      case "b" /* bezier */: {
+        if (i + 6 < tokens.length) {
+          commands.push({
+            name: "b" /* bezier */,
+            x1: Number(tokens[i + 1]),
+            y1: Number(tokens[i + 2]),
+            x2: Number(tokens[i + 3]),
+            y2: Number(tokens[i + 4]),
+            x3: Number(tokens[i + 5]),
+            y3: Number(tokens[i + 6])
+          });
+          i += 7;
+        } else {
+          i++;
+        }
+        break;
+      }
+      case "p" /* extendSpline */: {
+        if (i + 2 < tokens.length) {
+          commands.push({
+            name: "p" /* extendSpline */,
+            x: Number(tokens[i + 1]),
+            y: Number(tokens[i + 2])
+          });
+          i += 3;
+        } else {
+          i++;
+        }
+        break;
+      }
+      case "c" /* closeSpline */: {
+        commands.push({
+          name: "c" /* closeSpline */
+        });
+        i += 1;
+        break;
+      }
+      case "s" /* spline */: {
+        const points = [];
+        i++;
+        while (i + 1 < tokens.length) {
+          const xStr = tokens[i];
+          const yStr = tokens[i + 1];
+          if (DrawingCommandName.safeParse(xStr).success) {
+            break;
+          }
+          points.push({ x: Number(xStr), y: Number(yStr) });
+          i += 2;
+        }
+        commands.push({
+          name: "s" /* spline */,
+          points
+        });
+        break;
+      }
+      default:
+        if (!Number.isNaN(Number(token)) && i + 1 < tokens.length && !Number.isNaN(Number(tokens[i + 1]))) {
+          commands.push({
+            name: "l" /* line */,
+            x: Number(token),
+            y: Number(tokens[i + 1])
+          });
+          i += 2;
+        } else {
+          i++;
+        }
+        break;
+    }
+  }
+  return commands;
+}
+
 // src/content/parse.ts
 function parseContent(text) {
   const items = [];
   const result = text.matchAll(regexContent);
+  let currentDrawingLevel = 0;
   for (const match of result) {
     if (match.groups?.fx) {
       const rawTags = match.groups.fx.substring(1, match.groups.fx.length - 1);
       const tags = [];
       parseTags(rawTags, tags);
+      for (const tag of tags) {
+        if (tag.name === "p" /* p */) {
+          currentDrawingLevel = tag.value;
+        }
+      }
       items.push({
         name: "effect",
         tags
@@ -15204,15 +15484,54 @@ function parseContent(text) {
       continue;
     }
     if (match.groups?.txt) {
-      items.push({
-        name: "text",
-        value: match.groups?.txt
-      });
+      if (currentDrawingLevel > 0) {
+        items.push({
+          name: "drawing",
+          commands: parseDrawingCommands(match.groups?.txt)
+        });
+      } else {
+        items.push({
+          name: "text",
+          value: match.groups?.txt
+        });
+      }
       continue;
     }
   }
   return items;
 }
+// src/drawing/stringify.ts
+function drawingCommandsToString(commands) {
+  if (!commands || commands.length === 0)
+    return "";
+  const parts = [];
+  let lastCommandName = null;
+  for (const cmd of commands) {
+    const showName = cmd.name !== lastCommandName || cmd.name !== "l" /* line */;
+    switch (cmd.name) {
+      case "m" /* move */:
+      case "n" /* moveNoClose */:
+      case "l" /* line */:
+      case "p" /* extendSpline */:
+        parts.push(`${showName ? cmd.name + " " : ""}${cmd.x} ${cmd.y}`);
+        break;
+      case "b" /* bezier */:
+        parts.push(`${showName ? cmd.name + " " : ""}${cmd.x1} ${cmd.y1} ${cmd.x2} ${cmd.y2} ${cmd.x3} ${cmd.y3}`);
+        break;
+      case "c" /* closeSpline */:
+        parts.push(`${cmd.name}`);
+        break;
+      case "s" /* spline */: {
+        const pointsStr = cmd.points.map((p) => `${p.x} ${p.y}`).join(" ");
+        parts.push(`${showName ? cmd.name + " " : ""}${pointsStr}`);
+        break;
+      }
+    }
+    lastCommandName = cmd.name;
+  }
+  return parts.join(" ");
+}
+
 // src/content/stringify.ts
 function contentEffectToString(item) {
   let s = "";
@@ -15248,7 +15567,12 @@ function contentEffectToString(item) {
         break;
       case "clip" /* clip */:
       case "iclip" /* iclip */:
-        s += `\\${tag.name}(${tag.drawCommands})`;
+        if (tag.type === "rect") {
+          s += `\\${tag.name}(${tag.x1},${tag.y1},${tag.x2},${tag.y2})`;
+        } else {
+          const scaleStr = tag.scale !== null ? `${tag.scale},` : "";
+          s += `\\${tag.name}(${scaleStr}${tag.commands})`;
+        }
         break;
       case "fad" /* fad */:
         s += `\\fad(${tag.in},${tag.out})`;
@@ -15296,8 +15620,12 @@ function tagToString(tag) {
 function contentsToString(items) {
   let s = "";
   for (const item of items) {
-    if (item.name == "text") {
+    if (item.name === "text") {
       s += item.value;
+      continue;
+    }
+    if (item.name === "drawing") {
+      s += drawingCommandsToString(item.commands);
       continue;
     }
     s += "{" + contentEffectToString(item) + "}";
@@ -15808,19 +16136,51 @@ function setFade(items, alpha1, alpha2, alpha3, t1, t2, t3, t4) {
   }
   return tag;
 }
+function setClipRect(items, x1, y1, x2, y2) {
+  const newTag = { name: "clip" /* clip */, type: "rect", x1, y1, x2, y2 };
+  const fx = getOrAddEffect(items);
+  updateOrAddTag(fx.tags, newTag);
+  return newTag;
+}
+function setClipVector(items, commands, scale = null) {
+  const newTag = { name: "clip" /* clip */, type: "vector", commands, scale };
+  const fx = getOrAddEffect(items);
+  updateOrAddTag(fx.tags, newTag);
+  return newTag;
+}
 function setClip(items, drawCommands) {
-  const defaultTag = { name: "clip" /* clip */, drawCommands };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated)
-    tag.drawCommands = drawCommands;
-  return tag;
+  return setClipVector(items, drawCommands);
+}
+function setIclipRect(items, x1, y1, x2, y2) {
+  const newTag = { name: "iclip" /* iclip */, type: "rect", x1, y1, x2, y2 };
+  const fx = getOrAddEffect(items);
+  updateOrAddTag(fx.tags, newTag);
+  return newTag;
+}
+function setIclipVector(items, commands, scale = null) {
+  const newTag = { name: "iclip" /* iclip */, type: "vector", commands, scale };
+  const fx = getOrAddEffect(items);
+  updateOrAddTag(fx.tags, newTag);
+  return newTag;
 }
 function setIclip(items, drawCommands) {
-  const defaultTag = { name: "iclip" /* iclip */, drawCommands };
-  const [updated, tag] = setTag(items, defaultTag.name, defaultTag);
-  if (!updated)
-    tag.drawCommands = drawCommands;
-  return tag;
+  return setIclipVector(items, drawCommands);
+}
+function getOrAddEffect(items) {
+  let fx = items.find((item) => item.name === "effect");
+  if (fx == null) {
+    fx = { name: "effect", tags: [] };
+    items.unshift(fx);
+  }
+  return fx;
+}
+function updateOrAddTag(tags, newTag) {
+  const index = tags.findIndex((tag) => tag.name === newTag.name);
+  if (index === -1) {
+    tags.push(newTag);
+  } else {
+    tags[index] = newTag;
+  }
 }
 function setMove(items, x1, y1, x2, y2, t1 = null, t2 = null) {
   const defaultTag = { name: "move" /* move */, x1, y1, x2, y2, t1, t2 };
@@ -15904,6 +16264,8 @@ export {
   setKf,
   setKUpperCase,
   setKLowerCase,
+  setIclipVector,
+  setIclipRect,
   setIclip,
   setI,
   setFsp,
@@ -15925,6 +16287,8 @@ export {
   setColor2,
   setColor1,
   setColor,
+  setClipVector,
+  setClipRect,
   setClip,
   setBord,
   setBlur,
@@ -15951,9 +16315,12 @@ export {
   parseTagT,
   parseStyle,
   parseLine,
+  parseDrawingCommands,
   parseContent,
   parseColorBGR,
   parseASSFile,
+  optimizeTags,
+  optimizeContent,
   numberToHex,
   newSectionStyles,
   newSectionGraphics,
@@ -16028,6 +16395,7 @@ export {
   findAlpha1,
   findAlpha,
   findA,
+  drawingCommandsToString,
   contentsToString,
   contentEffectToString,
   calculateLineDurationInSeconds,
@@ -16065,6 +16433,8 @@ export {
   LINE_TYPE_COMMENT,
   Encodings,
   Encoding,
+  DrawingCommandNames,
+  DrawingCommandName,
   AttachedGraphicToString,
   AttachedFontToString,
   Alignments,
@@ -16072,4 +16442,4 @@ export {
   ASSFileToString
 };
 
-//# debugId=6B5DE732597FE91664756E2164756E21
+//# debugId=DB7608A36E6EB5BB64756E2164756E21
