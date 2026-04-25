@@ -17,6 +17,8 @@ import {
     TagBord,
     TagC,
     TagClip,
+    TagClipRect,
+    TagClipVector,
     TagFad,
     TagFade,
     TagFax,
@@ -33,6 +35,8 @@ import {
     TagFsp,
     TagI,
     TagIclip,
+    TagIclipRect,
+    TagIclipVector,
     TagKf,
     TagKLowerCase,
     TagKo,
@@ -250,18 +254,76 @@ export function setFade(
     return tag;
 }
 
+export function setClipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagClipRect {
+    const defaultTag: TagClipRect = { name: TagName.clip, type: "rect", x1, y1, x2, y2 };
+    const [updated, tag] = setTag<TagClip>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        const t = tag as any;
+        t.type = "rect";
+        t.x1 = x1;
+        t.y1 = y1;
+        t.x2 = x2;
+        t.y2 = y2;
+        delete t.commands;
+        delete t.scale;
+    }
+    return tag as TagClipRect;
+}
+
+export function setClipVector(items: ContentItem[], commands: string, scale: number | null = null): TagClipVector {
+    const defaultTag: TagClipVector = { name: TagName.clip, type: "vector", commands, scale };
+    const [updated, tag] = setTag<TagClip>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        const t = tag as any;
+        t.type = "vector";
+        t.commands = commands;
+        t.scale = scale;
+        delete t.x1;
+        delete t.y1;
+        delete t.x2;
+        delete t.y2;
+    }
+    return tag as TagClipVector;
+}
+
 export function setClip(items: ContentItem[], drawCommands: string): TagClip {
-    const defaultTag: TagClip = { name: TagName.clip, drawCommands };
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) tag.drawCommands = drawCommands;
-    return tag;
+    return setClipVector(items, drawCommands);
+}
+
+export function setIclipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagIclipRect {
+    const defaultTag: TagIclipRect = { name: TagName.iclip, type: "rect", x1, y1, x2, y2 };
+    const [updated, tag] = setTag<TagIclip>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        const t = tag as any;
+        t.type = "rect";
+        t.x1 = x1;
+        t.y1 = y1;
+        t.x2 = x2;
+        t.y2 = y2;
+        delete t.commands;
+        delete t.scale;
+    }
+    return tag as TagIclipRect;
+}
+
+export function setIclipVector(items: ContentItem[], commands: string, scale: number | null = null): TagIclipVector {
+    const defaultTag: TagIclipVector = { name: TagName.iclip, type: "vector", commands, scale };
+    const [updated, tag] = setTag<TagIclip>(items, defaultTag.name, defaultTag);
+    if (!updated) {
+        const t = tag as any;
+        t.type = "vector";
+        t.commands = commands;
+        t.scale = scale;
+        delete t.x1;
+        delete t.y1;
+        delete t.x2;
+        delete t.y2;
+    }
+    return tag as TagIclipVector;
 }
 
 export function setIclip(items: ContentItem[], drawCommands: string): TagIclip {
-    const defaultTag: TagIclip = { name: TagName.iclip, drawCommands };
-    const [updated, tag] = setTag<typeof defaultTag>(items, defaultTag.name, defaultTag);
-    if (!updated) tag.drawCommands = drawCommands;
-    return tag;
+    return setIclipVector(items, drawCommands);
 }
 
 export function setMove(

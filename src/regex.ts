@@ -271,11 +271,34 @@ const reMove = exactly("\\").and("move").and(exactly("(")).and(reFloat.groupedAs
 
 export const regexMove = createRegExp(reMove) as RegExp;
 
-const reClip = exactly("\\").and("clip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("clip_args")).and(exactly(")"));
+const reClipRect = exactly("\\").and("clip").and(exactly("("))
+    .and(reFloat.groupedAs("clip_rect_x1")).and(exactly(","))
+    .and(reFloat.groupedAs("clip_rect_y1")).and(exactly(","))
+    .and(reFloat.groupedAs("clip_rect_x2")).and(exactly(","))
+    .and(reFloat.groupedAs("clip_rect_y2"))
+    .and(exactly(")"));
+
+const reClipVector = exactly("\\").and("clip").and(exactly("("))
+    .and(reFloat.and(exactly(",")).optionally().groupedAs("clip_vector_scale"))
+    .and(oneOrMore(charNotIn(")")).groupedAs("clip_vector_commands"))
+    .and(exactly(")"));
+
+const reIclipRect = exactly("\\").and("iclip").and(exactly("("))
+    .and(reFloat.groupedAs("iclip_rect_x1")).and(exactly(","))
+    .and(reFloat.groupedAs("iclip_rect_y1")).and(exactly(","))
+    .and(reFloat.groupedAs("iclip_rect_x2")).and(exactly(","))
+    .and(reFloat.groupedAs("iclip_rect_y2"))
+    .and(exactly(")"));
+
+const reIclipVector = exactly("\\").and("iclip").and(exactly("("))
+    .and(reFloat.and(exactly(",")).optionally().groupedAs("iclip_vector_scale"))
+    .and(oneOrMore(charNotIn(")")).groupedAs("iclip_vector_commands"))
+    .and(exactly(")"));
+
+const reClip = reClipRect.or(reClipVector);
+const reIclip = reIclipRect.or(reIclipVector);
 
 export const regexClip = createRegExp(reClip) as RegExp;
-
-const reIclip = exactly("\\").and("iclip").and(exactly("(")).and(oneOrMore(charNotIn(")")).groupedAs("iclip_args")).and(exactly(")"));
 
 export const regexIclip = createRegExp(reIclip) as RegExp;
 

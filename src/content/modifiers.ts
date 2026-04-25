@@ -104,6 +104,16 @@ export function truncateNumberTags(items: ContentItem[], decimals: number): void
 
             case TagName.clip:
             case TagName.iclip:
+                if (tag.type === "rect") {
+                    tag.x1 = truncate(tag.x1, decimals);
+                    tag.y1 = truncate(tag.y1, decimals);
+                    tag.x2 = truncate(tag.x2, decimals);
+                    tag.y2 = truncate(tag.y2, decimals);
+                } else if (tag.scale !== null) {
+                    tag.scale = truncate(tag.scale, decimals);
+                }
+                break;
+
             case TagName.fn:
             case TagName.r:
             case TagName.text:

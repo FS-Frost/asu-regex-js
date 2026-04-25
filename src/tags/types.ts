@@ -146,15 +146,41 @@ export type Tag4a = {
     value: string;
 };
 
-export type TagClip = {
+export type TagClipRect = {
     name: TagName.clip;
-    drawCommands: string;
+    type: "rect";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
 };
 
-export type TagIclip = {
-    name: TagName.iclip;
-    drawCommands: string;
+export type TagClipVector = {
+    name: TagName.clip;
+    type: "vector";
+    scale: number | null;
+    commands: string;
 };
+
+export type TagClip = TagClipRect | TagClipVector;
+
+export type TagIclipRect = {
+    name: TagName.iclip;
+    type: "rect";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+};
+
+export type TagIclipVector = {
+    name: TagName.iclip;
+    type: "vector";
+    scale: number | null;
+    commands: string;
+};
+
+export type TagIclip = TagIclipRect | TagIclipVector;
 
 export type TagFad = {
     name: TagName.fad;

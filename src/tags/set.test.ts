@@ -1403,8 +1403,10 @@ test("update clip", () => {
     const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.clip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagClip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagClip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
@@ -1415,8 +1417,10 @@ test("add clip", () => {
     const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.clip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagClip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagClip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
@@ -1427,8 +1431,10 @@ test("create fx and clip", () => {
     const tag = asu.setClip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.clip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagClip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagClip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
@@ -1439,8 +1445,10 @@ test("update iclip", () => {
     const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.iclip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagIclip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagIclip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
@@ -1451,8 +1459,10 @@ test("add iclip", () => {
     const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.iclip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagIclip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagIclip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 
@@ -1463,8 +1473,10 @@ test("create fx and iclip", () => {
     const tag = asu.setIclip(result, "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0");
     expect(tag).toEqual({
         name: asu.TagName.iclip,
-        drawCommands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
-    } satisfies asu.TagIclip);
+        type: "vector",
+        commands: "1,m 50 0 b 100 0 100 100 50 100 b 0 100 0 0 50 0",
+        scale: null,
+    } as asu.TagIclip);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 

@@ -72,8 +72,9 @@ describe("stringify content", () => {
         });
 
         test("should format \\clip and \\iclip", () => {
-            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.clip, drawCommands: "m 0 0 l 10 10" }] })).toBe("\\clip(m 0 0 l 10 10)");
-            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.iclip, drawCommands: "m 0 0 l 10 10" }] })).toBe("\\iclip(m 0 0 l 10 10)");
+            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.clip, type: "vector", commands: "m 0 0 l 10 10", scale: null }] })).toBe("\\clip(m 0 0 l 10 10)");
+            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.iclip, type: "vector", commands: "m 0 0 l 10 10", scale: null }] })).toBe("\\iclip(m 0 0 l 10 10)");
+            expect(contentEffectToString({ name: "effect", tags: [{ name: TagName.clip, type: "rect", x1: 10, y1: 20, x2: 30, y2: 40 }] })).toBe("\\clip(10,20,30,40)");
         });
 
         test("should format \\fad", () => {

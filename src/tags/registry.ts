@@ -123,10 +123,24 @@ export const tagParsers: TagParser[] = [
     },
     {
         regex: regex.regexIclip,
-        parse: (groups): TagIclip => ({
-            name: TagName.iclip,
-            drawCommands: groups.iclip_args ?? "",
-        }),
+        parse: (groups): TagIclip => {
+            if (groups.iclip_rect_x1 !== undefined) {
+                return {
+                    name: TagName.iclip,
+                    type: "rect",
+                    x1: Number(groups.iclip_rect_x1),
+                    y1: Number(groups.iclip_rect_y1),
+                    x2: Number(groups.iclip_rect_x2),
+                    y2: Number(groups.iclip_rect_y2),
+                };
+            }
+            return {
+                name: TagName.iclip,
+                type: "vector",
+                scale: groups.iclip_vector_scale ? Number(groups.iclip_vector_scale.replace(",", "")) : null,
+                commands: groups.iclip_vector_commands ?? "",
+            };
+        },
     },
     {
         regex: regex.regexBlur,
@@ -193,10 +207,24 @@ export const tagParsers: TagParser[] = [
     },
     {
         regex: regex.regexClip,
-        parse: (groups): TagClip => ({
-            name: TagName.clip,
-            drawCommands: groups.clip_args ?? "",
-        }),
+        parse: (groups): TagClip => {
+            if (groups.clip_rect_x1 !== undefined) {
+                return {
+                    name: TagName.clip,
+                    type: "rect",
+                    x1: Number(groups.clip_rect_x1),
+                    y1: Number(groups.clip_rect_y1),
+                    x2: Number(groups.clip_rect_x2),
+                    y2: Number(groups.clip_rect_y2),
+                };
+            }
+            return {
+                name: TagName.clip,
+                type: "vector",
+                scale: groups.clip_vector_scale ? Number(groups.clip_vector_scale.replace(",", "")) : null,
+                commands: groups.clip_vector_commands ?? "",
+            };
+        },
     },
     {
         regex: regex.regexFsp,

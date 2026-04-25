@@ -40,7 +40,12 @@ export function contentEffectToString(item: ContentEffect): string {
 
             case TagName.clip:
             case TagName.iclip:
-                s += `\\${tag.name}(${tag.drawCommands})`;
+                if (tag.type === "rect") {
+                    s += `\\${tag.name}(${tag.x1},${tag.y1},${tag.x2},${tag.y2})`;
+                } else {
+                    const scaleStr = tag.scale !== null ? `${tag.scale},` : "";
+                    s += `\\${tag.name}(${scaleStr}${tag.commands})`;
+                }
                 break;
 
             case TagName.fad:
