@@ -6,6 +6,7 @@ import {
     DrawingCommandLine,
     DrawingCommandMove,
     DrawingCommandMoveNoClose,
+    DrawingCommandNames,
     DrawingCommandName,
     DrawingCommandSpline,
     DrawingPoint,
@@ -23,10 +24,10 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
         const token = tokens[i].toLowerCase();
 
         switch (token) {
-            case DrawingCommandName.move: {
+            case DrawingCommandNames.move: {
                 if (i + 2 < tokens.length) {
                     commands.push({
-                        name: DrawingCommandName.move,
+                        name: DrawingCommandNames.move,
                         x: Number(tokens[i + 1]),
                         y: Number(tokens[i + 2]),
                     } satisfies DrawingCommandMove);
@@ -36,10 +37,10 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
                 break;
             }
-            case DrawingCommandName.moveNoClose: {
+            case DrawingCommandNames.moveNoClose: {
                 if (i + 2 < tokens.length) {
                     commands.push({
-                        name: DrawingCommandName.moveNoClose,
+                        name: DrawingCommandNames.moveNoClose,
                         x: Number(tokens[i + 1]),
                         y: Number(tokens[i + 2]),
                     } satisfies DrawingCommandMoveNoClose);
@@ -49,10 +50,10 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
                 break;
             }
-            case DrawingCommandName.line: {
+            case DrawingCommandNames.line: {
                 if (i + 2 < tokens.length) {
                     commands.push({
-                        name: DrawingCommandName.line,
+                        name: DrawingCommandNames.line,
                         x: Number(tokens[i + 1]),
                         y: Number(tokens[i + 2]),
                     } satisfies DrawingCommandLine);
@@ -62,10 +63,10 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
                 break;
             }
-            case DrawingCommandName.bezier: {
+            case DrawingCommandNames.bezier: {
                 if (i + 6 < tokens.length) {
                     commands.push({
-                        name: DrawingCommandName.bezier,
+                        name: DrawingCommandNames.bezier,
                         x1: Number(tokens[i + 1]),
                         y1: Number(tokens[i + 2]),
                         x2: Number(tokens[i + 3]),
@@ -79,10 +80,10 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
                 break;
             }
-            case DrawingCommandName.extendSpline: {
+            case DrawingCommandNames.extendSpline: {
                 if (i + 2 < tokens.length) {
                     commands.push({
-                        name: DrawingCommandName.extendSpline,
+                        name: DrawingCommandNames.extendSpline,
                         x: Number(tokens[i + 1]),
                         y: Number(tokens[i + 2]),
                     } satisfies DrawingCommandExtendSpline);
@@ -92,14 +93,14 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
                 break;
             }
-            case DrawingCommandName.closeSpline: {
+            case DrawingCommandNames.closeSpline: {
                 commands.push({
-                    name: DrawingCommandName.closeSpline,
+                    name: DrawingCommandNames.closeSpline,
                 } satisfies DrawingCommandCloseSpline);
                 i += 1;
                 break;
             }
-            case DrawingCommandName.spline: {
+            case DrawingCommandNames.spline: {
                 const points: DrawingPoint[] = [];
                 i++;
                 while (i + 1 < tokens.length) {
@@ -107,7 +108,7 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                     const yStr = tokens[i + 1];
 
                     // If the next token is a command letter, break out
-                    if (Object.values(DrawingCommandName).includes(xStr as DrawingCommandName)) {
+                    if (DrawingCommandName.safeParse(xStr).success) {
                         break;
                     }
 
@@ -116,7 +117,7 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 }
 
                 commands.push({
-                    name: DrawingCommandName.spline,
+                    name: DrawingCommandNames.spline,
                     points,
                 } satisfies DrawingCommandSpline);
                 break;
@@ -125,7 +126,7 @@ export function parseDrawingCommands(text: string): DrawingCommand[] {
                 // Implicit line command if there are two numbers and no command letter
                 if (!Number.isNaN(Number(token)) && i + 1 < tokens.length && !Number.isNaN(Number(tokens[i + 1]))) {
                     commands.push({
-                        name: DrawingCommandName.line,
+                        name: DrawingCommandNames.line,
                         x: Number(token),
                         y: Number(tokens[i + 1]),
                     } satisfies DrawingCommandLine);

@@ -115,10 +115,10 @@ test("parse drawing commands instead of text when \\p > 0", () => {
         {
             name: "drawing",
             commands: [
-                { name: asu.DrawingCommandName.move, x: 0, y: 0 },
-                { name: asu.DrawingCommandName.line, x: 100, y: 0 },
-                { name: asu.DrawingCommandName.line, x: 100, y: 100 },
-                { name: asu.DrawingCommandName.line, x: 0, y: 100 },
+                { name: asu.DrawingCommandNames.move, x: 0, y: 0 },
+                { name: asu.DrawingCommandNames.line, x: 100, y: 0 },
+                { name: asu.DrawingCommandNames.line, x: 100, y: 100 },
+                { name: asu.DrawingCommandNames.line, x: 0, y: 100 },
             ]
         } satisfies asu.ContentDrawing,
         {

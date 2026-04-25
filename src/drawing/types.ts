@@ -1,4 +1,6 @@
-export enum DrawingCommandName {
+import { z } from "zod";
+
+export enum DrawingCommandNames {
     move = "m",
     moveNoClose = "n",
     line = "l",
@@ -8,26 +10,30 @@ export enum DrawingCommandName {
     closeSpline = "c",
 }
 
+export const DrawingCommandName: z.ZodEnum<typeof DrawingCommandNames> = z.enum(DrawingCommandNames);
+
+export type DrawingCommandName = z.infer<typeof DrawingCommandName>;
+
 export type DrawingCommandMove = {
-    name: DrawingCommandName.move;
+    name: DrawingCommandNames.move;
     x: number;
     y: number;
 };
 
 export type DrawingCommandMoveNoClose = {
-    name: DrawingCommandName.moveNoClose;
+    name: DrawingCommandNames.moveNoClose;
     x: number;
     y: number;
 };
 
 export type DrawingCommandLine = {
-    name: DrawingCommandName.line;
+    name: DrawingCommandNames.line;
     x: number;
     y: number;
 };
 
 export type DrawingCommandBezier = {
-    name: DrawingCommandName.bezier;
+    name: DrawingCommandNames.bezier;
     x1: number;
     y1: number;
     x2: number;
@@ -42,18 +48,18 @@ export type DrawingPoint = {
 };
 
 export type DrawingCommandSpline = {
-    name: DrawingCommandName.spline;
+    name: DrawingCommandNames.spline;
     points: DrawingPoint[];
 };
 
 export type DrawingCommandExtendSpline = {
-    name: DrawingCommandName.extendSpline;
+    name: DrawingCommandNames.extendSpline;
     x: number;
     y: number;
 };
 
 export type DrawingCommandCloseSpline = {
-    name: DrawingCommandName.closeSpline;
+    name: DrawingCommandNames.closeSpline;
 };
 
 export type DrawingCommand =
