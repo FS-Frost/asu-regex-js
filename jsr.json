@@ -2,5 +2,10 @@
     "name": "@fs-frost/asu",
     "version": "1.15.0",
     "exports": "./src/asu.ts",
-    "license": "MIT"
+    "license": "MIT",
+    "publish": {
+        "exclude": [
+            "ASS File Format Specification.html"
+        ]
+    }
 }
