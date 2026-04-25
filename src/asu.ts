@@ -20,6 +20,7 @@ export * from "./karaoke";
 export * from "./line";
 export * from "./math";
 export * from "./tags/find";
+export * from "./tags/optimize";
 export * from "./tags/parse";
 export * from "./tags/set";
 export * from "./tags/types";

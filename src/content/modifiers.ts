@@ -1,5 +1,6 @@
 import { truncate } from "../math";
 import { TagName, Tags } from "../tags/types";
+import { optimizeTags } from "../tags/optimize";
 import { ContentItem } from "./types";
 
 export function mergeNeighboringEffects(items: ContentItem[]): void {
@@ -22,6 +23,14 @@ export function mergeNeighboringEffects(items: ContentItem[]): void {
 
     for (const index of indexToRemove.reverse()) {
         items.splice(index, 1);
+    }
+}
+
+export function optimizeContent(items: ContentItem[]): void {
+    for (const item of items) {
+        if (item.name === "effect") {
+            item.tags = optimizeTags(item.tags);
+        }
     }
 }
 
