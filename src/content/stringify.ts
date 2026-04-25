@@ -105,12 +105,12 @@ export function contentsToString(items: ContentItem[]): string {
     let s = "";
 
     for (const item of items) {
-        if (item.name == "text") {
+        if (item.name === "text" || item.name === "drawing") {
             s += item.value;
             continue;
         }
 
-        s += "{" + contentEffectToString(item) + "}";
+        s += "{" + contentEffectToString(item as ContentEffect) + "}";
     }
 
     return s;

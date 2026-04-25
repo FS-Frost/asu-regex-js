@@ -59,7 +59,7 @@ import {
     TagYbord,
     TagYshad,
 } from "./types";
-import { ContentItem } from "../content/types";
+import { ContentItem, ContentEffect } from "../content/types";
 
 function setSingleValueTag<T extends Tags & { value: string | number; }>(
     items: ContentItem[],
@@ -255,35 +255,17 @@ export function setFade(
 }
 
 export function setClipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagClipRect {
-    const defaultTag: TagClipRect = { name: TagName.clip, type: "rect", x1, y1, x2, y2 };
-    const [updated, tag] = setTag<TagClip>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        const t = tag as any;
-        t.type = "rect";
-        t.x1 = x1;
-        t.y1 = y1;
-        t.x2 = x2;
-        t.y2 = y2;
-        delete t.commands;
-        delete t.scale;
-    }
-    return tag as TagClipRect;
+    const newTag: TagClipRect = { name: TagName.clip, type: "rect", x1, y1, x2, y2 };
+    const fx = getOrAddEffect(items);
+    updateOrAddTag(fx.tags, newTag);
+    return newTag;
 }
 
 export function setClipVector(items: ContentItem[], commands: string, scale: number | null = null): TagClipVector {
-    const defaultTag: TagClipVector = { name: TagName.clip, type: "vector", commands, scale };
-    const [updated, tag] = setTag<TagClip>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        const t = tag as any;
-        t.type = "vector";
-        t.commands = commands;
-        t.scale = scale;
-        delete t.x1;
-        delete t.y1;
-        delete t.x2;
-        delete t.y2;
-    }
-    return tag as TagClipVector;
+    const newTag: TagClipVector = { name: TagName.clip, type: "vector", commands, scale };
+    const fx = getOrAddEffect(items);
+    updateOrAddTag(fx.tags, newTag);
+    return newTag;
 }
 
 export function setClip(items: ContentItem[], drawCommands: string): TagClip {
@@ -291,39 +273,39 @@ export function setClip(items: ContentItem[], drawCommands: string): TagClip {
 }
 
 export function setIclipRect(items: ContentItem[], x1: number, y1: number, x2: number, y2: number): TagIclipRect {
-    const defaultTag: TagIclipRect = { name: TagName.iclip, type: "rect", x1, y1, x2, y2 };
-    const [updated, tag] = setTag<TagIclip>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        const t = tag as any;
-        t.type = "rect";
-        t.x1 = x1;
-        t.y1 = y1;
-        t.x2 = x2;
-        t.y2 = y2;
-        delete t.commands;
-        delete t.scale;
-    }
-    return tag as TagIclipRect;
+    const newTag: TagIclipRect = { name: TagName.iclip, type: "rect", x1, y1, x2, y2 };
+    const fx = getOrAddEffect(items);
+    updateOrAddTag(fx.tags, newTag);
+    return newTag;
 }
 
 export function setIclipVector(items: ContentItem[], commands: string, scale: number | null = null): TagIclipVector {
-    const defaultTag: TagIclipVector = { name: TagName.iclip, type: "vector", commands, scale };
-    const [updated, tag] = setTag<TagIclip>(items, defaultTag.name, defaultTag);
-    if (!updated) {
-        const t = tag as any;
-        t.type = "vector";
-        t.commands = commands;
-        t.scale = scale;
-        delete t.x1;
-        delete t.y1;
-        delete t.x2;
-        delete t.y2;
-    }
-    return tag as TagIclipVector;
+    const newTag: TagIclipVector = { name: TagName.iclip, type: "vector", commands, scale };
+    const fx = getOrAddEffect(items);
+    updateOrAddTag(fx.tags, newTag);
+    return newTag;
 }
 
 export function setIclip(items: ContentItem[], drawCommands: string): TagIclip {
     return setIclipVector(items, drawCommands);
+}
+
+function getOrAddEffect(items: ContentItem[]): ContentEffect {
+    let fx = items.find((item) => item.name === "effect") as ContentEffect | undefined;
+    if (fx == null) {
+        fx = { name: "effect", tags: [] };
+        items.unshift(fx);
+    }
+    return fx;
+}
+
+function updateOrAddTag(tags: Tags[], newTag: Tags): void {
+    const index = tags.findIndex((tag) => tag.name === newTag.name);
+    if (index === -1) {
+        tags.push(newTag);
+    } else {
+        tags[index] = newTag;
+    }
 }
 
 export function setMove(

@@ -99,6 +99,41 @@ test("parse tags with bad args", () => {
 });
 
 // others
+test("parse drawing commands instead of text when \\p > 0", () => {
+    const text = "{\\p1}m 0 0 l 100 0 100 100 0 100{\\p0}normal text";
+    const result = asu.parseContent(text);
+    const expected: asu.ContentItem[] = [
+        {
+            name: "effect",
+            tags: [
+                {
+                    name: asu.TagName.p,
+                    value: 1,
+                } satisfies asu.TagP,
+            ],
+        } satisfies asu.ContentEffect,
+        {
+            name: "drawing",
+            value: "m 0 0 l 100 0 100 100 0 100"
+        } satisfies asu.ContentDrawing,
+        {
+            name: "effect",
+            tags: [
+                {
+                    name: asu.TagName.p,
+                    value: 0,
+                } satisfies asu.TagP,
+            ],
+        } satisfies asu.ContentEffect,
+        {
+            name: "text",
+            value: "normal text"
+        } satisfies asu.ContentText,
+    ];
+    expect(result).toEqual(expected);
+    expect(asu.contentsToString(result)).toEqual(text);
+});
+
 test("parse result equals toString()", () => {
     const text = "{\\be5\\pos(0.5,-28)}{¡Buenos días, {\\i1}Chitanda-san{\\i0}!";
     const result = asu.parseContent(text);

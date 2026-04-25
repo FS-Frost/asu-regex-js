@@ -1,6 +1,6 @@
 import { expect, test, describe } from "bun:test";
 import { optimizeTags } from "./optimize";
-import { TagName, Tags, TagT } from "./types";
+import { TagName, Tags } from "./types";
 
 describe("optimizeTags", () => {
     test("should return empty array for empty input", () => {

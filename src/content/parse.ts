@@ -1,11 +1,12 @@
 import * as regex from "../regex";
 import { parseTags } from "../tags/parse";
-import { Tags } from "../tags/types";
-import { ContentEffect, ContentItem, ContentText } from "./types";
+import { TagName, Tags, TagP } from "../tags/types";
+import { ContentEffect, ContentItem, ContentText, ContentDrawing } from "./types";
 
 export function parseContent(text: string): ContentItem[] {
     const items: ContentItem[] = [];
     const result = text.matchAll(regex.regexContent);
+    let currentDrawingLevel = 0;
 
     for (const match of result) {
         if (match.groups?.fx) {
@@ -13,6 +14,12 @@ export function parseContent(text: string): ContentItem[] {
             const rawTags = match.groups.fx.substring(1, match.groups.fx.length - 1);
             const tags: Tags[] = [];
             parseTags(rawTags, tags);
+
+            for (const tag of tags) {
+                if (tag.name === TagName.p) {
+                    currentDrawingLevel = (tag as TagP).value;
+                }
+            }
 
             items.push({
                 name: "effect",
@@ -22,10 +29,17 @@ export function parseContent(text: string): ContentItem[] {
         }
 
         if (match.groups?.txt) {
-            items.push({
-                name: "text",
-                value: match.groups?.txt,
-            } satisfies ContentText);
+            if (currentDrawingLevel > 0) {
+                items.push({
+                    name: "drawing",
+                    value: match.groups?.txt,
+                } satisfies ContentDrawing);
+            } else {
+                items.push({
+                    name: "text",
+                    value: match.groups?.txt,
+                } satisfies ContentText);
+            }
             continue;
         }
     }

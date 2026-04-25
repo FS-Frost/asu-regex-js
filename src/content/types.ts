@@ -10,4 +10,9 @@ export type ContentText = {
     value: string;
 };
 
-export type ContentItem = ContentEffect | ContentText;
+export type ContentDrawing = {
+    name: "drawing";
+    value: string;
+};
+
+export type ContentItem = ContentEffect | ContentText | ContentDrawing;
