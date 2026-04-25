@@ -2,7 +2,8 @@
 
 ## Commands
 - **Test**: `bun test` (tests are co-located in `src/**/*.test.ts` and use `bun:test`, not Jest/Vitest).
-- **Lint**: `bunx eslint`
+- **Lint**: `bun run lint` (uses eslint).
+- **Check**: `bun run check` (runs test then lint).
 - **Build**: `bun run bundle` (runs `build.ts` which uses Bun's bundler and `dts-bundle-generator`).
 - **Docs**: `bun docs` (generates typedoc into `examples/docs`).
 
