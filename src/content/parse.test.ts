@@ -114,7 +114,12 @@ test("parse drawing commands instead of text when \\p > 0", () => {
         } satisfies asu.ContentEffect,
         {
             name: "drawing",
-            value: "m 0 0 l 100 0 100 100 0 100"
+            commands: [
+                { name: asu.DrawingCommandName.move, x: 0, y: 0 },
+                { name: asu.DrawingCommandName.line, x: 100, y: 0 },
+                { name: asu.DrawingCommandName.line, x: 100, y: 100 },
+                { name: asu.DrawingCommandName.line, x: 0, y: 100 },
+            ]
         } satisfies asu.ContentDrawing,
         {
             name: "effect",

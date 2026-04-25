@@ -866,14 +866,14 @@ test("create fx and ko", () => {
 });
 
 test("update p", () => {
-    const text = "{\\p1\\frz270}Kirino-san";
-    const expectedText = "{\\p2\\frz270}Kirino-san";
+    const text = "{\\p1\\frz270}m 0 0";
+    const expectedText = "{\\p2\\frz270}m 0 0";
     const result = asu.parseContent(text);
     const tag = asu.setP(result, 2);
     expect(tag).toEqual({
         name: asu.TagName.p,
         value: 2,
-    } satisfies asu.TagP);
+    } as asu.TagP);
     expect(asu.contentsToString(result)).toEqual(expectedText);
 });
 

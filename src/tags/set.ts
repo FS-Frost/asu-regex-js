@@ -291,7 +291,7 @@ export function setIclip(items: ContentItem[], drawCommands: string): TagIclip {
 }
 
 function getOrAddEffect(items: ContentItem[]): ContentEffect {
-    let fx = items.find((item) => item.name === "effect") as ContentEffect | undefined;
+    let fx = items.find((item) => item.name === "effect") satisfies ContentEffect | undefined;
     if (fx == null) {
         fx = { name: "effect", tags: [] };
         items.unshift(fx);

@@ -1,3 +1,4 @@
+import { DrawingCommand } from "../drawing/types";
 import { Tags } from "../tags/types";
 
 export type ContentEffect = {
@@ -12,7 +13,7 @@ export type ContentText = {
 
 export type ContentDrawing = {
     name: "drawing";
-    value: string;
+    commands: DrawingCommand[];
 };
 
 export type ContentItem = ContentEffect | ContentText | ContentDrawing;

@@ -1,5 +1,6 @@
 import { numberToHex } from "../math";
 import { TagName, Tags } from "../tags/types";
+import { drawingCommandsToString } from "../drawing/stringify";
 import { ContentEffect, ContentItem } from "./types";
 
 export function contentEffectToString(item: ContentEffect): string {
@@ -105,12 +106,17 @@ export function contentsToString(items: ContentItem[]): string {
     let s = "";
 
     for (const item of items) {
-        if (item.name === "text" || item.name === "drawing") {
+        if (item.name === "text") {
             s += item.value;
             continue;
         }
 
-        s += "{" + contentEffectToString(item as ContentEffect) + "}";
+        if (item.name === "drawing") {
+            s += drawingCommandsToString(item.commands);
+            continue;
+        }
+
+        s += "{" + contentEffectToString(item satisfies ContentEffect) + "}";
     }
 
     return s;

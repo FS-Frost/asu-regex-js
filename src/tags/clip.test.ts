@@ -14,7 +14,7 @@ describe("clip and iclip tags", () => {
                 y1: 20,
                 x2: 30,
                 y2: 40,
-            } as TagClipRect);
+            } satisfies TagClipRect);
         });
 
         test("should parse vectorial clip without scale", () => {
@@ -24,7 +24,7 @@ describe("clip and iclip tags", () => {
                 type: "vector",
                 scale: null,
                 commands: "m 0 0 l 10 10",
-            } as TagClipVector);
+            } satisfies TagClipVector);
         });
 
         test("should parse vectorial clip with scale", () => {
@@ -34,7 +34,7 @@ describe("clip and iclip tags", () => {
                 type: "vector",
                 scale: 1,
                 commands: "m 0 0 l 10 10",
-            } as TagClipVector);
+            } satisfies TagClipVector);
         });
 
         test("should parse rectangular iclip", () => {
@@ -46,7 +46,7 @@ describe("clip and iclip tags", () => {
                 y1: 20,
                 x2: 30,
                 y2: 40,
-            } as TagIclipRect);
+            } satisfies TagIclipRect);
         });
 
         test("should parse vectorial iclip without scale", () => {
@@ -56,7 +56,7 @@ describe("clip and iclip tags", () => {
                 type: "vector",
                 scale: null,
                 commands: "m 0 0 l 10 10",
-            } as TagIclipVector);
+            } satisfies TagIclipVector);
         });
 
         test("should parse vectorial iclip with scale", () => {
@@ -66,7 +66,7 @@ describe("clip and iclip tags", () => {
                 type: "vector",
                 scale: 2,
                 commands: "m 0 0 l 10 10",
-            } as TagIclipVector);
+            } satisfies TagIclipVector);
         });
     });
 

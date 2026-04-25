@@ -1,6 +1,7 @@
 import * as regex from "../regex";
 import { parseTags } from "../tags/parse";
 import { TagName, Tags, TagP } from "../tags/types";
+import { parseDrawingCommands } from "../drawing/parse";
 import { ContentEffect, ContentItem, ContentText, ContentDrawing } from "./types";
 
 export function parseContent(text: string): ContentItem[] {
@@ -17,7 +18,7 @@ export function parseContent(text: string): ContentItem[] {
 
             for (const tag of tags) {
                 if (tag.name === TagName.p) {
-                    currentDrawingLevel = (tag as TagP).value;
+                    currentDrawingLevel = (tag satisfies TagP).value;
                 }
             }
 
@@ -32,7 +33,7 @@ export function parseContent(text: string): ContentItem[] {
             if (currentDrawingLevel > 0) {
                 items.push({
                     name: "drawing",
-                    value: match.groups?.txt,
+                    commands: parseDrawingCommands(match.groups?.txt),
                 } satisfies ContentDrawing);
             } else {
                 items.push({

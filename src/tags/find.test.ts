@@ -219,7 +219,7 @@ test("find ko", () => {
 
 // p
 test("find p", () => {
-    const text = "{\\p1}Kirino-san";
+    const text = "{\\p1}m 0 0";
     const result = asu.parseContent(text);
     const tag = asu.findP(result);
     expect(tag).not.toBeNull();
