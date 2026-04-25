@@ -10,9 +10,12 @@
 ## Repository Quirks & Architecture
 - **GitHub Pages Root (`examples/`)**: The `examples` directory serves as the root for GitHub Pages. It contains the interactive playground (`app.js`, `index.html`), the bundled library artifacts (`examples/build`), and the generated documentation (`examples/docs`). Do not remove or ignore this folder when dealing with outputs.
 - **Entrypoint**: `src/asu.ts` is the main export used for bundling and publishing via JSR (`jsr.json`).
-- **Regex Patterns**: The library uses `magic-regexp` for all regex patterns (see `src/regex.ts`). Modify patterns there using the fluent API rather than writing raw regex strings inline.
+- **Regex Patterns**: The library uses `magic-regexp` for all regex patterns (see `src/regex.ts`). Modify patterns there using the fluent API rather than writing raw regex strings inline. Export them explicitly using `as RegExp` to avoid strict TypeScript inference issues downstream during the declaration file bundling.
 - **Platform Compatibility**: The build targets `browser`, `bun`, and `node`. Avoid introducing environment-specific dependencies (like Node's `fs` or `path`) into the core parser logic.
 - **ASS Specification**: The reference specification is provided locally in `ASS File Format Specification.html`. Always refer to it when interpreting or adding support for new SSA/ASS features to avoid guessing the syntax.
+
+## Zod & Enums
+- **Validating String Enums**: For string enums, follow the pattern established in `src/assFile/encoding.ts` and `src/drawing/types.ts`: Define the native enum, create a Zod schema using `z.nativeEnum(YourEnum)`, and export both. Use `.safeParse()` to avoid explicit type assertions (`as Type`) when parsing raw strings.
 
 ## Code Style & Documentation
 - **Self-Documenting Code**: Avoid JSDoc, function annotations, and inline comments. Use descriptive names for variables and functions.

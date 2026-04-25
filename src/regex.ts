@@ -366,6 +366,6 @@ const reTGeneral = exactly("\\").at.lineStart()
     .and(oneOrMore(unitTags).groupedAs("tags"))
     .and(exactly(")"));
 
-export const regexTags = createRegExp(unitTags) satisfies RegExp;
+export const regexTags = createRegExp(unitTags) as RegExp;
 
-export const regexTagT = createRegExp(reTGeneral) satisfies RegExp;
+export const regexTagT = createRegExp(reTGeneral) as RegExp;
